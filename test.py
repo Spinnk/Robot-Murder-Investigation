@@ -1,0 +1,11 @@
+"""
+THIS IS A TEST
+SUBLIME TEXT IS COOL IF YOU DON'T HAVE IT IT IS PRETTY MUCH THE BEST
+"""
+
+import sys
+
+def main():
+
+	
+
