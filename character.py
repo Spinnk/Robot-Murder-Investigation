@@ -8,17 +8,17 @@ import pygame
 from consts import *
 
 class character:
-    # need more variables for log, health?, etc
-
-    def __init__(self, sprite_sheet_name):         # taking in string to save memory + faster since surfaces are passed by value, not reference
-        self.__x = 0.0                             # position on map, change according to pixel/tile
-        self.__y = 0.0                             # position on map, change according to pixel/tile
-        self.__clip = 0                            # which image to clip from sprite sheet
+    def __init__(self, sprite_sheet_name, colorkey):   # taking in string to save memory + faster since surfaces are passed by value, not reference
+        # need more variables for log, health?, etc
+        self.__x = 0.0                                 # position on map, change according to pixel/tile
+        self.__y = 0.0                                 # position on map, change according to pixel/tile
+        self.__clip = 0                                # which image to clip from sprite sheet
         self.__sheet = pygame.image.load(sprite_sheet_name)
+        self.__sheet.set_colorkey(colorkey)
         if self.__sheet == None:
             sys.exit(IMAGE_DOES_NOT_EXIST)
 
-        self.__lasttick = 0                        # timer for frame independant animation
+        self.__lasttick = 0                            # timer for frame independant animation
 
     # modifiers
     def setx(self, y):
@@ -35,10 +35,10 @@ class character:
         return self.__y
 
     def save(self):
-	    pass
+        pass
 
     def interact(self):
-	    pass
+        pass
 
     def update(self, keystates):
         if self.__lasttick == 0:
