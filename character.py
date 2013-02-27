@@ -34,6 +34,12 @@ class character:
     def y(self):
         return self.__y
 
+    def save(self):
+	    pass
+
+    def interact(self):
+	    pass
+
     def update(self, keystates):
         if self.__lasttick == 0:
             self.__lasttick = pygame.time.get_ticks()

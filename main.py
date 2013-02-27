@@ -33,14 +33,14 @@ def main():
         # multi key presses
         pressed = pygame.key.get_pressed()
 
-    # update objects
+        # update objects
         user.update(pressed)
 
         # refresh screen
-        screen.fill((0xff, 0xff, 0xff))         # fill screen with white
-    user.display(screen, camera)                # display user sprite
-    pygame.display.set_caption('(' + str(user.x()) + ',' + str(user.y()) + ')')
-    pygame.display.flip()                       # show screen
+        screen.fill((0xff, 0xff, 0xff))             # fill screen with white
+        user.display(screen, camera)                # display user sprite
+        pygame.display.set_caption('(' + str(user.x()) + ',' + str(user.y()) + ')')
+        pygame.display.flip()                       # show screen
 
     return NO_PROBLEM
 
