@@ -15,14 +15,14 @@ def main():
     if screen == None:
         return SCREEN_DOES_NOT_EXIST
 
-    pygame.display.set_caption('Game')               # give the screen a titple
+    pygame.display.set_caption('Game')               # give the screen a title
     # #####################
 
     # Set up variables ####
     quit = False
     camera = pygame.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
 
-    user = character(CHARACTER_SPRITE_SHEET, COLOR_KEY)# change to hotpink when actual images are used
+    user = character(CHARACTER_SPRITE_SHEET, COLOR_KEY)
 
     # #####################
     while not(quit):

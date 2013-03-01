@@ -9,7 +9,6 @@ from consts import *
 
 class character:
     def __init__(self, sprite_sheet_name, colorkey):   # taking in string to save memory + faster since surfaces are passed by value, not reference
-        # need more variables for log, health?, etc
         self.__x = 0.0                                 # position on map, change according to pixel/tile
         self.__y = 0.0                                 # position on map, change according to pixel/tile
         self.__clip = 0                                # which image to clip from sprite sheet
@@ -47,24 +46,31 @@ class character:
         now = pygame.time.get_ticks()
         dt = now - self.__lasttick
         self.__lasttick = now
+        moved = False
 
         # use WASD or arrow keys to move
         if keystates[pygame.K_w] ^ keystates[pygame.K_UP]:
-            self.__y -= (CHARACTER_VY * dt) / 1000.
+            self.__y -= TILE_HEIGHT#(CHARACTER_VY * dt) / 1000.
             if (self.__y < 0):
                 self.__y = 0
+	    moved = True
         if keystates[pygame.K_a] ^ keystates[pygame.K_LEFT]:
-            self.__x -= (CHARACTER_VX * dt) / 1000.
+            self.__x -= TILE_WIDTH#(CHARACTER_VX * dt) / 1000.
             if (self.__x < 0):
                 self.__x = 0
+	    moved = True
         if keystates[pygame.K_s] ^ keystates[pygame.K_DOWN]:
-            self.__y += (CHARACTER_VY * dt) / 1000.
+            self.__y += TILE_HEIGHT#(CHARACTER_VY * dt) / 1000.
 #            if (self.__y > ):
 #                self.__y =
+	    moved = True
         if keystates[pygame.K_d] ^ keystates[pygame.K_RIGHT]:
-            self.__x += (CHARACTER_VX * dt) / 1000.
+            self.__x += TILE_WIDTH#(CHARACTER_VX * dt) / 1000.
 #            if (self.__x > ):
 #                self.__y =
+	    moved = True
+        if moved:
+	    pygame.time.delay(100)
 
     def display(self, screen, camera):
         if screen == None:

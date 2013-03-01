@@ -21,8 +21,8 @@ SPRITE_HEIGHT = 0           # pixels
 CHARACTER_SPRITE_SHEET = os.path.join(os.getcwd(), "robot.png")
 CHARACTER_WIDTH = 80        # pixels
 CHARACTER_HEIGHT = 188      # pixels
-CHARACTER_VX = 250          # change depending on pixel or tile
-CHARACTER_VY = 250          # change depending on pixel or tile
+#CHARACTER_VX = 250          # change depending on pixel or tile
+#CHARACTER_VY = 250          # change depending on pixel or tile
 
 # Random Useful RGB Values
 WHITE = pygame.Color(0xff, 0xff, 0xff, 0xff)
