@@ -22,7 +22,7 @@ def main():
     quit = False
     camera = pygame.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
 
-    user = character(CHARACTER_SPRITE_SHEET, 0xffffff)# change to hotpink when actual images are used
+    user = character(CHARACTER_SPRITE_SHEET, COLOR_KEY)# change to hotpink when actual images are used
 
     # #####################
     while not(quit):
@@ -37,7 +37,7 @@ def main():
         user.update(pressed)
 
         # refresh screen
-        screen.fill(0x000000);
+        screen.fill(WHITE);
         user.display(screen, camera)                # display user sprite
         pygame.display.set_caption('(' + str(user.x()) + ',' + str(user.y()) + ')')
         pygame.display.flip()                       # show screen
