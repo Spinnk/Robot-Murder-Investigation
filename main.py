@@ -15,14 +15,15 @@ def main():
     if screen == None:
         return SCREEN_DOES_NOT_EXIST
 
-    pygame.display.set_caption('Game')               # give the screen a title
+    pygame.display.set_caption(GAME_NAME)               # give the screen a title
     # #####################
 
     # Set up variables ####
     quit = False
-    camera = pygame.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
+    camera = pygame.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT) # tile index, not pixel
 
     user = character(CHARACTER_SPRITE_SHEET, COLOR_KEY)
+    ship = map(MAP_DEFAULT, TILE_SHEET)
 
     # #####################
     while not(quit):
@@ -38,7 +39,12 @@ def main():
 
         # refresh screen
         screen.fill(WHITE);
+
+        # display map
+
+        #display player
         user.display(screen, camera)                # display user sprite
+
         pygame.display.set_caption('(' + str(user.x()) + ',' + str(user.y()) + ')')
         pygame.display.flip()                       # show screen
 

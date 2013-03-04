@@ -1,6 +1,10 @@
 # character.py
 # Generic Character class for basic storing of data,
 # updating, and displaying
+
+# need to figure out how to keep character
+# centered except when near edges of map
+
 import sys
 
 import pygame
@@ -9,15 +13,16 @@ from consts import *
 
 class character:
     def __init__(self, sprite_sheet_name, colorkey):   # taking in string to save memory + faster since surfaces are passed by value, not reference
-        self.__x = 0.0                                 # position on map, change according to pixel/tile
-        self.__y = 0.0                                 # position on map, change according to pixel/tile
+        # remember sprite will be standing on tile x+1
+        self.__x = 0.0                                 # tile position on map
+        self.__y = 0.0                                 # tile position on map
         self.__clip = 0                                # which image to clip from sprite sheet
         self.__sheet = pygame.image.load(sprite_sheet_name)
         self.__sheet.set_colorkey(colorkey)
-        if self.__sheet == None:
+        if self.__sheet == None:                       # error if file could not be opened
             sys.exit(IMAGE_DOES_NOT_EXIST)
 
-        self.__lasttick = 0                            # timer for frame independant animation
+#        self.__lasttick = 0                            # timer for frame independant animation
 
     # modifiers
     def setx(self, y):
@@ -33,6 +38,7 @@ class character:
     def y(self):
         return self.__y
 
+    # other functions
     def save(self):
         pass
 
@@ -40,42 +46,42 @@ class character:
         pass
 
     def update(self, keystates):
-        if self.__lasttick == 0:
-            self.__lasttick = pygame.time.get_ticks()
-            return
-        now = pygame.time.get_ticks()
-        dt = now - self.__lasttick
-        self.__lasttick = now
+#        if self.__lasttick == 0:
+#            self.__lasttick = pygame.time.get_ticks()
+#            return
+#        now = pygame.time.get_ticks()
+#        dt = now - self.__lasttick
+#        self.__lasttick = now
         moved = False
 
         # use WASD or arrow keys to move
         if keystates[pygame.K_w] ^ keystates[pygame.K_UP]:
-            self.__y -= TILE_HEIGHT#(CHARACTER_VY * dt) / 1000.
+            self.__y -= 1#(CHARACTER_VY * dt) / 1000.
             if (self.__y < 0):
                 self.__y = 0
-	    moved = True
+            moved = True
         if keystates[pygame.K_a] ^ keystates[pygame.K_LEFT]:
-            self.__x -= TILE_WIDTH#(CHARACTER_VX * dt) / 1000.
+            self.__x -= 1#(CHARACTER_VX * dt) / 1000.
             if (self.__x < 0):
                 self.__x = 0
-	    moved = True
+            moved = True
         if keystates[pygame.K_s] ^ keystates[pygame.K_DOWN]:
-            self.__y += TILE_HEIGHT#(CHARACTER_VY * dt) / 1000.
+            self.__y += 1#(CHARACTER_VY * dt) / 1000.
 #            if (self.__y > ):
 #                self.__y =
-	    moved = True
+            moved = True
         if keystates[pygame.K_d] ^ keystates[pygame.K_RIGHT]:
-            self.__x += TILE_WIDTH#(CHARACTER_VX * dt) / 1000.
+            self.__x += 1#(CHARACTER_VX * dt) / 1000.
 #            if (self.__x > ):
 #                self.__y =
-	    moved = True
+            moved = True
         if moved:
-	    pygame.time.delay(100)
+            pygame.time.delay(100)
 
     def display(self, screen, camera):
         if screen == None:
             return SURFACE_DOES_NOT_EXIST
-        clip = pygame.Rect(0, 0, CHARACTER_WIDTH, CHARACTER_HEIGHT) # modify first 0 to correct value
-        show = pygame.Rect(self.__x - camera.x, self.__y - camera.y, 0, 0)
+        clip = pygame.Rect(self.__clip, 0, CHARACTER_WIDTH, CHARACTER_HEIGHT)
+        show = pygame.Rect((self.__x - camera.x) * TILE_WIDTH, (self.__y - camera.y) * TILE_HEIGHT, 0, 0)
         screen.blit(self.__sheet, show, clip)
         return 0
