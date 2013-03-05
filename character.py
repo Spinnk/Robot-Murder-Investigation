@@ -17,7 +17,7 @@ class character:
         # remember sprite will be standing on tile x+1
         self.__x = 0.0                                 # tile position on map
         self.__y = 0.0                                 # tile position on map
-        self.__clip = 0                                # which image to clip from sprite sheet
+        self.__clip = 0                                # which image to clip from sprite sheet; also which direction player is facing
         self.__sheet = pygame.image.load(sprite_sheet_name)
         self.__sheet.set_colorkey(colorkey)
         if self.__sheet == None:                       # error if file could not be opened
