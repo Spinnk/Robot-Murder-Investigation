@@ -12,6 +12,7 @@ import pygame
 from consts import *
 
 class character:
+    # or instead of using file name, open all images in main, and clip with display()
     def __init__(self, sprite_sheet_name, colorkey):   # taking in string to save memory + faster since surfaces are passed by value, not reference
         # remember sprite will be standing on tile x+1
         self.__x = 0.0                                 # tile position on map
@@ -79,6 +80,7 @@ class character:
             pygame.time.delay(100)
 
     def display(self, screen, camera):
+        # maybe, instead of actually displaying, return clip # and Rect to display in main
         if screen == None:
             return SURFACE_DOES_NOT_EXIST
         clip = pygame.Rect(self.__clip, 0, CHARACTER_WIDTH, CHARACTER_HEIGHT)

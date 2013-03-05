@@ -12,6 +12,7 @@ from functions import *
 
 class map:
     def __init__(self, map_file_name, tile_sheet_name):
+        # or instead of using file name, open all images in main, and clip with display()
         self.__sheet = pygame.image.load(tile_sheet_name)
 #        self.__sheet.set_colorkey(colorkey)
         if self.__sheet == None:                       # error if file could not be opened
@@ -33,6 +34,7 @@ class map:
         return 0
 
     def display(self, screen, camera):
+        # maybe, instead of actually displaying, return clip # and Rect to display in main
         if screen == None:
             return SURFACE_DOES_NOT_EXIST
         for x in xrange(SHOW_TILES_W):
