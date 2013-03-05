@@ -3,7 +3,7 @@
 import os
 import pygame
 
-GAME_NAME = "Robot Murder Investigation"    # Change to actual name
+GAME_NAME = "Sentience In Space"    # Change to actual name
 SCREEN_WIDTH = 640                          # pixels
 SCREEN_HEIGHT = 480                         # pixels
 
