@@ -55,8 +55,6 @@ class character:
 #        dt = now - self.__lasttick
 #        self.__lasttick = now
         moved = False
-
-        # use WASD or arrow keys to move
         if keystates[UP_KB]:
             self.__y -= 1#(CHARACTER_VY * dt) / 1000.
             if (self.__y < 0):

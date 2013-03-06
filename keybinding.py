@@ -32,4 +32,3 @@ def read_settings(file_name):
         elif bind[:3] == 'USE':
             bind = 'DOWN = pygame.K_' + bind[4:]
         eval(bind)
-    return
