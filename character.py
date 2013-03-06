@@ -10,6 +10,7 @@ import sys
 import pygame
 
 from consts import *
+from keybinding import *
 
 class character:
     # or instead of using file name, open all images in main, and clip with display()
@@ -56,22 +57,22 @@ class character:
         moved = False
 
         # use WASD or arrow keys to move
-        if keystates[pygame.K_w] ^ keystates[pygame.K_UP]:
+        if keystates[UP_KB]:
             self.__y -= 1#(CHARACTER_VY * dt) / 1000.
             if (self.__y < 0):
                 self.__y = 0
             moved = True
-        if keystates[pygame.K_a] ^ keystates[pygame.K_LEFT]:
+        if keystates[LEFT_KB]:
             self.__x -= 1#(CHARACTER_VX * dt) / 1000.
             if (self.__x < 0):
                 self.__x = 0
             moved = True
-        if keystates[pygame.K_s] ^ keystates[pygame.K_DOWN]:
+        if keystates[DOWN_KB]:
             self.__y += 1#(CHARACTER_VY * dt) / 1000.
 #            if (self.__y > ):
 #                self.__y =
             moved = True
-        if keystates[pygame.K_d] ^ keystates[pygame.K_RIGHT]:
+        if keystates[RIGHT_KB]:
             self.__x += 1#(CHARACTER_VX * dt) / 1000.
 #            if (self.__x > ):
 #                self.__y =
