@@ -8,6 +8,7 @@ import pygame
 
 from consts import *
 from character import *
+from keybinding import *
 
 def main():
     # Set up screen #######
@@ -15,8 +16,10 @@ def main():
     if screen == None:
         return SCREEN_DOES_NOT_EXIST
 
-    pygame.display.set_caption(GAME_NAME)               # give the screen a title
+    pygame.display.set_caption(GAME_NAME)                   # give the screen a title
     # #####################
+
+    read_settings(KEYBINDINGS)
 
     # Set up variables ####
     quit = False
@@ -39,11 +42,16 @@ def main():
 
         # refresh screen
         screen.fill(WHITE);
+        # map.update
+        # npcs.update
+        # etc
 
-        # display map
-
-        #display player
+        # display background
+        # display map/world
+        # display player
         user.display(screen, camera)                # display user sprite
+        # display NPCs
+        # etc
 
         pygame.display.set_caption('(' + str(user.x()) + ',' + str(user.y()) + ')')
         pygame.display.flip()                       # show screen

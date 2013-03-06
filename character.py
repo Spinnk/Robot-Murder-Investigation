@@ -24,10 +24,8 @@ class character:
         if self.__sheet == None:                       # error if file could not be opened
             sys.exit(IMAGE_DOES_NOT_EXIST)
 
-#        self.__lasttick = 0                            # timer for frame independant animation
-
-    # modifiers
-    def setx(self, y):
+    # modifiers (for forcing movement)
+    def setx(self, x):
         self.__x = x
 
     def sety(self, y):
@@ -47,34 +45,30 @@ class character:
     def interact(self):
         pass
 
-    def update(self, keystates):
-#        if self.__lasttick == 0:
-#            self.__lasttick = pygame.time.get_ticks()
-#            return
-#        now = pygame.time.get_ticks()
-#        dt = now - self.__lasttick
-#        self.__lasttick = now
+    def update(self, keystates): # add argument for collision detection?
         moved = False
-        if keystates[UP_KB]:
-            self.__y -= 1#(CHARACTER_VY * dt) / 1000.
+        if keystates[KB_UP]:
+            self.__y -= 1
             if (self.__y < 0):
                 self.__y = 0
             moved = True
-        if keystates[LEFT_KB]:
-            self.__x -= 1#(CHARACTER_VX * dt) / 1000.
+        if keystates[KB_LEFT]:
+            self.__x -= 1
             if (self.__x < 0):
                 self.__x = 0
             moved = True
-        if keystates[DOWN_KB]:
-            self.__y += 1#(CHARACTER_VY * dt) / 1000.
-#            if (self.__y > ):
-#                self.__y =
+        if keystates[KB_DOWN]:
+            self.__y += 1
+            if (self.__y >= MAP_HEIGHT):
+                self.__y = MAP_HEIGHT - 1
             moved = True
-        if keystates[RIGHT_KB]:
-            self.__x += 1#(CHARACTER_VX * dt) / 1000.
-#            if (self.__x > ):
-#                self.__y =
+        if keystates[KB_RIGHT]:
+            self.__x += 1
+            if (self.__x >= MAP_WIDTH):
+                self.__y = MAP_WIDTH - 1
             moved = True
+
+        # something to prevent constant moving
         if moved:
             pygame.time.delay(100)
 

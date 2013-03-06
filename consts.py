@@ -3,18 +3,22 @@
 import os
 import pygame
 
-GAME_NAME = "Sentience In Space"    # Change to actual name
+CWD = os.getcwd()
+
+GAME_NAME = "Sentience In Space"
+
+KEYBINDINGS = os.path.join(CWD, "settings.config")
+
 SCREEN_WIDTH = 640                          # pixels
 SCREEN_HEIGHT = 480                         # pixels
 
-TILE_WIDTH = 80                             # pixels
-TILE_HEIGHT = 80                            # pixels
-
-MAP_DEFAULT = ""                            # default map configuration
+MAP_DEFAULT = ""                            # default map configuration file
 MAP_WIDTH = 1024                            # tiles
 MAP_HEIGHT = 1024                           # tiles
 
 TILE_SHEET = ""                             # sheet of non-animated images
+TILE_WIDTH = 80                             # pixels
+TILE_HEIGHT = 80                            # pixels
 SHOW_TILES_W = SCREEN_WIDTH / TILE_WIDTH    # number of tiles across that are shown at any one time
 SHOW_TILES_H = SCREEN_HEIGHT / TILE_HEIGHT  # number of tiles down that are shown at any one time
 
@@ -22,7 +26,7 @@ SPRITE_SHEETS = ["", ""]                    # strings of file names. probably go
 SPRITE_WIDTH = 80                           # pixels
 SPRITE_HEIGHT = 80                          # pixels
 
-CHARACTER_SPRITE_SHEET = os.path.join(os.getcwd(), "robot.png")
+CHARACTER_SPRITE_SHEET = os.path.join(CWD, "robot.png")
 CHARACTER_WIDTH = 80                        # pixels
 CHARACTER_HEIGHT = 188                      # pixels
 
