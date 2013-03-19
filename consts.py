@@ -17,7 +17,7 @@ MAP_DEFAULT = os.path.join(CWD, "map.txt")  # default map configuration file
 MAP_WIDTH = 1024                            # tiles
 MAP_HEIGHT = 1024                           # tiles
 
-NUM_TILE_TYPES = 255
+NUM_TILE_TYPES = 256
 
 TILE_SHEET = ""                             # sheet of non-animated images
 TILE_WIDTH = 80                             # pixels
