@@ -9,7 +9,6 @@ import pygame
 from consts import *
 from character import *
 from keybinding import *
-from game import *
 
 def main():
     # Set up screen #######
@@ -26,8 +25,6 @@ def main():
     quit = False
     camera = pygame.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT) # tile index, not pixel
 
-
-    framework = game(screen)
     user = character(CHARACTER_SPRITE_SHEET, COLOR_KEY)
     ship = map(MAP_DEFAULT, TILE_SHEET)
 
@@ -53,7 +50,6 @@ def main():
         # display map/world
         # display player
         user.display(screen, camera)                # display user sprite
-        framework.draw_main_menu(screen)
         # display NPCs
         # etc
 
