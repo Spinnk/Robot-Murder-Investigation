@@ -25,7 +25,7 @@ def main():
     quit = False
     camera = pygame.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT) # tile index, not pixel
 
-    background = pygame.image.load(BACKGROUND)
+    background = pygame.image.load(BACKGROUND_IMAGE)
     user = character(CHARACTER_SPRITE_SHEET, COLOR_KEY)
     ship = map(MAP_DEFAULT, TILE_SHEET)
 

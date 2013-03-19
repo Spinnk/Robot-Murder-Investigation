@@ -3,16 +3,15 @@
 import os
 import pygame
 
-CWD = os.getcwd()
-
 GAME_NAME = "Sentience In Space"
+
+CWD = os.getcwd()
+ART_LOCATION = os.path.join( CWD, "art" )
 
 KEYBINDINGS = os.path.join(CWD, "settings.config")
 
 SCREEN_WIDTH = 800                          # pixels
 SCREEN_HEIGHT = 600                         # pixels
-
-BACKGROUND = os.path.join(CWD, "background 1.png")
 
 MAP_DEFAULT = ""                            # default map configuration file
 MAP_WIDTH = 1024                            # tiles
@@ -25,8 +24,6 @@ TILE_WIDTH = 80                             # pixels
 TILE_HEIGHT = 80                            # pixels
 SHOW_TILES_W = SCREEN_WIDTH / TILE_WIDTH    # number of tiles across that are shown at any one time
 SHOW_TILES_H = SCREEN_HEIGHT / TILE_HEIGHT  # number of tiles down that are shown at any one time
-
-ART_LOCATION = os.path.join( CWD, "art" )
 
 BACKGROUND_IMAGE = os.path.join( ART_LOCATION, "background 1.png" )
 
