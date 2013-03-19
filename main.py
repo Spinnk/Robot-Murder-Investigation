@@ -47,12 +47,16 @@ def main():
         # npcs.update
         # etc
 
+        # # # move updating screen into classes? # # #
+
         # display background
         screen.blit(background, (0, 0))
         # display map/world
+
         # display player
         user.display(screen, camera)                # display user sprite
         # display NPCs
+
         # etc
 
         pygame.display.set_caption('(' + str(user.x()) + ',' + str(user.y()) + ')')

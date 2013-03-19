@@ -13,11 +13,11 @@ KEYBINDINGS = os.path.join(CWD, "settings.config")
 SCREEN_WIDTH = 800                          # pixels
 SCREEN_HEIGHT = 600                         # pixels
 
-MAP_DEFAULT = ""                            # default map configuration file
+MAP_DEFAULT = os.path.join(CWD, "map.txt")  # default map configuration file
 MAP_WIDTH = 1024                            # tiles
 MAP_HEIGHT = 1024                           # tiles
 
-NUM_TILE_TYPES = 256
+NUM_TILE_TYPES = 255
 
 TILE_SHEET = ""                             # sheet of non-animated images
 TILE_WIDTH = 80                             # pixels
@@ -43,6 +43,9 @@ HOTPINK = pygame.Color(0xff, 0x69, 0xb4, 0xff)
 COLOR_KEY = HOTPINK
 
 # Error Codes
+# maybe turn this into a map, and raise exception
 NO_PROBLEM = 0
 SURFACE_DOES_NOT_EXIST = 1
 IMAGE_DOES_NOT_EXIST = 2
+CHECKSUMS_DO_NOT_MATCH = 3
+NO_DATA = 4
