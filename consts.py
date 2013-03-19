@@ -30,6 +30,8 @@ CHARACTER_SPRITE_SHEET = os.path.join(CWD, "robot.png")
 CHARACTER_WIDTH = 80                        # pixels
 CHARACTER_HEIGHT = 188                      # pixels
 
+MAIN_BG_IMAGE = os.path.join(CWD, "panda.png")
+
 # Random Useful RGB Values
 WHITE = pygame.Color(0xff, 0xff, 0xff, 0xff)
 BLACK = pygame.Color(0x00, 0x00, 0x00, 0xff)
