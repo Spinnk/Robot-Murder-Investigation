@@ -11,6 +11,8 @@ from character import *
 from keybinding import *
 
 def main():
+    os.environ['SDL_VIDEO_CENTERED'] = '1'
+
     # Set up screen #######
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.RESIZABLE)    # create the screen
     if screen == None:
