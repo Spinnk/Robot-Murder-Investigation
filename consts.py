@@ -9,8 +9,10 @@ GAME_NAME = "Sentience In Space"
 
 KEYBINDINGS = os.path.join(CWD, "settings.config")
 
-SCREEN_WIDTH = 640                          # pixels
-SCREEN_HEIGHT = 480                         # pixels
+SCREEN_WIDTH = 800                          # pixels
+SCREEN_HEIGHT = 600                         # pixels
+
+BACKGROUND = os.path.join(CWD, "background 1.png")
 
 MAP_DEFAULT = ""                            # default map configuration file
 MAP_WIDTH = 1024                            # tiles
