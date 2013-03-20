@@ -9,6 +9,7 @@ import pygame
 from consts import *
 from character import *
 from keybinding import *
+from map import *
 
 def main():
     os.environ['SDL_VIDEO_CENTERED'] = '1'
@@ -29,7 +30,8 @@ def main():
 
     background = pygame.image.load(BACKGROUND_IMAGE)
     user = character(CHARACTER_SPRITE_SHEET, COLOR_KEY)
-    ship = map(MAP_DEFAULT, TILE_SHEET)
+    ship = map(TILE_SHEET)
+    ship.load(MAP_DEFAULT)
 
     # #####################
     while not(quit):
@@ -44,8 +46,9 @@ def main():
         user.update(pressed)
 
         # refresh screen
-        screen.fill(WHITE);
+        screen.fill(WHITE)
         # map.update
+        ship.update()
         # npcs.update
         # etc
 
@@ -54,6 +57,7 @@ def main():
         # display background
         screen.blit(background, (0, 0))
         # display map/world
+        ship.display(screen, camera)
 
         # display player
         user.display(screen, camera)                # display user sprite

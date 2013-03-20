@@ -14,9 +14,9 @@ from functions import *
 from hashlib import *
 
 class map:
-    def __init__(self, tile_file_name):
+    def __init__(self, tile_sheet_name):
         self.__sheet = pygame.image.load(tile_sheet_name)
-        self.__sheet.set_colorkey(colorkey)
+        self.__sheet.set_colorkey(COLOR_KEY)
         if self.__sheet == None:                       # error if file could not be opened
             sys.exit(IMAGE_DOES_NOT_EXIST)
 
@@ -38,6 +38,8 @@ class map:
 
             checksum = sha512(data[:-64]).digest()
 
+            print len(data)
+
             for x in xrange(MAP_HEIGHT):
                 self.__map += [[y for y in data[:MAP_WIDTH]]]
                 data = data[MAP_WIDTH:]
@@ -50,6 +52,9 @@ class map:
 
         return NO_PROBLEM
 
+    def update(self):
+        pass
+
     def display(self, screen, camera):
         # maybe, instead of actually displaying, return clip # and Rect to display in main
         if screen == None:
@@ -59,7 +64,7 @@ class map:
 
         for x in xrange(SHOW_TILES_W):
             for y in xrange(SHOW_TILES_H):
-                show = pygame.rect(x * TILE_WIDTH, y * TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT)
-                clip = pygame.rect(self.__data[camera.x + x][camera.y + y] * TILE_WIDTH, 0, TILE_WIDTH, TILE_HEIGHT)
+                show = pygame.Rect(x * TILE_WIDTH, y * TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT)
+                clip = pygame.Rect(ord(self.__map[camera.x + x][camera.y + y]) * TILE_WIDTH, 0, TILE_WIDTH, TILE_HEIGHT)
                 screen.blit(self.__sheet, show, clip)
         return 0
