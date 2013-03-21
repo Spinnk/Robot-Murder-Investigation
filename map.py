@@ -15,9 +15,10 @@ from hashlib import sha512
 class map:
     def __init__(self, tile_sheet_name, colorkey = None):
         self.sheet = pygame.image.load(tile_sheet_name)
-        if self.sheet == None:                       # error if file could not be opened
+        if self.sheet == None:                              # error if file could not be opened
             sys.exit(IMAGE_DOES_NOT_EXIST)
-        self.sheet.set_colorkey(colorkey)            # not working for som reaosn
+        self.sheet = self.sheet.convert()
+        self.sheet.set_colorkey(colorkey, pygame.RLEACCEL)  # not working for som reaosn
         self.data = []
 
     # generates a random map and saves it to self.data and a file
@@ -62,7 +63,6 @@ class map:
                 show = pygame.Rect(x * TILE_WIDTH, y * TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT)
                 clip = pygame.Rect(self.data[camera.x + x][camera.y + y] * TILE_WIDTH, 0, TILE_WIDTH, TILE_HEIGHT)
                 screen.blit(self.sheet, show, clip)
-        screen.blit(self.sheet, (0, 0))
         return 0
 
 if __name__ == '__main__':
