@@ -3,11 +3,13 @@
 
 from math import ceil
 import os
+import sys
 
 import pygame
 
 GAME_NAME = "Sentience In Space"
 
+os.chdir(os.path.dirname(sys.argv[0]))
 CWD = os.getcwd()
 ART_LOCATION = os.path.join( CWD, "art" )
 
@@ -20,7 +22,7 @@ MAP_DEFAULT = os.path.join(CWD, "map.txt")  # default map configuration file
 MAP_WIDTH = 1024                            # tiles
 MAP_HEIGHT = 1024                           # tiles
 
-MAX_TILE_VALUE = 8                          # tile 0 is clear
+MAX_TILE_VALUE = 8
 
 TILE_SHEET = os.path.join(ART_LOCATION, "tiles.png") # sheet of non-animated images
 TILE_WIDTH = 80                             # pixels

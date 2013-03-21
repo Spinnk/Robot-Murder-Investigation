@@ -19,7 +19,6 @@ def main():
 
     pygame.display.set_caption(GAME_NAME)                   # give the screen a title
     # #####################
-
     read_settings(KEYBINDINGS)
 
     # Set up variables ####
@@ -65,7 +64,6 @@ def main():
     return NO_PROBLEM
 
 if __name__=='__main__':
-    os.chdir(os.path.dirname(sys.argv[0]))
     pygame.init()
     main()
     pygame.quit()

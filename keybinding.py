@@ -1,6 +1,10 @@
+# Key Bindings
+# Displayed in game and stored as integers
+# Different keyboards potentially have different values
+
 import pygame
 
-# Default key bindings
+# Default settings (mainly to allow for the variables to be global)
 KB_UP = pygame.K_w
 KB_LEFT = pygame.K_a
 KB_DOWN = pygame.K_s
@@ -8,40 +12,39 @@ KB_RIGHT = pygame.K_d
 KB_USE = pygame.K_e
 
 def default_settings():
+    global KB_UP, KB_LEFT, KB_DOWN, KB_RIGHT, KB_USE
     KB_UP = pygame.K_w
     KB_LEFT = pygame.K_a
     KB_DOWN = pygame.K_s
-    KB_RIGHT_KEB = pygame.K_d
+    KB_RIGHT = pygame.K_d
     KB_USE = pygame.K_e
 
 def read_settings(file_name):
     f = open(file_name, 'r')
-    settings = f.readlines();
+    settings = f.readlines()
+    f.close()
+    global KB_UP, KB_LEFT, KB_DOWN, KB_RIGHT, KB_USE
     for bind in settings:
         if bind[0] == '#':
             continue
         bind = bind[:-1]        # remove newline char
         if bind[:2] == 'UP':
-            KB_UP = eval('pygame.K_' + bind[3:])
+            KB_UP = int(bind[3:])
         elif bind[:4] == 'LEFT':
-            KB_LEFT = eval('pygame.K_' + bind[5:])
-        elif bind[:5] == 'RIGHT':
-            KB_RIGHT = eval('pygame.K_' + bind[6:])
+            KB_LEFT = int(bind[5:])
         elif bind[:4] == 'DOWN':
-            KB_DOWN = eval('pygame.K_' + bind[5:])
+            KB_DOWN = int(bind[5:])
+        elif bind[:5] == 'RIGHT':
+            KB_RIGHT = int(bind[6:])
         elif bind[:3] == 'USE':
-            KB_USE = eval('pygame.K_' + bind[4:])
-    f.close()
+            KB_USE = int(bind[4:])
 
-# not sure how to do this
-# cant just get the variable name 'pygame.K_w' from keybindings
-# storing integers may not work for every platform
 def write_settings():
     f = open(KEYBINDINGS, 'w')
     f.write('# Sentience in Space keybindings\n')
-    f.write('\nUP=' + str(''))
-    f.write('\nLEFT=' + str(''))
-    f.write('\nDOWN=' + str(''))
-    f.write('\nRIGHT=' + str(''))
-    f.write('\nUSE=' + str(''))
+    f.write('\nUP=' + str(KB_UP))
+    f.write('\nLEFT=' + str(KB_LEFT))
+    f.write('\nDOWN=' + str(KB_DOWN))
+    f.write('\nRIGHT=' + str(KB_RIGHT))
+    f.write('\nUSE=' + str(KB_USE))
     f.close()
