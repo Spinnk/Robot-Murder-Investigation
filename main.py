@@ -65,6 +65,7 @@ def main():
     return NO_PROBLEM
 
 if __name__=='__main__':
+    os.chdir(os.path.dirname(sys.argv[0]))
     pygame.init()
     main()
     pygame.quit()

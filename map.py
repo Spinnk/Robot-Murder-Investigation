@@ -4,8 +4,8 @@
 
 # Run this file to generate a random default map
 
-# probably need to change self.data to array
-# of tiles rather than array of integers
+# need to check within class whether or not map exists
+# checksum usage is not really correct
 
 import pygame
 
@@ -21,6 +21,9 @@ class map:
         self.sheet.set_colorkey(colorkey, pygame.RLEACCEL)  # not working for som reaosn
         self.data = []
 
+    def change_tile(self, new_tile, location):
+        self.data[location[0][1]] = new_tile
+
     # generates a random map and saves it to self.data and a file
     def generate_random_map(self, file_name):
         self.data = []
@@ -29,6 +32,7 @@ class map:
             self.data += [[randint(0, MAX_TILE_VALUE) for x in xrange(MAP_WIDTH)]]
         self.save(file_name)
 
+    # load from file
     def load(self, file_name):
         self.data = []
         file = open(file_name, 'rb')
@@ -43,6 +47,7 @@ class map:
             data = data[MAP_WIDTH:]
         return NO_PROBLEM
 
+    # save to file
     def save(self, file_name):
         out = ''
         for row in self.data:
@@ -54,6 +59,7 @@ class map:
         file.close()
         return NO_PROBLEM
 
+    # display map on screen
     def display(self, screen, camera):
         # maybe, instead of actually displaying, return clip # and Rect to display in main
         if screen == None:
