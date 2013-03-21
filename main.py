@@ -9,6 +9,7 @@ import pygame
 from consts import *
 from character import *
 from keybinding import *
+from map import *
 
 def main():
     # Set up screen #######
@@ -22,12 +23,16 @@ def main():
     read_settings(KEYBINDINGS)
 
     # Set up variables ####
+    # they probably need ##
+    # better names ########
     quit = False
     camera = pygame.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT) # tile index, not pixel
 
     background = pygame.image.load(BACKGROUND_IMAGE)
     user = character(CHARACTER_SPRITE_SHEET, COLOR_KEY)
-    ship = map(MAP_DEFAULT, TILE_SHEET)
+
+    ship = map(TILE_SHEET, COLOR_KEY)
+    ship.load(MAP_DEFAULT)
 
     # #####################
     while not(quit):
@@ -40,22 +45,21 @@ def main():
 
         # update objects
         user.update(pressed)
-
-        # refresh screen
-        screen.fill(WHITE);
         # map.update
         # npcs.update
         # etc
 
+        # refresh screen
         # display background
         screen.blit(background, (0, 0))
         # display map/world
+        ship.display(screen, camera)
         # display player
         user.display(screen, camera)                # display user sprite
         # display NPCs
         # etc
 
-        pygame.display.set_caption('(' + str(user.x()) + ',' + str(user.y()) + ')')
+        pygame.display.set_caption(GAME_NAME + ' (' + str(user.x()) + ',' + str(user.y()) + ')')
         pygame.display.flip()                       # show screen
 
     return NO_PROBLEM
