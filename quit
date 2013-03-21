@@ -1,0 +1,234 @@
+[33mcommit a5c950b851165f572ce0e2eaefb85c6b44a6c148[m
+Author: calccrypto <calccrypto@yahoo.com>
+Date:   Tue Mar 19 16:54:13 2013 -0400
+
+    Less Stuff
+
+[33mcommit f13491cd8aa6e88e07c12cec54f9a263e9f259cc[m
+Author: Kate <ktspinney@gmail.com>
+Date:   Tue Mar 19 16:49:01 2013 -0400
+
+    Menu Class Introduction
+
+[33mcommit c8b443719bf696b0ebf54d4363c90747c958388e[m
+Author: Kate <ktspinney@gmail.com>
+Date:   Tue Mar 19 16:36:51 2013 -0400
+
+    Organization/Consts modification
+
+[33mcommit a571d496d71c05f11ffbd3da4bfd247d8186aa17[m
+Author: calccrypto <calccrypto@yahoo.com>
+Date:   Tue Mar 19 16:19:44 2013 -0400
+
+    Have Background!
+
+[33mcommit 6b5d8cf6fd944ba329bf32134ac3a873231af425[m
+Author: Kate <ktspinney@gmail.com>
+Date:   Tue Mar 19 16:20:01 2013 -0400
+
+    Revert "Geo"
+    
+    This reverts commit 5e40492624962860942211d86caab5a06729da00.
+
+[33mcommit 5e40492624962860942211d86caab5a06729da00[m
+Author: Kate <ktspinney@gmail.com>
+Date:   Tue Mar 19 16:18:18 2013 -0400
+
+    Geo
+
+[33mcommit 9b4c309e29ba22a184c62babcff6b4f56fc07cae[m
+Author: calccrypto <calccrypto@yahoo.com>
+Date:   Wed Mar 6 14:40:38 2013 -0500
+
+    More stuff
+
+[33mcommit 7630faa22bc39c71eabf03a33bdfc83f9dc57804[m
+Author: calccrypto <calccrypto@yahoo.com>
+Date:   Wed Mar 6 13:28:37 2013 -0500
+
+    Fixed typos
+
+[33mcommit afb9da46fdc9aa38046c3fced90734620ae56d8e[m
+Author: calccrypto <calccrypto@yahoo.com>
+Date:   Wed Mar 6 13:25:03 2013 -0500
+
+    Added Modifiable Keybindings
+
+[33mcommit 98eff8eac81af214a9c69d2deee33524743c8ae5[m
+Author: calccrypto <calccrypto@yahoo.com>
+Date:   Tue Mar 5 17:13:32 2013 -0500
+
+    Use self.__clip for direction user is facing
+
+[33mcommit 06377c2cb0eee86798ded0713ee5554b9e5f343d[m
+Author: calccrypto <calccrypto@yahoo.com>
+Date:   Tue Mar 5 17:03:32 2013 -0500
+
+    Added suggestions in comments
+    
+    instead of opening image files in classes, open them in main, and clip
+    them somewhere else (pass into 'display()' function, do clipping in
+    main, etc)
+
+[33mcommit 9ebec2e5b7c877a2a153ba1c03684029098b0761[m
+Author: calccrypto <calccrypto@yahoo.com>
+Date:   Tue Mar 5 16:49:39 2013 -0500
+
+    Changed GAME_NAME const
+
+[33mcommit 1c5b23042c471309735ee01f5efeee65e03bf2fb[m
+Author: calccrypto <calccrypto@yahoo.com>
+Date:   Mon Mar 4 18:50:10 2013 -0500
+
+    More stuff thats probably not going to be used
+
+[33mcommit 49c0ed2b05e9f92bc9508570631f697020a5be9f[m
+Author: calccrypto <calccrypto@yahoo.com>
+Date:   Fri Mar 1 17:34:20 2013 -0500
+
+    More Robot
+
+[33mcommit 7e326899b062bc84da04ca9d287e47fc7142c4b3[m
+Author: calccrypto <calccrypto@yahoo.com>
+Date:   Fri Mar 1 16:41:13 2013 -0500
+
+    We have a Robot!
+    
+    Beep Boop
+
+[33mcommit a070daaf258d16a7cdc7b0db691d3341ba7422ad[m
+Author: calccrypto <calccrypto@yahoo.com>
+Date:   Wed Feb 27 16:24:03 2013 -0500
+
+    More changes
+
+[33mcommit 8c74fbf515e9eae29839052a71b341ad523117a2[m
+Author: calccrypto <calccrypto@yahoo.com>
+Date:   Wed Feb 27 16:01:25 2013 -0500
+
+    Fixed indents
+
+[33mcommit 746f43135b7695832ead16b21e3f88eb052a913a[m
+Author: calccrypto <calccrypto@yahoo.com>
+Date:   Tue Feb 26 16:35:58 2013 -0500
+
+    Added picture I forgot to add
+
+[33mcommit a046df203cea0bc01641b9b41355533bfc1e8d10[m
+Author: calccrypto <calccrypto@yahoo.com>
+Date:   Tue Feb 26 16:32:37 2013 -0500
+
+    Added some basic code
+    
+    No need to use code, but it will probably be useful
+
+[33mcommit 9920464fb92f33b640e765391ff499bbdff04f40[m
+Author: calccrypto <calccrypto@yahoo.com>
+Date:   Wed Feb 20 14:02:40 2013 -0500
+
+    Added base.py
+    
+    Some basic pygame code
+
+[33mcommit 48b056836ec8922625977ce96b6b901bffbf3952[m
+Author: calccrypto <calccrypto@yahoo.com>
+Date:   Wed Feb 20 14:01:26 2013 -0500
+
+    Revert "asdasdas"
+    
+    This reverts commit f5ed2f94cbe9ef9e48e6b24f38aa0e446b6a8c1f.
+
+[33mcommit f5ed2f94cbe9ef9e48e6b24f38aa0e446b6a8c1f[m
+Author: calccrypto <calccrypto@yahoo.com>
+Date:   Wed Feb 20 14:00:29 2013 -0500
+
+    asdasdas
+
+[33mcommit 5ac9137475c93cc986cb2c5fe640bf6017885c26[m
+Author: calccrypto <calccrypto@yahoo.com>
+Date:   Fri Feb 15 18:14:57 2013 -0500
+
+    Can you hear me now?
+
+[33mcommit 8d302ff7d24965c74f93c75a705061637687a445[m
+Author: T.J. Callahan <callat2@gmail.com>
+Date:   Fri Feb 15 17:43:59 2013 -0500
+
+    messing with python
+
+[33mcommit b7276a6d387bbbb008897a7f6f0ba19ce2c0ff78[m
+Merge: 13f924f e009520
+Author: calccrypto <calccrypto@yahoo.com>
+Date:   Fri Feb 15 17:23:53 2013 -0500
+
+    Merge branch 'master' of github.com:Spinnk/Robot-Murder-Investigation
+
+[33mcommit 13f924f8cac2a243ec45ea60d4685151ae59162a[m
+Author: calccrypto <calccrypto@yahoo.com>
+Date:   Fri Feb 15 17:19:33 2013 -0500
+
+    HI
+
+[33mcommit e00952094e5f0962a5956867f166eabdcf3daa74[m
+Author: Geo Kersey <geokersey@gmail.com>
+Date:   Fri Feb 15 17:01:51 2013 -0500
+
+    Example Python File
+    
+    BOOM HEADSHOT 360 NOSCOPE
+
+[33mcommit 68f803ef6331848c7826948470371cea86e26b9b[m
+Author: T.J. Callahan <callat2@gmail.com>
+Date:   Fri Feb 15 16:40:11 2013 -0500
+
+    trying to upload a file
+    
+    did it work :O :O :O
+
+[33mcommit cb043f397c34ac3df1a8bca62f7a36e273b50f3b[m
+Author: Geo Kersey <geokersey@gmail.com>
+Date:   Fri Feb 15 16:32:59 2013 -0500
+
+    Example
+    
+    Using my local folder, I placed this doc in there then "committed" it.
+
+[33mcommit d435d83c586d8f9c0f08d75c84664357394ee9a9[m
+Author: Spinnk <ktspinney@gmail.com>
+Date:   Fri Feb 15 16:31:14 2013 -0500
+
+    Update README.md
+
+[33mcommit 1be4a50527c0cb98ab3d14475e0956397b681fa7[m
+Author: Spinnk <ktspinney@gmail.com>
+Date:   Fri Feb 15 16:30:27 2013 -0500
+
+    Update README.md
+
+[33mcommit 6b4098ac2903a812a1063ea01bf437722481a543[m
+Author: T.J. Callahan <callat2@gmail.com>
+Date:   Fri Feb 15 16:26:43 2013 -0500
+
+    DID IT WORK
+
+[33mcommit be9bc8c307c6191dc9575cbe1c08480ee1a552ec[m
+Author: Geo Kersey <geokersey@gmail.com>
+Date:   Fri Feb 15 16:26:14 2013 -0500
+
+    Revert "Revert "Initial commit""
+    
+    This reverts commit a8936d45a1edf462600f5559def2f20c33233b3c.
+
+[33mcommit a8936d45a1edf462600f5559def2f20c33233b3c[m
+Author: Geo Kersey <geokersey@gmail.com>
+Date:   Fri Feb 15 16:24:41 2013 -0500
+
+    Revert "Initial commit"
+    
+    This reverts commit 730f7b121ad76ba54d289c33a76c0af992d6696d.
+
+[33mcommit 730f7b121ad76ba54d289c33a76c0af992d6696d[m
+Author: Spinnk <ktspinney@gmail.com>
+Date:   Tue Feb 12 14:24:54 2013 -0800
+
+    Initial commit
