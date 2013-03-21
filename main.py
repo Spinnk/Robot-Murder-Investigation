@@ -9,8 +9,11 @@ import pygame
 from consts import *
 from character import *
 from keybinding import *
+from map import *
 
 def main():
+    os.environ['SDL_VIDEO_CENTERED'] = '1'
+
     # Set up screen #######
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.RESIZABLE)    # create the screen
     if screen == None:
@@ -27,7 +30,8 @@ def main():
 
     background = pygame.image.load(BACKGROUND_IMAGE)
     user = character(CHARACTER_SPRITE_SHEET, COLOR_KEY)
-    ship = map(MAP_DEFAULT, TILE_SHEET)
+    ship = map(TILE_SHEET)
+    ship.load(MAP_DEFAULT)
 
     # #####################
     while not(quit):
@@ -42,17 +46,23 @@ def main():
         user.update(pressed)
 
         # refresh screen
-        screen.fill(WHITE);
+        screen.fill(WHITE)
         # map.update
+        ship.update()
         # npcs.update
         # etc
+
+        # # # move updating screen into classes? # # #
 
         # display background
         screen.blit(background, (0, 0))
         # display map/world
+        ship.display(screen, camera)
+
         # display player
         user.display(screen, camera)                # display user sprite
         # display NPCs
+
         # etc
 
         pygame.display.set_caption('(' + str(user.x()) + ',' + str(user.y()) + ')')
