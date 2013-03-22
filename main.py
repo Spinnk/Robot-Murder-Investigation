@@ -76,7 +76,7 @@ def main():
         screen.blit(background, (0, 0))
         gameInstance.display(screen)
         # display map/world
-        # ship.display(screen, camera)
+        ship.display(screen, camera)
         # display player
         user.display(screen, camera)                # display user sprite
         # display NPCs

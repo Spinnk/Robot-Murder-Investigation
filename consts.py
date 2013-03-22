@@ -21,7 +21,7 @@ MAP_DEFAULT = os.path.join(CWD, "map.txt")  # default map configuration file
 MAP_WIDTH = 1024                            # tiles
 MAP_HEIGHT = 1024                           # tiles
 
-MAX_TILE_VALUE = 8
+MAX_TILE_VALUE = 2
 
 TILE_SHEET = os.path.join(ART_LOCATION, "tiles.png") # sheet of non-animated images
 TILE_WIDTH = 80                             # pixels
@@ -37,7 +37,7 @@ SPRITE_HEIGHT = 80                          # pixels
 
 CHARACTER_SPRITE_SHEET = os.path.join( ART_LOCATION, "robot.png")
 CHARACTER_WIDTH = 80                        # pixels
-CHARACTER_HEIGHT = 188                      # pixels
+CHARACTER_HEIGHT = 160                      # pixels
 
 # Random Useful RGB Values
 WHITE = pygame.Color(0xff, 0xff, 0xff, 0xff)
