@@ -10,6 +10,7 @@ from consts import *
 from character import *
 from keybinding import *
 from map import *
+from game import *
 
 def main():
     # Set up screen #######
