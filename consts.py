@@ -9,8 +9,8 @@ import pygame
 
 GAME_NAME = "Sentience In Space"
 
-os.chdir(os.path.dirname(sys.argv[0]))
-CWD = os.getcwd()
+CWD = os.path.abspath(__file__))[0]
+os.chdir(CWD)
 ART_LOCATION = os.path.join( CWD, "art" )
 
 KEYBINDINGS = os.path.join(CWD, "settings.config")
