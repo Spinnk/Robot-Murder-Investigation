@@ -27,4 +27,6 @@ class game:
 
         def __init__(self, screen):
             self.__main_menu = main_menu( screen )
-            self.
+
+        def display(self, screen):
+            self.__main_menu.display(pygame.event.Event(EVENT_CHANGE_STATE, key = 0), screen) 

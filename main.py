@@ -10,6 +10,7 @@ from consts import *
 from character import *
 from keybinding import *
 from map import *
+from game import *
 
 def main():
     # Set up screen #######
@@ -29,6 +30,7 @@ def main():
 
     background = pygame.image.load(BACKGROUND_IMAGE)
     user = character(CHARACTER_SPRITE_SHEET, COLOR_KEY)
+    gameInstance = game(screen)
 
     ship = map(TILE_SHEET, COLOR_KEY)
     ship.load(MAP_DEFAULT)
@@ -63,8 +65,9 @@ def main():
         # refresh screen
         # display background
         screen.blit(background, (0, 0))
+        gameInstance.display(screen)
         # display map/world
-        ship.display(screen, camera)
+        # ship.display(screen, camera)
         # display player
         user.display(screen, camera)                # display user sprite
         # display NPCs
