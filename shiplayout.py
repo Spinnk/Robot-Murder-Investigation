@@ -12,20 +12,20 @@ import pygame
 from consts import *
 from hashlib import sha512
 
-class map:
+class ShipLayout:
     def __init__(self, tile_sheet_name, colorkey = None):
         self.sheet = pygame.image.load(tile_sheet_name)
         if self.sheet == None:                              # error if file could not be opened
             sys.exit(IMAGE_DOES_NOT_EXIST)
         self.sheet = self.sheet.convert()
-        self.sheet.set_colorkey(colorkey, pygame.RLEACCEL)  # not working for som reaosn
+        self.sheet.set_colorkey(colorkey, pygame.RLEACCEL)  # not working for some reason
         self.data = []
 
     def change_tile(self, new_tile, location):
         self.data[location[0][1]] = new_tile
 
     # generates a random map and saves it to self.data and a file
-    def generate_random_map(self, file_name):
+    def generaterandommap(self, file_name):
         self.data = []
         from random import randint
         for x in xrange(MAP_HEIGHT):
@@ -72,5 +72,5 @@ class map:
         return 0
 
 if __name__ == '__main__':
-    test = map(TILE_SHEET, COLOR_KEY)
-    test.generate_random_map(os.path.join(CWD, "map.txt"))
+    test = ShipLayout(TILE_SHEET, COLOR_KEY)
+    test.generaterandommap(os.path.join(CWD, "map.txt"))
