@@ -9,7 +9,7 @@ import pygame
 from consts import *
 from character import *
 from keybinding import *
-from ShipLayout import *
+from shiplayout import *
 from game import *
 
 def main():
@@ -48,7 +48,7 @@ def main():
             if (event.type == pygame.QUIT) or ((event.type == pygame.KEYDOWN) and pygame.key.get_pressed()[pygame.K_ESCAPE]): # exit when close window "X" is pressed or escape key
                 quit = True
 
-            else:
+            elif (event.type == pygame.KEYDOWN or event.type == EVENT_CHANGE_STATE):
                 gameInstance.update( event )
         # multi key presses
         pressed = pygame.key.get_pressed()
