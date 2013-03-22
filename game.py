@@ -27,3 +27,4 @@ class game:
 
         def __init__(self, screen):
             self.__main_menu = main_menu( screen )
+            self.
