@@ -17,6 +17,9 @@ class MainMenu:
         self.__menu.set_center(True, True)
         self.__menu.set_alignment('center', 'center')
 
+    def update(self, event):
+        self.__menu.update(event, 0)
+
 
     def display(self, event, screen):
         rect_list, state = self.__menu.update(event, 0)
@@ -28,5 +31,9 @@ class Game:
         def __init__(self, screen):
             self.__mainMenu = MainMenu( screen )
 
-        def display(self, event, screen):
+        def update(self, event):
+            self.__mainMenu(event)
+
+        def display(self, screen):
             self.__mainMenu.display(pygame.event.Event(EVENT_CHANGE_STATE, key = 0), screen) 
+

@@ -9,7 +9,7 @@ import pygame
 from consts import *
 from character import *
 from keybinding import *
-from map import *
+from ShipLayout import *
 from game import *
 
 def main():
@@ -32,7 +32,7 @@ def main():
     user = character(CHARACTER_SPRITE_SHEET, COLOR_KEY)
     gameInstance = Game(screen)
 
-    ship = map(TILE_SHEET, COLOR_KEY)
+    ship = ShipLayout(TILE_SHEET, COLOR_KEY)
     ship.load(MAP_DEFAULT)
 
     state = 0  # 0 = main menu
@@ -47,6 +47,9 @@ def main():
         for event in pygame.event.get():
             if (event.type == pygame.QUIT) or ((event.type == pygame.KEYDOWN) and pygame.key.get_pressed()[pygame.K_ESCAPE]): # exit when close window "X" is pressed or escape key
                 quit = True
+
+            else:
+                gameInstance.update( event )
         # multi key presses
         pressed = pygame.key.get_pressed()
 
@@ -71,7 +74,7 @@ def main():
         # refresh screen
         # display background
         screen.blit(background, (0, 0))
-        gameInstance.display(event, screen)
+        gameInstance.display(screen)
         # display map/world
         # ship.display(screen, camera)
         # display player
