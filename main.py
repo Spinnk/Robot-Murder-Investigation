@@ -42,6 +42,18 @@ def main():
         # multi key presses
         pressed = pygame.key.get_pressed()
 
+        # reposition camera
+        camera.x = user.x() - SHOW_TILES_W / 2
+        if camera.x < 0:
+            camera.x = 0
+        if (camera.x + 1) > MAP_WIDTH:
+            camera.x = MAP_WIDTH - 1
+        camera.y = user.y() - SHOW_TILES_H / 2
+        if camera.y < 0:
+            camera.y = 0
+        if (camera.y + 1) > MAP_HEIGHT:
+            camera.y = MAP_HEIGHT - 1
+
         # update objects
         user.update(pressed)
         # map.update
