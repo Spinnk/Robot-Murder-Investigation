@@ -9,7 +9,7 @@ import pygame
 
 GAME_NAME = "Sentience In Space"
 
-CWD = os.path.abspath(__file__))[0]
+CWD = os.path.split(os.path.abspath(__file__))[0]
 os.chdir(CWD)
 ART_LOCATION = os.path.join( CWD, "art" )
 
