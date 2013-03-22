@@ -42,13 +42,13 @@ def main():
                 #4 = options menu
 
     # #####################
-    while not(quit):
+    while not(quit):      
         # single key presses
         for event in pygame.event.get():
             if (event.type == pygame.QUIT) or ((event.type == pygame.KEYDOWN) and pygame.key.get_pressed()[pygame.K_ESCAPE]): # exit when close window "X" is pressed or escape key
                 quit = True
 
-            elif (event.type == pygame.KEYDOWN or event.type == EVENT_CHANGE_STATE):
+            else:
                 gameInstance.update( event )
         # multi key presses
         pressed = pygame.key.get_pressed()
@@ -74,6 +74,8 @@ def main():
         # refresh screen
         # display background
         screen.blit(background, (0, 0))
+        
+
         gameInstance.display(screen)
         # display map/world
         ship.display(screen, camera)
