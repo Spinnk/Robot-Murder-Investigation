@@ -35,7 +35,7 @@ def main():
     ship = ShipLayout(TILE_SHEET, COLOR_KEY)
     ship.load(MAP_DEFAULT)
 
-    state = 0  # 0 = main menu
+    state = 0   #0 = main menu
                 #1 = in-game
                 #2 = inventory/map/journal
                 #3 = puzzle
@@ -48,8 +48,8 @@ def main():
             if (event.type == pygame.QUIT) or ((event.type == pygame.KEYDOWN) and pygame.key.get_pressed()[pygame.K_ESCAPE]): # exit when close window "X" is pressed or escape key
                 quit = True
 
-            else:
-                gameInstance.update( event )
+            elif state == 0:
+                state = gameInstance.update( event )
         # multi key presses
         pressed = pygame.key.get_pressed()
 
@@ -75,12 +75,14 @@ def main():
         # display background
         screen.blit(background, (0, 0))
         
-
-        gameInstance.display(screen)
-        # display map/world
-        ship.display(screen, camera)
-        # display player
-        user.display(screen, camera)                # display user sprite
+        if state == 0:
+            gameInstance.display(screen)
+  
+        elif state == 1:
+            # display player
+            user.display(screen, camera)                # display user sprite
+            # display map/world
+            ship.display(screen, camera)
         # display NPCs
         # etc
 

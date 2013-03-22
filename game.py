@@ -9,33 +9,39 @@ from menu import *
 class MainMenu:
 
     def __init__(self, screen):
-        self.__menu = cMenu(50, 50, 20, 5, 'vertical', 100, screen,
+        self.menu = cMenu(50, 50, 20, 5, 'vertical', 100, screen,
                             [('New Game', 1, None),
                              ('Load Game', 2, None),
                              ('Exit', 3, None)])
         
-        self.__menu.set_center(True, True)
-        self.__menu.set_alignment('center', 'center')
+        self.menu.set_center(True, True)
+        self.menu.set_alignment('center', 'center')
+        self.mainState = 0
  
     def update(self, event):
-        self.__menu.update(event, 0)
+        rectList, self.mainState = self.menu.update(event, 0)
+        return self.mainState
+            
 
 
-    def display(self, event, screen):
-        self.__menu.draw_buttons()
+
+    def display(self):
+        self.menu.draw_buttons()
 
 
 
 class Game:
         def __init__(self, screen):
-            self.__mainMenu = MainMenu( screen )
-            self.__mainMenu.update( pygame.event.Event(EVENT_CHANGE_STATE, key = 0) )
+            self.mainMenu = MainMenu( screen )
+            self.mainMenu.update( pygame.event.Event(EVENT_CHANGE_STATE, key = 0) )
             
         def update(self, event):
-            if (event.type == pygame.KEYDOWN or event.type == EVENT_CHANGE_STATE):
-                self.__mainMenu.update(event)
+            if event.type == pygame.KEYDOWN or event.type == EVENT_CHANGE_STATE:
+                return self.mainMenu.update(event)
+            else:
+                return 0
 
                 
         def display(self, screen):
-            self.__mainMenu.display(pygame.event.Event(EVENT_CHANGE_STATE, key = 0), screen) 
+            self.mainMenu.display() 
             
