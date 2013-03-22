@@ -30,10 +30,16 @@ def main():
 
     background = pygame.image.load(BACKGROUND_IMAGE)
     user = character(CHARACTER_SPRITE_SHEET, COLOR_KEY)
-    gameInstance = game(screen)
+    gameInstance = Game(screen)
 
     ship = map(TILE_SHEET, COLOR_KEY)
     ship.load(MAP_DEFAULT)
+
+    state = 0  # 0 = main menu
+                #1 = in-game
+                #2 = inventory/map/journal
+                #3 = puzzle
+                #4 = options menu
 
     # #####################
     while not(quit):
@@ -65,7 +71,7 @@ def main():
         # refresh screen
         # display background
         screen.blit(background, (0, 0))
-        gameInstance.display(screen)
+        gameInstance.display(event, screen)
         # display map/world
         # ship.display(screen, camera)
         # display player

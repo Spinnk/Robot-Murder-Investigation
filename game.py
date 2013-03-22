@@ -6,7 +6,7 @@ import sys, pygame
 from consts import *
 from menu import *
 
-class main_menu:
+class MainMenu:
 
     def __init__(self, screen):
         self.__menu = cMenu(50, 50, 20, 5, 'vertical', 100, screen,
@@ -23,10 +23,10 @@ class main_menu:
         pygame.display.update(rect_list)
 
 
-class game:
+class Game:
 
         def __init__(self, screen):
-            self.__main_menu = main_menu( screen )
+            self.__mainMenu = MainMenu( screen )
 
-        def display(self, screen):
-            self.__main_menu.display(pygame.event.Event(EVENT_CHANGE_STATE, key = 0), screen) 
+        def display(self, event, screen):
+            self.__mainMenu.display(pygame.event.Event(EVENT_CHANGE_STATE, key = 0), screen) 
