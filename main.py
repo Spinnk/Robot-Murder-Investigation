@@ -8,9 +8,9 @@ import pygame
 
 from consts import *
 from character import *
+from game import *
 from keybinding import *
 from shiplayout import *
-from game import *
 
 def main():
     # Set up screen #######
@@ -42,7 +42,7 @@ def main():
                 #4 = options menu
 
     # #####################
-    while not(quit):      
+    while not(quit):
         # single key presses
         for event in pygame.event.get():
             if (event.type == pygame.QUIT) or ((event.type == pygame.KEYDOWN) and pygame.key.get_pressed()[pygame.K_ESCAPE]): # exit when close window "X" is pressed or escape key
@@ -53,38 +53,38 @@ def main():
         # multi key presses
         pressed = pygame.key.get_pressed()
 
-        # reposition camera
-        camera.x = user.x() - SHOW_TILES_W / 2
-        if camera.x < 0:
-            camera.x = 0
-        if (camera.x + 1) > MAP_WIDTH:
-            camera.x = MAP_WIDTH - 1
-        camera.y = user.y() - SHOW_TILES_H / 2
-        if camera.y < 0:
-            camera.y = 0
-        if (camera.y + 1) > MAP_HEIGHT:
-            camera.y = MAP_HEIGHT - 1
-
-        # update objects
-        user.update(pressed)
-        # map.update
-        # npcs.update
-        # etc
-
         # refresh screen
         # display background
         screen.blit(background, (0, 0))
-        
+
         if state == 0:
             gameInstance.display(screen)
-  
+
         elif state == 1:
-            # display player
-            user.display(screen, camera)                # display user sprite
+            # reposition camera
+            camera.x = user.x() - SHOW_TILES_W / 2
+            if camera.x < 0:
+                camera.x = 0
+            if (camera.x + 1) > MAP_WIDTH:
+                camera.x = MAP_WIDTH - 1
+            camera.y = user.y() - SHOW_TILES_H / 2 - 1
+            if camera.y < 0:
+                camera.y = 0
+            if (camera.y + 1) > MAP_HEIGHT:
+                camera.y = MAP_HEIGHT - 1
+
+            # update objects
+            user.update(pressed)
+            # map.update
+            # npcs.update
+            # etc
+
             # display map/world
             ship.display(screen, camera)
-        # display NPCs
-        # etc
+            # display player
+            user.display(screen, camera)
+            # display NPCs
+            # etc
 
         pygame.display.set_caption(GAME_NAME + ' (' + str(user.x()) + ',' + str(user.y()) + ')')
         pygame.display.flip()                       # show screen

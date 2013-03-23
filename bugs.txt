@@ -1,0 +1,2 @@
+3/19 - Colorkey not working properly
+3/22 - Player display jumps if movement key is held down
