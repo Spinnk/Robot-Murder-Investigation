@@ -14,8 +14,8 @@ ART_LOCATION = os.path.join( CWD, "art" )
 
 KEYBINDINGS = os.path.join(CWD, "settings.config")
 
-SCREEN_WIDTH = 800                          # pixels
-SCREEN_HEIGHT = 600                         # pixels
+SCREEN_WIDTH = 880                          # pixels
+SCREEN_HEIGHT = 640                         # pixels
 
 MAP_DEFAULT = os.path.join(CWD, "map.txt")  # default map configuration file
 MAP_WIDTH = 1024                            # tiles
@@ -26,8 +26,10 @@ MAX_TILE_VALUE = 2
 TILE_SHEET = os.path.join(ART_LOCATION, "tiles.png") # sheet of non-animated images
 TILE_WIDTH = 80                             # pixels
 TILE_HEIGHT = 80                            # pixels
-SHOW_TILES_W = int(ceil(float(SCREEN_WIDTH) / TILE_WIDTH))    # number of tiles across that are shown at any one time
-SHOW_TILES_H = int(ceil(float(SCREEN_HEIGHT) / TILE_HEIGHT))  # number of tiles down that are shown at any one time
+SHOW_TILES_W = SCREEN_WIDTH / TILE_WIDTH    # number of tiles across that are shown at any one time
+SHOW_TILES_H = SCREEN_HEIGHT / TILE_HEIGHT  # number of tiles down that are shown at any one time
+
+print SHOW_TILES_W
 
 BACKGROUND_IMAGE = os.path.join( ART_LOCATION, "background 1.png" )
 

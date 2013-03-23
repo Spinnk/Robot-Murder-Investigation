@@ -67,7 +67,7 @@ def main():
                 camera.x = 0
             if (camera.x + 1) > MAP_WIDTH:
                 camera.x = MAP_WIDTH - 1
-            camera.y = user.y() - SHOW_TILES_H / 2 - 1
+            camera.y = user.y() - SHOW_TILES_H / 2 + 1
             if camera.y < 0:
                 camera.y = 0
             if (camera.y + 1) > MAP_HEIGHT:
