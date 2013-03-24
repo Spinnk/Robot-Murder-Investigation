@@ -1,3 +1,6 @@
-3/19 - Colorkey not working properly
+3/19 -  Colorkey not working properly
+3/21 -  Colorkey fixed
 3/22 -  Player display jumps if movement key is held down
         Camera not centered - fixed
+3/24 -  Player image does not jump after movement key is released
+        Keybindings do not work

@@ -52,17 +52,17 @@ class character:
             if (self.__y < 0):
                 self.__y = 0
             moved = True
-        if keystates[KB_LEFT]:
+        elif keystates[KB_LEFT]:
             self.__x -= 1
             if (self.__x < 0):
                 self.__x = 0
             moved = True
-        if keystates[KB_DOWN]:
+        elif keystates[KB_DOWN]:
             self.__y += 1
             if (self.__y >= MAP_HEIGHT):
                 self.__y = MAP_HEIGHT - 1
             moved = True
-        if keystates[KB_RIGHT]:
+        elif keystates[KB_RIGHT]:
             self.__x += 1
             if (self.__x >= MAP_WIDTH):
                 self.__y = MAP_WIDTH - 1

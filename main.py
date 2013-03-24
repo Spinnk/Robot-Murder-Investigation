@@ -9,6 +9,7 @@ import pygame
 from consts import *
 from character import *
 from game import *
+from inventory import *
 from keybinding import *
 from shiplayout import *
 
@@ -20,7 +21,8 @@ def main():
 
     pygame.display.set_caption(GAME_NAME)                   # give the screen a title
     # #####################
-    read_settings(KEYBINDINGS)
+
+    read_keybindings(KEYBINDINGS)
 
     # Set up variables ####
     # they probably need ##
@@ -50,6 +52,7 @@ def main():
 
             elif state == 0:
                 state = gameInstance.update( event )
+
         # multi key presses
         pressed = pygame.key.get_pressed()
 
@@ -61,6 +64,12 @@ def main():
             gameInstance.display(screen)
 
         elif state == 1:
+            # update objects
+            user.update(pressed)
+            # map.update
+            # npcs.update
+            # etc
+
             # reposition camera
             camera.x = user.x() - SHOW_TILES_W / 2
             if camera.x < 0:
@@ -72,12 +81,6 @@ def main():
                 camera.y = 0
             if (camera.y + 1) > MAP_HEIGHT:
                 camera.y = MAP_HEIGHT - 1
-
-            # update objects
-            user.update(pressed)
-            # map.update
-            # npcs.update
-            # etc
 
             # display map/world
             ship.display(screen, camera)
