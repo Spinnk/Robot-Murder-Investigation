@@ -39,19 +39,23 @@ def main():
 
     state = 0   #0 = main menu
                 #1 = in-game
-                #2 = inventory/map/journal
-                #3 = puzzle
-                #4 = options menu
+                #2 = load game
+                #3 = exit
+                #4 = save game
+                #5 = settings
+                #6 = inventory/map/journal
+                #7 = puzzle
+                #8 = options menu
 
     # #####################
     while not(quit):
         # single key presses
         for event in pygame.event.get():
-            if (event.type == pygame.QUIT) or ((event.type == pygame.KEYDOWN) and pygame.key.get_pressed()[pygame.K_ESCAPE]): # exit when close window "X" is pressed or escape key
+            if (event.type == pygame.QUIT): #or ((event.type == pygame.KEYDOWN) and pygame.key.get_pressed()[pygame.K_ESCAPE]): # exit when close window "X" is pressed or escape key
                 quit = True
 
-            elif state == 0:
-                state = gameInstance.update( event )
+            elif state == 0 or state == 1 or state == 2 or state == 5 or state == 8:
+                state = gameInstance.update( event, state )
 
         # multi key presses
         pressed = pygame.key.get_pressed()
@@ -61,7 +65,7 @@ def main():
         screen.blit(background, (0, 0))
 
         if state == 0:
-            gameInstance.display(screen)
+            gameInstance.display(screen, 0)
 
         elif state == 1:
             # update objects
@@ -88,6 +92,15 @@ def main():
             user.display(screen, camera)
             # display NPCs
             # etc
+
+        elif state == 2:
+            pass
+
+        elif state == 3:
+            quit = True
+
+        elif state == 8:
+            gameInstance.display(screen, state)
 
         pygame.display.set_caption(GAME_NAME + ' (' + str(user.x()) + ',' + str(user.y()) + ')')
         pygame.display.flip()                       # show screen

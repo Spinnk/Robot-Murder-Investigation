@@ -74,7 +74,7 @@
 #---[ Imports ]-----------------------------------------------------------------
 #-------------------------------------------------------------------------------
 import pygame
-
+from keybinding import *
 
 #-------------------------------------------------------------------------------
 #---[ Defines ]-----------------------------------------------------------------
@@ -600,22 +600,22 @@ class cMenu:
       s = self.selection
       n = self.change_number
 
-      if e.key == pygame.K_DOWN:
+      if e.key == pygame.K_DOWN or e.key == KB_DOWN:
          if (o == 'vertical') and ((s + 1) % n != 0):
             self.selection += 1
          elif o == 'horizontal':
             self.selection += n
-      elif e.key == pygame.K_UP:
+      elif e.key == pygame.K_UP or e.key == KB_UP:
          if (o == 'vertical') and ((s) % n != 0):
             self.selection -= 1
          elif o == 'horizontal':
             self.selection -= n
-      elif e.key == pygame.K_RIGHT:
+      elif e.key == pygame.K_RIGHT or e.key == KB_RIGHT:
          if o == 'vertical':
             self.selection += n
          elif (o == 'horizontal') and ((s + 1) % n != 0):
             self.selection += 1
-      elif e.key == pygame.K_LEFT:
+      elif e.key == pygame.K_LEFT or e.key == KB_LEFT:
          if o == 'vertical':
             self.selection -= n
          elif (o == 'horizontal') and ((s) % n != 0):
