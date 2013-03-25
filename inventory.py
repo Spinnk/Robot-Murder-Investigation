@@ -3,6 +3,9 @@
 # Currently displays inventory as list
 # Maybe change to fixed size 2D array or something
 
+# For displaying on map, maybe instead of having multiple
+# tile types, just hold a list of items and their coordinates
+
 from consts import *
 from keybinding import *
 

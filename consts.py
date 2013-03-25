@@ -47,13 +47,13 @@ INVENTORY_BACKGROUND_SHEET = os.path.join(ART_LOCATION, "inventory.png") # main 
 ITEM_COUNT = 6                              # max items in displayed list; reest are hidden
 ITEM_LIST_BOX = pygame.Rect(0, 0, 0, 0)     # first line of unselected items list
 
-ITEM_SHEET_LARGE = os.path.join(ART_LOCATION, "large items.png") # larger item images
-ITEM_LARGE_WIDTH = 80                       # pixels
-ITEM_LARGE_HEIGHT = 80                      # pixels
+ITEM_SHEET_LARGE = os.path.join(ART_LOCATION, "large items.png") # larger item images (displaying in inventory menu)
+ITEM_LARGE_WIDTH = 200                       # pixels
+ITEM_LARGE_HEIGHT = 200                      # pixels
 
-ITEM_SHEET_SMALL = os.path.join(ART_LOCATION, "small items.png") # smaller item images
-ITEM_SMALL_WIDTH = 200                      # pixels
-ITEM_SMALL_HEIGHT = 200                     # pixels
+ITEM_SHEET_SMALL = os.path.join(ART_LOCATION, "small items.png") # smaller item images (maybe for displaying on tiles)
+ITEM_SMALL_WIDTH = 80                      # pixels
+ITEM_SMALL_HEIGHT = 80                     # pixels
 
 # Items list
 # Item Index = Type, Tile on sheet
