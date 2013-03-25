@@ -14,15 +14,12 @@ from keybinding import *
 
 class character:
     # or instead of using file name, open all images in main, and clip with display()
-    def __init__(self, sprite_sheet_name, colorkey):   # taking in string to save memory + faster since surfaces are passed by value, not reference
+    def __init__(self):   # taking in string to save memory + faster since surfaces are passed by value, not reference
         # remember sprite will be standing on tile x+1
         self.__x = 0.0                                 # tile position on map
         self.__y = 0.0                                 # tile position on map
         self.__clip = 0                                # which image to clip from sprite sheet; also which direction player is facing
-        self.__sheet = pygame.image.load(sprite_sheet_name)
-        self.__sheet.set_colorkey(colorkey)
-        if self.__sheet == None:                       # error if file could not be opened
-            sys.exit(IMAGE_DOES_NOT_EXIST)
+        self.__frame = 0                               # use for animations
 
     # modifiers (for forcing movement)
     def setx(self, x):
@@ -72,11 +69,13 @@ class character:
         if moved:
             pygame.time.delay(100)
 
-    def display(self, screen, camera):
+    def display(self, screen, sheet, camera):
         # maybe, instead of actually displaying, return clip # and Rect to display in main
         if screen == None:
             return SURFACE_DOES_NOT_EXIST
+        if sheet == None:
+            return SURFACE_DOES_NOT_EXIST
         clip = pygame.Rect(self.__clip, 0, CHARACTER_WIDTH, CHARACTER_HEIGHT)
         show = pygame.Rect((self.__x - camera.x) * TILE_WIDTH, (self.__y - camera.y) * TILE_HEIGHT, 0, 0)
-        screen.blit(self.__sheet, show, clip)
+        screen.blit(sheet, show, clip)
         return 0

@@ -4,3 +4,4 @@
         Camera not centered - fixed
 3/24 -  Player image does not jump after movement key is released
         Keybindings do not work
+3/25 -  Weird syntax error

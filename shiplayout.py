@@ -1,4 +1,4 @@
-# map.py
+# shiplayout.py
 # Generic map class for basic storing of data,
 # updating, and displaying of a tile map
 
@@ -13,16 +13,11 @@ from consts import *
 from hashlib import sha512
 
 class ShipLayout:
-    def __init__(self, tile_sheet_name, colorkey = None):
-        self.sheet = pygame.image.load(tile_sheet_name)
-        if self.sheet == None:                              # error if file could not be opened
-            sys.exit(IMAGE_DOES_NOT_EXIST)
-        self.sheet = self.sheet.convert()
-        self.sheet.set_colorkey(colorkey, pygame.RLEACCEL)  # not working for some reason
+    def __init__(self):
         self.data = []
 
     def change_tile(self, new_tile, location):
-        self.data[location[0][1]] = new_tile
+        self.data[location[0]][location[1]] = new_tile
 
     # generates a random map and saves it to self.data and a file
     def generaterandommap(self, file_name):
@@ -60,15 +55,17 @@ class ShipLayout:
         return NO_PROBLEM
 
     # display map on screen
-    def display(self, screen, camera):
+    def display(self, screen, sheet, camera):
         # maybe, instead of actually displaying, return clip # and Rect to display in main
         if screen == None:
+            return SURFACE_DOES_NOT_EXIST
+        if sheet == None:
             return SURFACE_DOES_NOT_EXIST
         for x in xrange(SHOW_TILES_W):
             for y in xrange(SHOW_TILES_H):
                 show = pygame.Rect(x * TILE_WIDTH, y * TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT)
                 clip = pygame.Rect(self.data[camera.x + x][camera.y + y] * TILE_WIDTH, 0, TILE_WIDTH, TILE_HEIGHT)
-                screen.blit(self.sheet, show, clip)
+                screen.blit(sheet, show, clip)
         return 0
 
 if __name__ == '__main__':

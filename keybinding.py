@@ -45,7 +45,6 @@ def read_keybindings(file_name):
             KB_RIGHT = int(bind[6:])
         elif bind[:3] == 'USE':
             KB_USE = int(bind[4:])
-    print KB_UP
     return NO_PROBLEM
 
 # write keybindings to a settings file

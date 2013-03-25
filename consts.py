@@ -14,44 +14,55 @@ GAME_NAME = "Sentience In Space"
 
 CWD = os.path.split(os.path.abspath(__file__))[0]
 os.chdir(CWD)
-ART_LOCATION = os.path.join( CWD, "art" )
+ART_DIR = os.path.join( CWD, "art" )
 
-KEYBINDINGS = os.path.join(CWD, "settings.config")
+FPS = 60
 
+KEYBINDINGS_DIR = os.path.join(CWD, "settings.config")
+
+BACKGROUND_IMAGE_DIR = os.path.join( ART_DIR, "background 1.png" )
 SCREEN_WIDTH = 880                          # pixels
 SCREEN_HEIGHT = 640                         # pixels
 
-MAP_DEFAULT = os.path.join(CWD, "map.txt")  # default map configuration file
+MAP_DEFAULT_DIR = os.path.join(CWD, "map.txt")  # default map configuration file
 MAP_WIDTH = 1024                            # tiles
 MAP_HEIGHT = 1024                           # tiles
 
 MAX_TILE_VALUE = 2
 
-TILE_SHEET = os.path.join(ART_LOCATION, "tiles.png") # tiles
+TILE_SHEET_DIR = os.path.join(ART_DIR, "tiles.png") # tiles
 TILE_WIDTH = 80                             # pixels
 TILE_HEIGHT = 80                            # pixels
 SHOW_TILES_W = SCREEN_WIDTH / TILE_WIDTH    # number of tiles across that are shown at any one time
 SHOW_TILES_H = SCREEN_HEIGHT / TILE_HEIGHT  # number of tiles down that are shown at any one time
 
-BACKGROUND_IMAGE = os.path.join( ART_LOCATION, "background 1.png" )
+TILE_SOLID = 0x01                           # mask for whether or not the tile can be walked through
 
-SPRITE_SHEETS = ["", ""]                    # strings of file names. probably going to create separate variables rather than use list
-SPRITE_WIDTH = 80                           # pixels
-SPRITE_HEIGHT = 80                          # pixels
+TILE_INFO = [0,                             # index = tile type, clip; value is properties mask
+             0,
+             0
+            ]
 
-CHARACTER_SPRITE_SHEET = os.path.join( ART_LOCATION, "robot.png")
+NPC_SHEETS_DIR = []                         # strings of file names. probably going to create separate variables rather than use list
+NPC_WIDTH = 80                              # pixels
+NPC_HEIGHT = 80                             # pixels
+NPC_MAX_VALUE = 0
+NPC_COUNT = 0
+NPC_NAMES = ["", ""]                        # nams of "extra" npcs
+
+CHARACTER_SPRITE_SHEET_DIR = os.path.join( ART_DIR, "robot.png")
 CHARACTER_WIDTH = 80                        # pixels
 CHARACTER_HEIGHT = 160                      # pixels
 
-INVENTORY_BACKGROUND_SHEET = os.path.join(ART_LOCATION, "inventory.png") # main inventory screen
+INVENTORY_BACKGROUND_SHEET_DIR = os.path.join(ART_DIR, "inventory.png") # main inventory screen
 ITEM_COUNT = 6                              # max items in displayed list; reest are hidden
 ITEM_LIST_BOX = pygame.Rect(0, 0, 0, 0)     # first line of unselected items list
 
-ITEM_SHEET_LARGE = os.path.join(ART_LOCATION, "large items.png") # larger item images (displaying in inventory menu)
+ITEM_SHEET_LARGE_DIR = os.path.join(ART_DIR, "large items.png") # larger item images (displaying in inventory menu)
 ITEM_LARGE_WIDTH = 200                       # pixels
 ITEM_LARGE_HEIGHT = 200                      # pixels
 
-ITEM_SHEET_SMALL = os.path.join(ART_LOCATION, "small items.png") # smaller item images (maybe for displaying on tiles)
+ITEM_SHEET_SMALL_DIR = os.path.join(ART_DIR, "small items.png") # smaller item images (maybe for displaying on tiles)
 ITEM_SMALL_WIDTH = 80                      # pixels
 ITEM_SMALL_HEIGHT = 80                     # pixels
 
@@ -67,7 +78,7 @@ ITEM_IMAGE_BOX = pygame.Rect(0, 0, 100, 100)        # location of items when dis
 ITEM_NAME_BOX = pygame.Rect(0, 0, 100, 100)         # location of name when item is displayed
 ITEM_DESCRIPTION_BOX = pygame.Rect(0, 0, 100, 100)  # location of first line of descriptions
 
-# Random Useful RGB Values
+# Useful RGB Values
 WHITE = pygame.Color(0xff, 0xff, 0xff, 0xff)
 BLACK = pygame.Color(0x00, 0x00, 0x00, 0xff)
 HOTPINK = pygame.Color(0xff, 0x69, 0xb4, 0xff)
@@ -81,3 +92,5 @@ IMAGE_DOES_NOT_EXIST = 2
 CHECKSUMS_DO_NOT_MATCH = 3
 INCORRECT_FILE_FORMAT = 4
 ITEM_DOES_NOT_EXIST = 5
+
+MUSIC_FILES = []                                # list of music file names
