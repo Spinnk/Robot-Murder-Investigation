@@ -52,7 +52,6 @@ class OptionsMenu:
 class Game:
         def __init__(self, screen):
             self.mainMenu = MainMenu( screen )
-            self.mainMenu.update( pygame.event.Event(EVENT_CHANGE_STATE, key = 0) )
             self.optionsMenu = OptionsMenu( screen )
 
         def update(self, event, state):
@@ -63,7 +62,8 @@ class Game:
                 if (event.type == pygame.KEYDOWN) and pygame.key.get_pressed()[pygame.K_ESCAPE]:
                     return self.optionsMenu.update(event)
             if state == 8:
-                return self.optionsMenu.update(event)
+                if event.type == pygame.KEYDOWN or event.type == EVENT_CHANGE_STATE:
+                    return self.optionsMenu.update(event)
    
             return state
 

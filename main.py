@@ -47,6 +47,8 @@ def main():
                 #7 = puzzle
                 #8 = options menu
 
+    gameInstance.update( pygame.event.Event(EVENT_CHANGE_STATE, key = 0), state )
+
     # #####################
     while not(quit):
         # single key presses
