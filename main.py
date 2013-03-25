@@ -11,7 +11,7 @@ from character import *
 from game import *
 from inventory import *
 from keybinding import *
-#from npc import *
+from npc import *
 from shiplayout import *
 
 def init():
@@ -44,7 +44,7 @@ def init():
         if sheet == None:
             return IMAGE_DOES_NOT_EXIST
 
-    background.set_colorkey(COLOR_KEY)
+#    background.set_colorkey(COLOR_KEY)
 #    character_sprite_sheet.set_colorkey(COLOR_KEY)
     tile_sheet.set_colorkey(COLOR_KEY)
     #inventory_sheet.set_colorkey(COLOR_KEY)
@@ -53,7 +53,7 @@ def init():
     for sheet in npc_sheets:
         sheet.set_colorkey(COLOR_KEY)
 
-    background = background.convert()
+#    background = background.convert()
 #    character_sprite_sheet = character_sprite_sheet.convert()
     tile_sheet = tile_sheet.convert()
     #inventory_sheet = inventory_sprite_sheet.convert()
@@ -99,15 +99,19 @@ def main():
 
     gameInstance.update( pygame.event.Event(EVENT_CHANGE_STATE, key = 0), state )
 
+
     # #####################
     while not(quit):
         # single key presses
         for event in pygame.event.get():
-            if (event.type == pygame.QUIT): #or ((event.type == pygame.KEYDOWN) and pygame.key.get_pressed()[pygame.K_ESCAPE]): # exit when close window "X" is pressed or escape key
+            if (event.type == pygame.QUIT):# or ((event.type == pygame.KEYDOWN) and pygame.key.get_pressed()[pygame.K_ESCAPE]): # exit when close window "X" is pressed or escape key
                 quit = True
 
             elif state == 0 or state == 1 or state == 2 or state == 5 or state == 8:
                 state = gameInstance.update( event, state )
+
+        # display background
+        screen.blit(background, (0, 0))
 
         if state == 0:
             gameInstance.display(screen, 0)
@@ -132,15 +136,13 @@ def main():
                 camera.y = MAP_HEIGHT - 1
 
             # refresh screen
-            # display background
-            screen.blit(background, (0, 0))
             # display map/world
             ship.display(screen, tile_sheet, camera)
             # display player
             user.display(screen, character_sprite_sheet, camera)
             # display NPCs
             for npc in npcs:
-                npc.display(screen, camera
+                npc.display(screen, camera)
             # etc
 
         elif state == 2:
