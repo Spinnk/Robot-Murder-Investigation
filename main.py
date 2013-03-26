@@ -87,18 +87,10 @@ def main():
     ship = ShipLayout()
     ship.load(MAP_DEFAULT_DIR)
 
-    state = 0   #0 = main menu
-                #1 = in-game
-                #2 = load game
-                #3 = exit
-                #4 = save game
-                #5 = settings
-                #6 = inventory/map/journal
-                #7 = puzzle
-                #8 = options menu
+    # states are listed in consts.py
+    state = MAIN_MENU_STATE
 
     gameInstance.update( pygame.event.Event(EVENT_CHANGE_STATE, key = 0), state )
-
 
     # #####################
     while not(quit):
@@ -113,10 +105,10 @@ def main():
         # display background
         screen.blit(background, (0, 0))
 
-        if state == 0:
+        if state == MAIN_MENU_STATE:
             gameInstance.display(screen, 0)
 
-        elif state == 1:
+        if state == IN_GAME_STATE:
             # update objects
             user.update(pygame.key.get_pressed())
             # map.update
@@ -145,13 +137,13 @@ def main():
                 npc.display(screen, camera)
             # etc
 
-        elif state == 2:
+        elif state == LOAD_MENU_STATE:
             pass
 
-        elif state == 3:
+        elif state == EXIT_STATE:
             quit = True
 
-        elif state == 8:
+        elif state == OPTIONS_MENU_STATE:
             gameInstance.display(screen, state)
 
         pygame.display.set_caption(GAME_NAME + ' (' + str(user.x()) + ',' + str(user.y()) + ')')
