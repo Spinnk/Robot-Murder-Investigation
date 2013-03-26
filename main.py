@@ -21,48 +21,41 @@ def init():
 
     # open images
     background = pygame.image.load(BACKGROUND_IMAGE_DIR)
-    character_sprite_sheet = pygame.image.load(CHARACTER_SPRITE_SHEET_DIR)
-    tile_sheet = pygame.image.load(TILE_SHEET_DIR)
-    npc_sheets = [pygame.image.load(file) for file in NPC_SHEETS_DIR]
+    #character_sprite_sheet = pygame.image.load(CHARACTER_SPRITE_SHEET_DIR)
+    #tile_sheet = pygame.image.load(TILE_SHEET_DIR)
+    #npc_sheets = [pygame.image.load(file) for file in NPC_SHEETS_DIR]
     #inventory_sheet = pygame.image.load(INVENTORY_BACKGROUND_SHEET_DIR)
     #item_sheet_large = pygame.image.load(ITEM_SHEET_LARGE_DIR)
     #item_sheet_small = pygame.image.load(ITEM_SHEET_SMALL_DIR)
 
     if background == None:
         return IMAGE_DOES_NOT_EXIST
-    if character_sprite_sheet == None:
-        return IMAGE_DOES_NOT_EXIST
-    if tile_sheet == None:
-        return IMAGE_DOES_NOT_EXIST
+
     #if inventory_sheet == None:
     #    return IMAGE_DOES_NOT_EXIST
     #if item_sheet_large == None:
     #    return IMAGE_DOES_NOT_EXIST
     #if item_sheet_small == None:
     #    return IMAGE_DOES_NOT_EXIST
-    for sheet in npc_sheets:
-        if sheet == None:
-            return IMAGE_DOES_NOT_EXIST
+
 
 #    background.set_colorkey(COLOR_KEY)
 #    character_sprite_sheet.set_colorkey(COLOR_KEY)
-    tile_sheet.set_colorkey(COLOR_KEY)
+    #tile_sheet.set_colorkey(COLOR_KEY)
     #inventory_sheet.set_colorkey(COLOR_KEY)
     #item_sheet_large.set_colorkey(COLOR_KEY)
     #item_sheet_small.set_colorkey(COLOR_KEY)
-    for sheet in npc_sheets:
-        sheet.set_colorkey(COLOR_KEY)
+
 
 #    background = background.convert()
 #    character_sprite_sheet = character_sprite_sheet.convert()
-    tile_sheet = tile_sheet.convert()
+    #tile_sheet = tile_sheet.convert()
     #inventory_sheet = inventory_sprite_sheet.convert()
     #item_sheet_large = item_sheet_large.convert()
     #item_sheet_small = item_sheet_small.convert()
-    for i in xrange(len(npc_sheets)):
-        npc[i] = npc[i].convert()
+ 
 
-    return background, character_sprite_sheet, tile_sheet#, inventory_sheet, item_sheet_large, item_sheet_small, npc_sheets
+    return background #, inventory_sheet, item_sheet_large, item_sheet_small, npc_sheets
 
 def main():
     # Set up screen #######
@@ -73,19 +66,19 @@ def main():
     pygame.display.set_caption(GAME_NAME)                   # give the screen a title
 
 #    background, character_sprite_sheet, tile_sheet, inventory_sheet, item_sheet_large, item_sheet_small, npc_sheets = init_load()
-    background, character_sprite_sheet, tile_sheet = init()
+    background = init()
 
     # Set up variables ####
     quit = False
 
     gameInstance = Game(screen)
 
-    camera = pygame.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT) # tile index, not pixel
-    user = character()
+    #camera = pygame.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT) # tile index, not pixel
+    #user = character()
     npcs = [NPC(random.randint(0, NPC_MAX_VALUE)) for x in xrange(NPC_COUNT)]
     npcs += [] # add special npcs
-    ship = ShipLayout()
-    ship.load(MAP_DEFAULT_DIR)
+    #ship = ShipLayout()
+    #ship.load(MAP_DEFAULT_DIR)
 
     # states are listed in consts.py
     state = MAIN_MENU_STATE
@@ -99,7 +92,7 @@ def main():
             if (event.type == pygame.QUIT):# or ((event.type == pygame.KEYDOWN) and pygame.key.get_pressed()[pygame.K_ESCAPE]): # exit when close window "X" is pressed or escape key
                 quit = True
 
-            elif state == 0 or state == 1 or state == 2 or state == 5 or state == 8:
+            elif state == 0 or state == IN_GAME_STATE or state == 1 or state == 2 or state == 5 or state == 8:
                 state = gameInstance.update( event, state )
 
         # display background
@@ -110,34 +103,25 @@ def main():
 
         if state == IN_GAME_STATE:
             # update objects
-            user.update(pygame.key.get_pressed())
+            #user.update(pygame.key.get_pressed())
             # map.update
             # npcs.update
             # etc
-
-            # reposition camera
-            camera.x = user.x() - SHOW_TILES_W / 2
-            if camera.x < 0:
-                camera.x = 0
-            if (camera.x + 1) > MAP_WIDTH:
-                camera.x = MAP_WIDTH - 1
-            camera.y = user.y() - SHOW_TILES_H / 2 + 1
-            if camera.y < 0:
-                camera.y = 0
-            if (camera.y + 1) > MAP_HEIGHT:
-                camera.y = MAP_HEIGHT - 1
+            state = gameInstance.update( pygame.event.Event(EVENT_CHANGE_STATE, key = 0), 1 )
+            gameInstance.display(screen, IN_GAME_STATE)
+           
 
             # refresh screen
             # display map/world
-            ship.display(screen, tile_sheet, camera)
+            #ship.display(screen, tile_sheet, camera)
             # display player
-            user.display(screen, character_sprite_sheet, camera)
+            #user.display(screen, character_sprite_sheet, camera)
             # display NPCs
-            for npc in npcs:
-                npc.display(screen, camera)
+           # for npc in npcs:
+                #npc.display(screen, camera)
             # etc
 
-        elif state == LOAD_MENU_STATE:
+        elif state == LOAD_STATE:
             pass
 
         elif state == EXIT_STATE:
@@ -146,7 +130,7 @@ def main():
         elif state == OPTIONS_MENU_STATE:
             gameInstance.display(screen, state)
 
-        pygame.display.set_caption(GAME_NAME + ' (' + str(user.x()) + ',' + str(user.y()) + ')')
+        pygame.display.set_caption(GAME_NAME)
         pygame.display.flip()                       # show screen
 
     return NO_PROBLEM

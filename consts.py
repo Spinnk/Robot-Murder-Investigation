@@ -85,11 +85,16 @@ HOTPINK = pygame.Color(0xff, 0x69, 0xb4, 0xff)
 
 COLOR_KEY = HOTPINK
 
+#Save Info
+SAVE_FILE = os.path.join( CWD, "save.txt" )
+
+
+
 # States
 MAIN_MENU_STATE = 0
 IN_GAME_STATE = 1
-LOAD_MENU_STATE = 2
-SAVE_MENU_STATE = 3
+LOAD_STATE = 2
+SAVE_STATE = 3
 EXIT_STATE = 4
 SETTINGS_STATE = 5
 INVENTORY_STATE = 6
