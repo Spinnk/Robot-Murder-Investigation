@@ -10,9 +10,27 @@ from consts import *
 from keybinding import *
 
 class Inventory:
-    def __init__(self):
+    def __init__(self, background, small, large):
         self.items = [] # list of (item #, count)
         self.selected = 0
+
+        self.background = pygame.image.load(background)
+        if self.background == None:
+            sys.exit(IMAGE_DOES_NOT_EXIST)
+        self.background.set_colorkey(COLORKEY)
+        self.background = self.background.convert()
+
+        self.small = pygame.image.load(small)
+        if self.small == None:
+            sys.exit(IMAGE_DOES_NOT_EXIST)
+        self.small.set_colorkey(COLORKEY)
+        self.small = self.background.convert()
+
+        self.large = pygame.image.load(large)
+        if self.large == None:
+            sys.exit(IMAGE_DOES_NOT_EXIST)
+        self.large.set_colorkey(COLORKEY)
+        self.large = self.background.convert()
 
     def add(self, new_item):# item is an integer
         found = False
@@ -35,15 +53,19 @@ class Inventory:
 
     # display selected, individual item
     # need to implement scrolling
-    def update(self, keystates):
-        if keystates[KB_UP]:
+    def update(self, keystates, keybinding):
+        '''if keystates[keybinding[KB_UP]]:
+            selected -= 6
+        if keystates[keybinding[KB_DOWN]]:
+            selected += 6
+        if keystates[keybinding[KB_LEFT]]:
             selected -= 1
-        if keystates[KB_DOWN]:
-            selected += 1
+        if keystates[keybinding[KB_RIGHT]]:
+            selected += 1    
         if selected == -1:
             selected = len(self.items) - 1
         if selected == len(self.items):
-            selected = 0
+            selected = 0'''
         return NO_PROBLEM
 
     # display unselected items
@@ -52,19 +74,8 @@ class Inventory:
             return SURFACE_DOES_NOT_EXIST
 
         # display inventory background
-        screen.blit(INVENTORY_BACKGROUND, (0, 0))
+        screen.blit(background, (0, 0))
 
-        # display list of items
-        # need to implement highlight box (or something) that moves
 
-        # display selected item
-        if len(self.items) > 0:
-            # display image
-            clip = pygame.Rect(self.selected * ITEM_WIDTH, 0, ITEM_WIDTH, ITEM_HEIGHT)
-            screen.blit(image, ITEM_BOX, clip)
-
-            # display name
-
-            # display description
 
         return NO_PROBLEM

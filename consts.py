@@ -43,17 +43,13 @@ TILE_INFO = [0,                             # index = tile type, clip; value is 
              0
             ]
 
-NPC_SHEETS_DIR = []                         # strings of file names. probably going to create separate variables rather than use list
+NPCS = ["puppy", "panda", "koala", "spock"]
+NPC_SHEETS_DIR = [os.path.join(ART_DIR, fname + ".png") for fname in NPCS]
 NPC_WIDTH = 80                              # pixels
 NPC_HEIGHT = 80                             # pixels
-NPC_MAX_VALUE = 0
-NPC_COUNT = 0
-NPC_DIRS = [os.path.join(ART_DIR, "puppy.png"), # nams of "extra" npcs
-            os.path.join(ART_DIR, "panda.png"),
-            os.path.join(ART_DIR, "koala.png"),
-            os.path.join(ART_DIR, "spock.png")
-            ]
-	    
+NPC_MAX_VALUE = 3
+NPC_COUNT = 3
+
 CHARACTER_SPRITE_SHEET_DIR = os.path.join( ART_DIR, "robot.png")
 CHARACTER_WIDTH = 80                        # pixels
 CHARACTER_HEIGHT = 160                      # pixels
@@ -61,12 +57,12 @@ CHARACTER_HEIGHT = 160                      # pixels
 INVENTORY_BACKGROUND_SHEET_DIR = os.path.join(ART_DIR, "inventory.png") # main inventory screen
 
 ITEM_SHEET_LARGE_DIR = os.path.join(ART_DIR, "large items.png") # larger item images (displaying in inventory menu)
-ITEM_LARGE_WIDTH = 200                       # pixels
-ITEM_LARGE_HEIGHT = 200                      # pixels
+ITEM_LARGE_WIDTH = 200                      # pixels
+ITEM_LARGE_HEIGHT = 200                     # pixels
 
 ITEM_SHEET_SMALL_DIR = os.path.join(ART_DIR, "small items.png") # smaller item images (maybe for displaying on tiles)
-ITEM_SMALL_WIDTH = 80                      # pixels
-ITEM_SMALL_HEIGHT = 80                     # pixels
+ITEM_SMALL_WIDTH = 80                       # pixels
+ITEM_SMALL_HEIGHT = 80                      # pixels
 
 # Items list
 # Item Index = Type, Tile on sheet
@@ -90,8 +86,6 @@ COLOR_KEY = HOTPINK
 #Save Info
 SAVE_FILE = os.path.join( CWD, "save.txt" )
 
-
-
 # States
 MAIN_MENU_STATE = 0
 IN_GAME_STATE = 1
@@ -103,7 +97,7 @@ INVENTORY_STATE = 6
 PUZZLE_STATE = 7
 OPTIONS_MENU_STATE = 8
 
-# Keybindings
+# Keybindings Enum
 KB_UP = 0
 KB_LEFT = 1
 KB_DOWN = 2

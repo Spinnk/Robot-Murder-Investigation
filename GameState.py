@@ -88,7 +88,7 @@ class InGameState (GameState):
         self.tile_sheet = self.tile_sheet.convert()
 
         for i in xrange(len(self.npc_sheets)):
-            npc[i] = npc[i].convert()
+            self.npc_sheets[i] = self.npc_sheets[i].convert()
 
         self.camera = pygame.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT) # tile index, not pixel
 
