@@ -83,32 +83,33 @@ def main():
     # states are listed in consts.py
     state = MAIN_MENU_STATE
 
-    gameInstance.update( pygame.event.Event(EVENT_CHANGE_STATE, key = 0), state )
+    gameInstance.update( pygame.event.Event(EVENT_CHANGE_STATE, key = 0) )
+
+    pygame.key.set_repeat(100, 100)
 
     # #####################
     while not(quit):
         # single key presses
         for event in pygame.event.get():
-            if (event.type == pygame.QUIT):# or ((event.type == pygame.KEYDOWN) and pygame.key.get_pressed()[pygame.K_ESCAPE]): # exit when close window "X" is pressed or escape key
+            if (event.type == pygame.QUIT): # exit when close window "X" is pressed
                 quit = True
 
-            elif state == 0 or state == IN_GAME_STATE or state == 1 or state == 2 or state == 5 or state == 8:
-                state = gameInstance.update( event, state )
+            gameInstance.update( event )
 
         # display background
         screen.blit(background, (0, 0))
 
-        if state == MAIN_MENU_STATE:
-            gameInstance.display(screen, 0)
+        
+        gameInstance.display(screen, 0)
 
-        if state == IN_GAME_STATE:
+        
             # update objects
             #user.update(pygame.key.get_pressed())
             # map.update
             # npcs.update
             # etc
-            state = gameInstance.update( pygame.event.Event(EVENT_CHANGE_STATE, key = 0), 1 )
-            gameInstance.display(screen, IN_GAME_STATE)
+        #gameInstance.update( pygame.event.Event(EVENT_CHANGE_STATE, key = 0) )
+        gameInstance.display(screen, IN_GAME_STATE)
            
 
             # refresh screen
@@ -121,7 +122,7 @@ def main():
                 #npc.display(screen, camera)
             # etc
 
-        elif state == LOAD_STATE:
+        if state == LOAD_STATE:
             pass
 
         elif state == EXIT_STATE:

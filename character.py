@@ -66,8 +66,8 @@ class character:
             moved = True
 
         # something to prevent constant moving
-        if moved:
-            pygame.time.delay(100)
+        #if moved:
+            #pygame.time.delay(100)
 
     def display(self, screen, sheet, camera):
         # maybe, instead of actually displaying, return clip # and Rect to display in main
