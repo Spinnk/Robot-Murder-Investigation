@@ -61,10 +61,11 @@ class MainMenuState (GameState):
 
 
 class InGameState (GameState):
-    def __init__(self, screen):
+    def __init__(self, screen, keybindings):
         self.user = character()
         self.ship = ShipLayout()
         self.ship.load(MAP_DEFAULT_DIR)
+	self.keybindings = keybindings
 
         self.screen = screen
               
@@ -95,24 +96,24 @@ class InGameState (GameState):
         if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             pygame.event.post(pygame.event.Event(EVENT_CHANGE_STATE, key = 0))
             return OPTIONS_MENU_STATE
-        self.user.update(pygame.key.get_pressed())
+        self.user.update(pygame.key.get_pressed(), self.keybindings)
         return IN_GAME_STATE
 
     def display(self):
         # reposition camera
-        self.camera.x = self.user.x() - SHOW_TILES_W / 2
+        self.camera.x = self.user.getx() - SHOW_TILES_W / 2
         if self.camera.x < 0:
             self.camera.x = 0
         if (self.camera.x + 1) > MAP_WIDTH:
             self.camera.x = MAP_WIDTH - 1
-        self.camera.y = self.user.y() - SHOW_TILES_H / 2 + 1
+        self.camera.y = self.user.gety() - SHOW_TILES_H / 2 + 1
         if self.camera.y < 0:
             self.camera.y = 0
         if (self.camera.y + 1) > MAP_HEIGHT:
             self.camera.y = MAP_HEIGHT - 1
             
-        self.ship.display(self.screen, self.tile_sheet, self.camera)
-        self.user.display(self.screen, self.character_sprite_sheet, self.camera)
+        self.ship.display(self.screen, self.camera)
+        self.user.display(self.screen, self.camera)
 
 
 class OptionsMenuState (GameState):

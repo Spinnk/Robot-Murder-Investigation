@@ -14,16 +14,17 @@ from GameState import *
 
 
 class Game:
-    def __init__(self, screen):
+    def __init__(self, screen, keybindings):
         self.mainMenuState = MainMenuState( screen )
         self.optionsMenuState = OptionsMenuState( screen )
-        self.inGameState = InGameState(screen)
+        self.inGameState = InGameState(screen, keybindings)
 
         self.currentState = self.mainMenuState
         self.currentStateID = MAIN_MENU_STATE
 
         self.saveExists = False
-
+        self.keybindings = keybindings
+	
     # Set the currentState to match the currentStateID
     def setState(self):
         if self.currentStateID == MAIN_MENU_STATE:

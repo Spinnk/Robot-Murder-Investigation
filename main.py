@@ -14,49 +14,6 @@ from keybinding import *
 from npc import *
 from shiplayout import *
 
-def init():
-    # read keybindings
-    # KB_UP, KB_LEFT, KB_DOWN, KB_RIGHT, KB_USE
-    read_keybindings(KEYBINDINGS_DIR)                           # doesnt work
-
-    # open images
-    background = pygame.image.load(BACKGROUND_IMAGE_DIR)
-    #character_sprite_sheet = pygame.image.load(CHARACTER_SPRITE_SHEET_DIR)
-    #tile_sheet = pygame.image.load(TILE_SHEET_DIR)
-    #npc_sheets = [pygame.image.load(file) for file in NPC_SHEETS_DIR]
-    #inventory_sheet = pygame.image.load(INVENTORY_BACKGROUND_SHEET_DIR)
-    #item_sheet_large = pygame.image.load(ITEM_SHEET_LARGE_DIR)
-    #item_sheet_small = pygame.image.load(ITEM_SHEET_SMALL_DIR)
-
-    if background == None:
-        return IMAGE_DOES_NOT_EXIST
-
-    #if inventory_sheet == None:
-    #    return IMAGE_DOES_NOT_EXIST
-    #if item_sheet_large == None:
-    #    return IMAGE_DOES_NOT_EXIST
-    #if item_sheet_small == None:
-    #    return IMAGE_DOES_NOT_EXIST
-
-
-#    background.set_colorkey(COLOR_KEY)
-#    character_sprite_sheet.set_colorkey(COLOR_KEY)
-    #tile_sheet.set_colorkey(COLOR_KEY)
-    #inventory_sheet.set_colorkey(COLOR_KEY)
-    #item_sheet_large.set_colorkey(COLOR_KEY)
-    #item_sheet_small.set_colorkey(COLOR_KEY)
-
-
-#    background = background.convert()
-#    character_sprite_sheet = character_sprite_sheet.convert()
-    #tile_sheet = tile_sheet.convert()
-    #inventory_sheet = inventory_sprite_sheet.convert()
-    #item_sheet_large = item_sheet_large.convert()
-    #item_sheet_small = item_sheet_small.convert()
- 
-
-    return background #, inventory_sheet, item_sheet_large, item_sheet_small, npc_sheets
-
 def main():
     # Set up screen #######
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.RESIZABLE)    # create the screen
@@ -65,13 +22,15 @@ def main():
 
     pygame.display.set_caption(GAME_NAME)                   # give the screen a title
 
-#    background, character_sprite_sheet, tile_sheet, inventory_sheet, item_sheet_large, item_sheet_small, npc_sheets = init_load()
-    background = init()
-
     # Set up variables ####
     quit = False
 
-    gameInstance = Game(screen)
+
+    background = pygame.image.load(BACKGROUND_IMAGE_DIR)
+
+    keybindings = default_keybindings()
+    keybindings = read_keybindings(KEYBINDINGS_DIR)
+    gameInstance = Game(screen, keybindings)
 
     #camera = pygame.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT) # tile index, not pixel
     #user = character()

@@ -25,8 +25,8 @@ SCREEN_WIDTH = 880                          # pixels
 SCREEN_HEIGHT = 640                         # pixels
 
 MAP_DEFAULT_DIR = os.path.join(CWD, "map.txt")  # default map configuration file
-MAP_WIDTH = 1024                            # tiles
-MAP_HEIGHT = 1024                           # tiles
+MAP_WIDTH = 128                             # tiles
+MAP_HEIGHT = 128                            # tiles
 
 MAX_TILE_VALUE = 2
 
@@ -48,15 +48,17 @@ NPC_WIDTH = 80                              # pixels
 NPC_HEIGHT = 80                             # pixels
 NPC_MAX_VALUE = 0
 NPC_COUNT = 0
-NPC_NAMES = ["", ""]                        # nams of "extra" npcs
-
+NPC_DIRS = [os.path.join(ART_DIR, "puppy.png"), # nams of "extra" npcs
+            os.path.join(ART_DIR, "panda.png"),
+            os.path.join(ART_DIR, "koala.png"),
+            os.path.join(ART_DIR, "spock.png")
+            ]
+	    
 CHARACTER_SPRITE_SHEET_DIR = os.path.join( ART_DIR, "robot.png")
 CHARACTER_WIDTH = 80                        # pixels
 CHARACTER_HEIGHT = 160                      # pixels
 
 INVENTORY_BACKGROUND_SHEET_DIR = os.path.join(ART_DIR, "inventory.png") # main inventory screen
-ITEM_COUNT = 6                              # max items in displayed list; reest are hidden
-ITEM_LIST_BOX = pygame.Rect(0, 0, 0, 0)     # first line of unselected items list
 
 ITEM_SHEET_LARGE_DIR = os.path.join(ART_DIR, "large items.png") # larger item images (displaying in inventory menu)
 ITEM_LARGE_WIDTH = 200                       # pixels
@@ -100,6 +102,13 @@ SETTINGS_STATE = 5
 INVENTORY_STATE = 6
 PUZZLE_STATE = 7
 OPTIONS_MENU_STATE = 8
+
+# Keybindings
+KB_UP = 0
+KB_LEFT = 1
+KB_DOWN = 2
+KB_RIGHT = 3
+KB_USE = 4
 
 # Error Codes
 NO_PROBLEM = 0
