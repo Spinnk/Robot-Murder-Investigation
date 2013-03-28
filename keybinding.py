@@ -12,7 +12,8 @@ def default_keybindings():
             KB_LEFT: pygame.K_a,
             KB_DOWN: pygame.K_s,
             KB_RIGHT: pygame.K_d,
-            KB_USE: pygame.K_e}
+            KB_USE: pygame.K_e,
+            KB_INVENTORY: pygame.K_i}
 
 # reads in keybindings from properly formatted settings file
 def read_keybindings(file_name):
@@ -24,31 +25,34 @@ def read_keybindings(file_name):
         if bind[0] == '#':
             continue
         bind = bind[:-1]        # remove newline char
-        if bind[:2] == 'UP':
+        if bind[:2] == 'Up':
             keybindings[KB_UP] = int(bind[3:])
-        elif bind[:4] == 'LEFT':
+        elif bind[:4] == 'Left':
             keybindings[KB_LEFT] = int(bind[5:])
-        elif bind[:4] == 'DOWN':
+        elif bind[:4] == 'Down':
             keybindings[KB_DOWN] = int(bind[5:])
-        elif bind[:5] == 'RIGHT':
+        elif bind[:5] == 'Right':
             keybindings[KB_RIGHT] = int(bind[6:])
-        elif bind[:3] == 'USE':
+        elif bind[:3] == 'Use':
             keybindings[KB_USE] = int(bind[4:])
+        elif bind[:9] == 'Inventory':
+            keybindings[KB_INVENTORY] = int(bind[10:])
     return keybindings
 
 # write keybindings to a settings file
 def write_keybindings(file_name, keybindings):
     f = open(file_name, 'w')
     f.write('# Sentience in Space keybindings\n')
-    f.write('\nUP=' + str(keybindings[KB_UP]))
-    f.write('\nLEFT=' + str(keybindings[KB_LEFT]))
-    f.write('\nDOWN=' + str(keybindings[KB_DOWN]))
-    f.write('\nRIGHT=' + str(keybindings[KB_RIGHT]))
-    f.write('\nUSE=' + str(keybindings[KB_USE]))
+    f.write('\nUp=' + str(keybindings[KB_UP]))
+    f.write('\nLeft=' + str(keybindings[KB_LEFT]))
+    f.write('\nDown=' + str(keybindings[KB_DOWN]))
+    f.write('\nRight=' + str(keybindings[KB_RIGHT]))
+    f.write('\nUse=' + str(keybindings[KB_USE]))
+    f.write('\nInventory=' + str(keybindings[KB_INVENTORY]))
     f.write('\n')   # final newline char
     f.close()
     return NO_PROBLEM
 
 if __name__=='__main__':
-    default_keybindings()
-    write_keybindings(KEYBINDINGS)
+    keybindings = default_keybindings()
+    write_keybindings(KEYBINDINGS_DIR, keybindings)

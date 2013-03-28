@@ -40,8 +40,7 @@ TILE_SOLID = 0x01                           # mask for whether or not the tile c
 
 TILE_INFO = [0,                             # index = tile type, clip; value is properties mask
              0,
-             0
-            ]
+             0]
 
 NPCS = ["puppy", "panda", "koala", "spock"]
 NPC_SHEETS_DIR = [os.path.join(ART_DIR, fname + ".png") for fname in NPCS]
@@ -103,6 +102,7 @@ KB_LEFT = 1
 KB_DOWN = 2
 KB_RIGHT = 3
 KB_USE = 4
+KB_INVENTORY = 5
 
 # Error Codes
 NO_PROBLEM = 0

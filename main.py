@@ -34,8 +34,8 @@ def main():
 
     #camera = pygame.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT) # tile index, not pixel
     #user = character()
-    npcs = [NPC(random.randint(0, NPC_MAX_VALUE)) for x in xrange(NPC_COUNT)]
-    npcs += [] # add special npcs
+    #npcs = [NPC(random.randint(0, NPC_MAX_VALUE)) for x in xrange(NPC_COUNT)]
+    #npcs += [] # add special npcs
     #ship = ShipLayout()
     #ship.load(MAP_DEFAULT_DIR)
 

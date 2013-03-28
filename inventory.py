@@ -76,6 +76,22 @@ class Inventory:
         # display inventory background
         screen.blit(background, (0, 0))
 
+        # display items
+        # should display count of items too
+        count = 0
+        for item in self.items:
+            clip = pygame.Rect(ITEM_SMALL_WIDTH * (count % 6), ITEM_SMALL_HEIGHT * (count / 8), ITEM_SMALL_WIDTH, ITEM_SMALL_HEIGHT)
+            show = pygame.Rect(ITEM_SMALL_WIDTH * item[0], 0, ITEM_SMALL_WIDTH, ITEM_SMALL_HEIGHT)
+            screen.blit(self.small, show, clip)
 
+        # display highlight
+
+        # display selected item
+        clip = pygame.Rect(ITEM_LARGE_WIDTH * self.items[self.selected][0], ITEM_LARGE_HEIGHT * (count / 8), ITEM_LARGE_WIDTH, ITEM_LARGE_HEIGHT)
+        show = pygame.Rect(639, 41, ITEM_LARGE_WIDTH, ITEM_LARGE_HEIGHT)
+        screen.blit(self.large, show, clip)
 
         return NO_PROBLEM
+
+if __name__=='__main__':
+    pass
