@@ -1,9 +1,9 @@
 # Inventory Class
-# lots of bugs
-# need to add remove (and maybe use) buttons
-# if some button is pressed when highlight is on that inventory space, enable buttons?
 
-from copy import deepcopy
+# should change storage to array 8 * 7
+# should add timer or check for only keydown events
+
+import copy
 
 from consts import *
 from keybinding import *
@@ -11,9 +11,11 @@ from keybinding import *
 import pygame
 
 class Inventory:
-    def __init__(self, background, small, large, box):
-        self.items = [] # list of (item #, count)
+    def __init__(self, background, small, large, box, option_box):
+        self.items = []             # list of (item #, count)
+        self.mode = 0               # 0 in items area; 1 in options area
         self.selected = 0
+        self.option = 0
 
         self.background = pygame.image.load(background)
         if self.background == None:
@@ -38,6 +40,12 @@ class Inventory:
             sys.exit(IMAGE_DOES_NOT_EXIST)
         self.box.set_colorkey(COLOR_KEY)
         self.box = self.box.convert()
+        
+        self.option_box = pygame.image.load(option_box)
+        if self.option_box == None:
+            sys.exit(IMAGE_DOES_NOT_EXIST)
+        self.option_box.set_colorkey(COLOR_KEY)
+        self.option_box = self.option_box.convert()
 
     def add(self, item):# item is an integer
         found = False
@@ -60,19 +68,36 @@ class Inventory:
         return ITEM_DOES_NOT_EXIST
 
     def update(self, keystates, keybinding):
-        if keystates[keybinding[KB_UP]]:
-            self.selected -= 8
-        if keystates[keybinding[KB_DOWN]]:
-            self.selected += 8
-        if keystates[keybinding[KB_LEFT]]:
-            self.selected -= 1
-        if keystates[keybinding[KB_RIGHT]]:
-            self.selected += 1 
-
-        if self.selected < 0:
-            self.selected += 56
-        if self.selected > 55:
-            self.selected - 56
+        # cursor in items area
+        if self.mode == 0:
+            if keystates[keybinding[KB_UP]]:
+                self.selected -= 8
+            elif keystates[keybinding[KB_DOWN]]:
+                self.selected += 8
+            elif keystates[keybinding[KB_LEFT]]:
+                self.selected -= 1
+            elif keystates[keybinding[KB_RIGHT]]:
+                self.selected += 1 
+            elif keystates[keybindings[KB_ENTER]]:
+#                if not (self.items[self.selected] == None):
+#                    self.mode = 1
+                if self.selected < len(self.items):
+                    self.mode = 1
+            self.selected %= 56
+        # cursor in buttons area
+        elif self.mode == 1:
+            if keystates[keybinding[KB_LEFT]]:
+                self.option -= 1
+            elif keystates[keybinding[KB_RIGHT]]:
+                self.option += 1
+            if keystates[keybindings[KB_ENTER]]:
+                self.mode = 0
+                out = self.items[self.selected][0]
+                self.remove(out)
+                return out
+            elif keystates[keybindings[KB_ESCAPE]]:
+                self.mode = 0
+            self.option %= len(INVENTORY_BUTTONS)
 
         return NO_PROBLEM
 
@@ -91,7 +116,7 @@ class Inventory:
         dy = ITEM_SMALL_HEIGHT - font.size("A")[1]
         for item in self.items:
             clip = pygame.Rect(ITEM_SMALL_WIDTH * item[0], 0, ITEM_SMALL_WIDTH, ITEM_SMALL_HEIGHT)
-            show = pygame.Rect((ITEM_SMALL_WIDTH + 1)  * (count % 6) + 1, ITEM_SMALL_HEIGHT * (count / 8) + 37, ITEM_SMALL_WIDTH, ITEM_SMALL_HEIGHT)
+            show = pygame.Rect((ITEM_SMALL_WIDTH + 1)  * (count % 8) + 1, (ITEM_SMALL_HEIGHT + 1) * (count / 8) + 37, ITEM_SMALL_WIDTH, ITEM_SMALL_HEIGHT)
             screen.blit(self.small, show, clip)
             show.y += dy
             text_image = font.render(str(item[1]), FONT_ANTIALIAS, FONT_COLOR)
@@ -99,8 +124,12 @@ class Inventory:
             count += 1
 
         # display highlight
-        show = pygame.Rect((ITEM_SMALL_WIDTH + 1)  * (self.selected % 6) + 1, ITEM_SMALL_HEIGHT * (self.selected / 8) + 37, ITEM_SMALL_WIDTH, ITEM_SMALL_HEIGHT)
+        show = pygame.Rect((ITEM_SMALL_WIDTH + 1)  * (self.selected % 8) + 1, (ITEM_SMALL_HEIGHT + 1) * (self.selected / 8) + 37, ITEM_SMALL_WIDTH, ITEM_SMALL_HEIGHT)
         screen.blit(self.box, show)
+
+        # if an item is selected for usage
+        if self.mode == 1:
+            screen.blit(self.option_box, INVENTORY_BUTTONS[self.option])
 
         if self.selected < len(self.items):
             # display selected item
@@ -111,7 +140,7 @@ class Inventory:
             text_image = font.render(ITEMS[self.selected][0], FONT_ANTIALIAS, FONT_COLOR)
             screen.blit(text_image, ITEM_NAME_BOX)
 
-            show = deepcopy(ITEM_DESCRIPTION_BOX)
+            show = copy.deepcopy(ITEM_DESCRIPTION_BOX)
             font = pygame.font.Font(FONT_DIR, FONT_SIZE_SMALL)
             dy = font.size("A")[1]
             for desc in ITEMS[self.selected][1]:
@@ -123,14 +152,13 @@ class Inventory:
 
 if __name__=='__main__':
     pygame.init()
-    # Set up screen #######
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.RESIZABLE)    # create the screen
     if screen == None:
         sys.exit(SCREEN_DOES_NOT_EXIST)
 
     pygame.display.set_caption("Inventory Demo")
 
-    inv = Inventory(INVENTORY_BACKGROUND_SHEET_DIR, ITEM_SHEET_SMALL_DIR, ITEM_SHEET_LARGE_DIR, ITEM_BOX_DIR)
+    inv = Inventory(INVENTORY_BACKGROUND_SHEET_DIR, ITEM_SHEET_SMALL_DIR, ITEM_SHEET_LARGE_DIR, ITEM_BOX_DIR, INVENTORY_BUTTONS_DIR)
     inv.add(0); inv.add(0); inv.add(0); inv.add(0)
     inv.add(1) 
     inv.add(2); inv.add(2); inv.add(2)
@@ -140,7 +168,7 @@ if __name__=='__main__':
     while not(quit):
         # single key presses
         for event in pygame.event.get():
-            if (event.type == pygame.QUIT): # exit when close window "X" is pressed
+            if event.type == pygame.QUIT: # exit when close window "X" is pressed
                 quit = True
         inv.update(pygame.key.get_pressed(), keybindings)
         inv.display(screen)

@@ -13,7 +13,10 @@ def default_keybindings():
             KB_DOWN: pygame.K_s,
             KB_RIGHT: pygame.K_d,
             KB_USE: pygame.K_e,
-            KB_INVENTORY: pygame.K_i}
+            KB_INVENTORY: pygame.K_i,
+            KB_ENTER: pygame.K_RETURN,
+            KB_ESCAPE: pygame.K_ESCAPE
+            }
 
 # reads in keybindings from properly formatted settings file
 def read_keybindings(file_name):
@@ -37,6 +40,10 @@ def read_keybindings(file_name):
             keybindings[KB_USE] = int(bind[4:])
         elif bind[:9] == 'Inventory':
             keybindings[KB_INVENTORY] = int(bind[10:])
+        elif bind[:5] == 'Enter':
+            keybindings[KB_ENTER] = int(bind[6:])
+        elif bind[:6] == 'Escape':
+            keybindings[KB_ESCAPE] = int(bind[7:])
     return keybindings
 
 # write keybindings to a settings file
@@ -49,6 +56,8 @@ def write_keybindings(file_name, keybindings):
     f.write('\nRight=' + str(keybindings[KB_RIGHT]))
     f.write('\nUse=' + str(keybindings[KB_USE]))
     f.write('\nInventory=' + str(keybindings[KB_INVENTORY]))
+    f.write('\nEnter=' + str(keybindings[KB_ENTER]))
+    f.write('\nEscape=' + str(keybindings[KB_ESCAPE]))
     f.write('\n')   # final newline char
     f.close()
     return NO_PROBLEM

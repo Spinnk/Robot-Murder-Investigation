@@ -54,6 +54,8 @@ CHARACTER_WIDTH = 80                        # pixels
 CHARACTER_HEIGHT = 160                      # pixels
 
 INVENTORY_BACKGROUND_SHEET_DIR = os.path.join(ART_DIR, "inventory.png") # main inventory screen
+INVENTORY_BUTTONS_DIR = os.path.join(ART_DIR, "option box.png")
+INVENTORY_BUTTONS = [pygame.Rect(735, 566, 68, 38)] # location of buttons
 
 ITEM_BOX_DIR = os.path.join(ART_DIR, "box.png")
 ITEM_SHEET_LARGE_DIR = os.path.join(ART_DIR, "large items.png") # larger item images (displaying in inventory menu)
@@ -105,6 +107,8 @@ KB_DOWN = 2
 KB_RIGHT = 3
 KB_USE = 4
 KB_INVENTORY = 5
+KB_ENTER = 6
+KB_ESCAPE = 7
 
 # Error Codes
 NO_PROBLEM = 0
