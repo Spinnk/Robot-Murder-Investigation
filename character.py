@@ -14,14 +14,14 @@ from keybinding import *
 
 class character:
     # or instead of using file name, open all images in main, and clip with display()
-    def __init__(self):   # taking in string to save memory + faster since surfaces are passed by value, not reference
+    def __init__(self, sprite_sheet):   # taking in string to save memory + faster since surfaces are passed by value, not reference
         # remember sprite will be standing on tile x+1
         self.x = 0.0                                 # tile position on map
         self.y = 0.0                                 # tile position on map
         self.clip = 0                                # which image to clip from sprite sheet; also which direction player is facing
         self.frame = 0                               # use for animations
 
-        self.sprite = pygame.image.load(CHARACTER_SPRITE_SHEET_DIR)
+        self.sprite = pygame.image.load(sprite_sheet)
         if self.sprite == None:
             sys.exit(IMAGE_DOES_NOT_EXIST)
 

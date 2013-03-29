@@ -14,17 +14,17 @@ from consts import *
 from hashlib import sha512
 
 class ShipLayout:
-    def __init__(self):
+    def __init__(self, floor_tiles, small_items):
         self.data = []  # 2D array
         self.items = [] # ((x, y), item)
 
-        self.floor_tiles = pygame.image.load(TILE_SHEET_DIR)
+        self.floor_tiles = pygame.image.load(floor_tiles)
         if self.floor_tiles == None:
             sys.exit(IMAGE_DOES_NOT_EXIST)
         self.floor_tiles.set_colorkey(COLOR_KEY)
         self.floor_tiles = self.floor_tiles.convert()
 
-        self.item_tiles = pygame.image.load(ITEM_SHEET_SMALL_DIR)
+        self.item_tiles = pygame.image.load(small_items)
         if self.item_tiles == None:
             sys.exit(IMAGE_DOES_NOT_EXIST)
         self.item_tiles.set_colorkey(COLOR_KEY)

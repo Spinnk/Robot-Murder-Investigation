@@ -55,6 +55,7 @@ CHARACTER_HEIGHT = 160                      # pixels
 
 INVENTORY_BACKGROUND_SHEET_DIR = os.path.join(ART_DIR, "inventory.png") # main inventory screen
 
+ITEM_BOX_DIR = os.path.join(ART_DIR, "box.png")
 ITEM_SHEET_LARGE_DIR = os.path.join(ART_DIR, "large items.png") # larger item images (displaying in inventory menu)
 ITEM_LARGE_WIDTH = 200                      # pixels
 ITEM_LARGE_HEIGHT = 200                     # pixels
@@ -67,13 +68,14 @@ ITEM_SMALL_HEIGHT = 80                      # pixels
 # Item Index = Type, Tile on sheet
 # Item Name = first value
 # item Descirption = second value; store in multiple strings to display nicely
-ITEMS = [   ["Item 0", ["Item 0 Description"]],
-            ["Item 1", ["Item 1 Description"]]
+ITEMS = [   ["Item 1", ["Item 1 Description", "Line 2", "Line 3"]],
+            ["Item 2", ["Item 2 Description"]],
+        	["Item 3", ["Item 3 Description", "Line 2"]]
         ]
 
-ITEM_IMAGE_BOX = pygame.Rect(0, 0, 100, 100)        # location of items when displayed on screen; change as necessary
-ITEM_NAME_BOX = pygame.Rect(0, 0, 100, 100)         # location of name when item is displayed
-ITEM_DESCRIPTION_BOX = pygame.Rect(0, 0, 100, 100)  # location of first line of descriptions
+ITEM_IMAGE_BOX = pygame.Rect(666, 37, 100, 100)        # location of items when displayed on screen; change as necessary
+ITEM_NAME_BOX = pygame.Rect(665, 250, 100, 100)        # location of name when item is displayed
+ITEM_DESCRIPTION_BOX = pygame.Rect(665, 300, 100, 100) # location of first line of descriptions
 
 # Useful RGB Values
 WHITE = pygame.Color(0xff, 0xff, 0xff, 0xff)
@@ -113,3 +115,9 @@ INCORRECT_FILE_FORMAT = 4
 ITEM_DOES_NOT_EXIST = 5
 
 MUSIC_FILES = []                                # list of music file names
+
+FONT_DIR = os.path.join(CWD, "comic.ttf")		# font file
+FONT_SIZE_LARGE = 24
+FONT_SIZE_SMALL = 12
+FONT_COLOR = BLACK
+FONT_ANTIALIAS = True

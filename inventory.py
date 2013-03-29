@@ -1,49 +1,57 @@
 # Inventory Class
+# lots of bugs
+# need to add remove (and maybe use) buttons
+# if some button is pressed when highlight is on that inventory space, enable buttons?
 
-# Currently displays inventory as list
-# Maybe change to fixed size 2D array or something
-
-# For displaying on map, maybe instead of having multiple
-# tile types, just hold a list of items and their coordinates
+from copy import deepcopy
 
 from consts import *
 from keybinding import *
 
+import pygame
+
 class Inventory:
-    def __init__(self, background, small, large):
+    def __init__(self, background, small, large, box):
         self.items = [] # list of (item #, count)
         self.selected = 0
 
         self.background = pygame.image.load(background)
         if self.background == None:
             sys.exit(IMAGE_DOES_NOT_EXIST)
-        self.background.set_colorkey(COLORKEY)
+        self.background.set_colorkey(COLOR_KEY)
         self.background = self.background.convert()
 
         self.small = pygame.image.load(small)
         if self.small == None:
             sys.exit(IMAGE_DOES_NOT_EXIST)
-        self.small.set_colorkey(COLORKEY)
-        self.small = self.background.convert()
+        self.small.set_colorkey(COLOR_KEY)
+        self.small = self.small.convert()
 
         self.large = pygame.image.load(large)
         if self.large == None:
             sys.exit(IMAGE_DOES_NOT_EXIST)
-        self.large.set_colorkey(COLORKEY)
-        self.large = self.background.convert()
+        self.large.set_colorkey(COLOR_KEY)
+        self.large = self.large.convert()
 
-    def add(self, new_item):# item is an integer
+        self.box = pygame.image.load(box)
+        if self.box == None:
+            sys.exit(IMAGE_DOES_NOT_EXIST)
+        self.box.set_colorkey(COLOR_KEY)
+        self.box = self.box.convert()
+
+    def add(self, item):# item is an integer
         found = False
-        for item in self.items:
-            if item[0] == new_item:
+        for i in xrange(len(self.items)):
+            if self.items[i][0] == item:
                 found = True
-                item[1] += 1
+                self.items[i][1] += 1
+                break;
         if not found:
-            self.items += [(item, 1)]
+            self.items += [[item, 1]]
         return NO_PROBLEM
 
     def remove(self, to_rem):
-        for i in len(self.items):
+        for i in xrange(len(self.items)):
             if self.items[i][0] == to_rem:
                 self.items[i][1] -= 1
                 if self.items[i][1] == 0:
@@ -51,47 +59,91 @@ class Inventory:
                 return NO_PROBLEM
         return ITEM_DOES_NOT_EXIST
 
-    # display selected, individual item
-    # need to implement scrolling
     def update(self, keystates, keybinding):
-        '''if keystates[keybinding[KB_UP]]:
-            selected -= 6
+        if keystates[keybinding[KB_UP]]:
+            self.selected -= 8
         if keystates[keybinding[KB_DOWN]]:
-            selected += 6
+            self.selected += 8
         if keystates[keybinding[KB_LEFT]]:
-            selected -= 1
+            self.selected -= 1
         if keystates[keybinding[KB_RIGHT]]:
-            selected += 1    
-        if selected == -1:
-            selected = len(self.items) - 1
-        if selected == len(self.items):
-            selected = 0'''
+            self.selected += 1 
+
+        if self.selected < 0:
+            self.selected += 56
+        if self.selected > 55:
+            self.selected - 56
+
         return NO_PROBLEM
 
     # display unselected items
     def display(self, screen):
-        if screen == NULL:
+        if screen == None:
             return SURFACE_DOES_NOT_EXIST
 
         # display inventory background
-        screen.blit(background, (0, 0))
-
+        screen.blit(self.background, (0, 0))
+        
         # display items
         # should display count of items too
         count = 0
+        font = pygame.font.Font(FONT_DIR, FONT_SIZE_SMALL)
+        dy = ITEM_SMALL_HEIGHT - font.size("A")[1]
         for item in self.items:
-            clip = pygame.Rect(ITEM_SMALL_WIDTH * (count % 6), ITEM_SMALL_HEIGHT * (count / 8), ITEM_SMALL_WIDTH, ITEM_SMALL_HEIGHT)
-            show = pygame.Rect(ITEM_SMALL_WIDTH * item[0], 0, ITEM_SMALL_WIDTH, ITEM_SMALL_HEIGHT)
+            clip = pygame.Rect(ITEM_SMALL_WIDTH * item[0], 0, ITEM_SMALL_WIDTH, ITEM_SMALL_HEIGHT)
+            show = pygame.Rect((ITEM_SMALL_WIDTH + 1)  * (count % 6) + 1, ITEM_SMALL_HEIGHT * (count / 8) + 37, ITEM_SMALL_WIDTH, ITEM_SMALL_HEIGHT)
             screen.blit(self.small, show, clip)
+            show.y += dy
+            text_image = font.render(str(item[1]), FONT_ANTIALIAS, FONT_COLOR)
+            screen.blit(text_image, show)
+            count += 1
 
         # display highlight
+        show = pygame.Rect((ITEM_SMALL_WIDTH + 1)  * (self.selected % 6) + 1, ITEM_SMALL_HEIGHT * (self.selected / 8) + 37, ITEM_SMALL_WIDTH, ITEM_SMALL_HEIGHT)
+        screen.blit(self.box, show)
 
-        # display selected item
-        clip = pygame.Rect(ITEM_LARGE_WIDTH * self.items[self.selected][0], ITEM_LARGE_HEIGHT * (count / 8), ITEM_LARGE_WIDTH, ITEM_LARGE_HEIGHT)
-        show = pygame.Rect(639, 41, ITEM_LARGE_WIDTH, ITEM_LARGE_HEIGHT)
-        screen.blit(self.large, show, clip)
+        if self.selected < len(self.items):
+            # display selected item
+            clip = pygame.Rect(ITEM_LARGE_WIDTH * self.items[self.selected][0], ITEM_LARGE_HEIGHT * (count / 8), ITEM_LARGE_WIDTH, ITEM_LARGE_HEIGHT)
+            screen.blit(self.large, ITEM_IMAGE_BOX, clip)
+
+            font = pygame.font.Font(FONT_DIR, FONT_SIZE_LARGE)
+            text_image = font.render(ITEMS[self.selected][0], FONT_ANTIALIAS, FONT_COLOR)
+            screen.blit(text_image, ITEM_NAME_BOX)
+
+            show = deepcopy(ITEM_DESCRIPTION_BOX)
+            font = pygame.font.Font(FONT_DIR, FONT_SIZE_SMALL)
+            dy = font.size("A")[1]
+            for desc in ITEMS[self.selected][1]:
+                text_image = font.render(desc, FONT_ANTIALIAS, FONT_COLOR)
+                screen.blit(text_image, show)
+                show.y += dy
 
         return NO_PROBLEM
 
 if __name__=='__main__':
-    pass
+    pygame.init()
+    # Set up screen #######
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.RESIZABLE)    # create the screen
+    if screen == None:
+        sys.exit(SCREEN_DOES_NOT_EXIST)
+
+    pygame.display.set_caption("Inventory Demo")
+
+    inv = Inventory(INVENTORY_BACKGROUND_SHEET_DIR, ITEM_SHEET_SMALL_DIR, ITEM_SHEET_LARGE_DIR, ITEM_BOX_DIR)
+    inv.add(0); inv.add(0); inv.add(0); inv.add(0)
+    inv.add(1) 
+    inv.add(2); inv.add(2); inv.add(2)
+    keybindings = default_keybindings()
+
+    quit = False
+    while not(quit):
+        # single key presses
+        for event in pygame.event.get():
+            if (event.type == pygame.QUIT): # exit when close window "X" is pressed
+                quit = True
+        inv.update(pygame.key.get_pressed(), keybindings)
+        inv.display(screen)
+        pygame.display.flip()
+
+    pygame.quit()      
