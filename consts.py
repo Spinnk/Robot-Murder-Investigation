@@ -16,7 +16,7 @@ CWD = os.path.split(os.path.abspath(__file__))[0]
 os.chdir(CWD)
 ART_DIR = os.path.join( CWD, "art" )
 
-FPS = 60
+FPS = 50
 
 KEYBINDINGS_DIR = os.path.join(CWD, "settings.config")
 

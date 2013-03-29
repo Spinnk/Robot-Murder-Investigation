@@ -94,6 +94,8 @@ GREEN = (0, 255, 0)
 ## RGB color for Blue
 BLUE = (0, 0, 255)
 
+GRAY = (105, 105, 105)
+
 ## This is a user event that should be sent whenever the game state is changed
 #  (at the main game loop level)
 EVENT_CHANGE_STATE = pygame.USEREVENT + 1
@@ -151,6 +153,7 @@ class cMenu:
 
       self.selection = 0                        # The currently selected button
       self.u_color = WHITE                      # Color for unselected text
+      self.n_color = GRAY
       self.s_color = RED                        # Color for selected text
       self.image_highlight_color = BLUE         # Color for the image highlights
       self.image_highlight_offset = 2           # Addition padding around image
@@ -395,13 +398,14 @@ class cMenu:
       new_button = {'text'    : button_info[0],
                     'state'   : button_info[1],
                     'selected': set_selected,
+                    'selectable': button_info[3],
                     'rect'    : button_rect,
                     'offset'  : (0, 0),
                     'redraw'  : set_redraw,
                     'b_image' : button_info[2],  # base image
                     's_image' : None,            # image when selected and not
-                    'u_image' : None}            # selected (created in
-                                                 # set_button_images)
+                    'u_image' : None,            # selected (created in
+                    'n_image' : None }            # set_button_images)
 
       return new_button
 
@@ -436,6 +440,11 @@ class cMenu:
             text_image   = r(button['text'], True, self.u_color)
             unselected_image.blit(text_image, (0, 0))
 
+            unselectable_image = pygame.Surface((width, height), -1)
+            unselectable_image.blit(self.background, (0, 0), rect)
+            text_image   = r(button['text'], True, self.n_color)
+            unselectable_image.blit(text_image, (0, 0))
+
          # Else this button is a graphic button, so create the selected and
          # unselected images based on the image provided
          else:
@@ -468,6 +477,7 @@ class cMenu:
 
          button['s_image'] = selected_image
          button['u_image'] = unselected_image
+         button['n_image'] = unselectable_image
 
 
    ## ---[ position_buttons ]---------------------------------------------------
@@ -632,6 +642,14 @@ class cMenu:
       if self.selection >= len(self.menu_items) or self.selection < 0:
          self.selection = self.selection_prev
 
+      if self.menu_items[self.selection]['selectable'] == False:
+         if e.key == pygame.K_DOWN or e.key == KB_DOWN:
+            if (o == 'vertical') and ((s + 1) % n != 0):
+               self.selection += 1
+         elif e.key == pygame.K_UP or e.key == KB_UP:
+            if (o == 'vertical') and ((s) % n != 0):
+               self.selection -= 1
+
       # If this is an EVENT_CHANGE_STATE, then this is the first time that we
       # have entered this menu, so lets set it up
       if e.type == EVENT_CHANGE_STATE:
@@ -700,7 +718,9 @@ class cMenu:
       # Cycle through the buttons, only draw the ones that need to be redrawn
       for button in self.menu_items:
          if button['redraw']:
-            if button['selected']:
+            if not button['selectable']:
+               image = button['n_image']
+            elif button['selected']:
                image = button['s_image']
             else:
                image = button['u_image']

@@ -7,66 +7,59 @@ from pygame.locals import *
 from consts import *
 from menu import *
 from character import *
-from inventory import *
 from npc import *
 from shiplayout import *
 from GameState import *
+from inventory import *
+
+
 
 class Game:
     def __init__(self, screen, keybindings):
-        self.mainMenuState = MainMenuState( screen )
-        self.optionsMenuState = OptionsMenuState( screen )
-        self.inGameState = InGameState(screen, keybindings)
-#        self.inventory = Inventory(INVENTORY_BACKGROUND_SHEET_DIR, ITEM_SHEET_SMALL_DIR, ITEM_SHEET_LARGE_DIR, ITEM_BOX_DIR, INVENTORY_BUTTONS_DIR)
+        self.main_menu_state = MainMenuState( screen, False )
+        self.options_menu_state = OptionsMenuState( screen, False )
+        self.in_game_state = InGameState(screen, keybindings)
+        self.inventory = Inventory(INVENTORY_BACKGROUND_SHEET_DIR, ITEM_SHEET_SMALL_DIR, ITEM_SHEET_LARGE_DIR, ITEM_BOX_DIR, INVENTORY_BUTTONS_DIR)
+        self.screen = screen
 
-        self.currentState = self.mainMenuState
-        self.currentStateID = MAIN_MENU_STATE
+        self.current_state = self.main_menu_state
+        self.current_state_id = MAIN_MENU_STATE
 
-        self.saveExists = False
+        self.save_exists = False
         self.keybindings = keybindings
-
 	
     # Set the currentState to match the currentStateID
     def setState(self):
-        if self.currentStateID == MAIN_MENU_STATE:
-            self.currentState = self.mainMenuState
-        elif self.currentStateID == IN_GAME_STATE:
-            self.currentState = self.inGameState
-        elif self.currentStateID == LOAD_STATE:
+        if self.current_state_id == MAIN_MENU_STATE:
+            self.current_state = self.main_menu_state
+        elif self.current_state_id == IN_GAME_STATE:
+            self.current_state = self.in_game_state
+        elif self.current_state_id == LOAD_STATE:
             pass
-        elif self.currentStateID == SAVE_STATE:
+        elif self.current_state_id == SAVE_STATE:
             pass
-        elif self.currentStateID == EXIT_STATE:
+        elif self.current_state_id == EXIT_STATE:
             pygame.event.post(pygame.event.Event(pygame.QUIT, key = 0))
-        elif self.currentStateID == SETTINGS_STATE:
+        elif self.current_state_id == SETTINGS_STATE:
             pass
-        elif self.currentStateID == INVENTORY_STATE:
+        elif self.current_state_id == INVENTORY_STATE:
             self.inventory.display(screen)
-        elif self.currentStateID == PUZZLE_STATE:
+        elif self.current_state_id == PUZZLE_STATE:
             pass
-        elif self.currentStateID == OPTIONS_MENU_STATE:
-            self.currentState = self.optionsMenuState
+        elif self.current_state_id == OPTIONS_MENU_STATE:
+            self.current_state = self.options_menu_state
         
 
     def update(self, event):
-        newStateID = self.currentState.update(event)
-        if newStateID != self.currentStateID:
-            if newStateID == LOAD_STATE and not self.saveExists:
-                pass
-            self.currentStateID = newStateID
+        newStateID = self.current_state.update(event)
+        if newStateID != self.current_state_id:
+            if newStateID == LOAD_STATE and not self.save_exists:
+                return NO_SAVED_GAMES
+            self.current_state_id = newStateID
             self.setState()
 
     def display(self, screen, state):
-        self.currentState.display()
-
-        
-class SaveGame:
-    def __init__(self):
-        pass
-        
-
-
-
+        self.current_state.display()
 
 
 

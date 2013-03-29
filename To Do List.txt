@@ -1,0 +1,4 @@
+To Do:
+-- saveability
+-- assimilate code to naming conventions
+-- consider other coding standards

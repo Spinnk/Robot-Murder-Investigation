@@ -1,12 +1,13 @@
 import sys, pygame
 
 from consts import *
-
-from character import *
-from inventory import *
 from menu import *
+from character import *
 from npc import *
 from shiplayout import *
+
+
+
 
 class GameState:
     def __init__(self, screen):
@@ -40,11 +41,13 @@ class LoadGameState (GameState):
 
 class MainMenuState (GameState):
 
-    def __init__(self, screen):
+    def __init__(self, screen, save_exists):
+        self.save_exists = save_exists
+        
         self.menu = cMenu(50, 50, 20, 5, 'vertical', 100, screen,
-                            [('New Game', IN_GAME_STATE, None),
-                             ('Load Game', LOAD_STATE, None),
-                             ('Quit', EXIT_STATE, None)])
+                            [('New Game', IN_GAME_STATE, None, True),
+                             ('Load Game', LOAD_STATE, None, self.save_exists),
+                             ('Quit', EXIT_STATE, None, True)])
 
         self.menu.set_center(True, True)
         self.menu.set_alignment('center', 'center')
@@ -64,7 +67,7 @@ class InGameState (GameState):
         self.user = character(CHARACTER_SPRITE_SHEET_DIR)
         self.ship = ShipLayout(TILE_SHEET_DIR, ITEM_SHEET_SMALL_DIR)
         self.ship.load(MAP_DEFAULT_DIR)
-        self.keybindings = keybindings
+	self.keybindings = keybindings
 
         self.screen = screen
               
@@ -95,8 +98,6 @@ class InGameState (GameState):
         if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             pygame.event.post(pygame.event.Event(EVENT_CHANGE_STATE, key = 0))
             return OPTIONS_MENU_STATE
-        elif event.type == pygame.KEYDOWN and pygame.key.get_pressed()[KB_INVENTORY]:
-            return INVENTORY_STATE
         self.user.update(pygame.key.get_pressed(), self.keybindings)
         return IN_GAME_STATE
 
@@ -118,20 +119,19 @@ class InGameState (GameState):
 
 
 class OptionsMenuState (GameState):
-    def __init__(self, screen):
+    def __init__(self, screen, save_exists):
+        self.save_exists = save_exists
         self.menu = cMenu(50, 50, 20, 5, 'vertical', 100, screen,
-                            [('Save Game', SAVE_STATE, None),
-                             ('Load Game', LOAD_STATE, None),
-                             ('Modify Settings', SETTINGS_STATE, None),
-                             ('Resume Game', IN_GAME_STATE, None),
-                             ('Quit', EXIT_STATE, None)])
+                            [('Save Game', SAVE_STATE, None, True),
+                             ('Load Game', LOAD_STATE, None, save_exists),
+                             ('Modify Settings', SETTINGS_STATE, None, True),
+                             ('Resume Game', IN_GAME_STATE, None, True),
+                             ('Quit', EXIT_STATE, None, True)])
         self.menu.set_center(True, True)
         self.menu.set_alignment('center', 'center')
 
     def update(self, event):
         state = OPTIONS_MENU_STATE
-        #if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-         #   rectList, state = self.menu.update(pygame.event.Event(EVENT_CHANGE_STATE, key = 0), OPTIONS_MENU_STATE)
         if event.type == pygame.KEYDOWN or event.type == EVENT_CHANGE_STATE:
             rectList, state = self.menu.update(event, OPTIONS_MENU_STATE)
         return state
