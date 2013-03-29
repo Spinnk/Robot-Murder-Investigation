@@ -158,10 +158,10 @@ if __name__=='__main__':
 
     pygame.display.set_caption("Inventory Demo")
 
-    inv = Inventory(INVENTORY_BACKGROUND_SHEET_DIR, ITEM_SHEET_SMALL_DIR, ITEM_SHEET_LARGE_DIR, ITEM_BOX_DIR, INVENTORY_BUTTONS_DIR)
-    inv.add(0); inv.add(0); inv.add(0); inv.add(0)
-    inv.add(1) 
-    inv.add(2); inv.add(2); inv.add(2)
+    test_inventory = Inventory(INVENTORY_BACKGROUND_SHEET_DIR, ITEM_SHEET_SMALL_DIR, ITEM_SHEET_LARGE_DIR, ITEM_BOX_DIR, INVENTORY_BUTTONS_DIR)
+    test_inventory.add(0); test_inventory.add(0); test_inventory.add(0); test_inventory.add(0)
+    test_inventory.add(1) 
+    test_inventory.add(2); test_inventory.add(2); test_inventory.add(2)
     keybindings = default_keybindings()
 
     quit = False
@@ -170,8 +170,8 @@ if __name__=='__main__':
         for event in pygame.event.get():
             if event.type == pygame.QUIT: # exit when close window "X" is pressed
                 quit = True
-        inv.update(pygame.key.get_pressed(), keybindings)
-        inv.display(screen)
+        test_inventory.update(pygame.key.get_pressed(), keybindings)
+        test_inventory.display(screen)
         pygame.display.flip()
 
     pygame.quit()      

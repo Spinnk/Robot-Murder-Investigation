@@ -25,19 +25,12 @@ def main():
     # Set up variables ####
     quit = False
 
-
+    # load background, since it has nothing to do with inner workings of game
     background = pygame.image.load(BACKGROUND_IMAGE_DIR)
 
     keybindings = default_keybindings()
     keybindings = read_keybindings(KEYBINDINGS_DIR)
     gameInstance = Game(screen, keybindings)
-
-    #camera = pygame.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT) # tile index, not pixel
-    #user = character()
-    #npcs = [NPC(random.randint(0, NPC_MAX_VALUE)) for x in xrange(NPC_COUNT)]
-    #npcs += [] # add special npcs
-    #ship = ShipLayout()
-    #ship.load(MAP_DEFAULT_DIR)
 
     # states are listed in consts.py
     state = MAIN_MENU_STATE
@@ -55,31 +48,10 @@ def main():
 
             gameInstance.update( event )
 
-        # display background
         screen.blit(background, (0, 0))
 
-        
         gameInstance.display(screen, 0)
-
         
-            # update objects
-            #user.update(pygame.key.get_pressed())
-            # map.update
-            # npcs.update
-            # etc
-        #gameInstance.update( pygame.event.Event(EVENT_CHANGE_STATE, key = 0) )
-        gameInstance.display(screen, IN_GAME_STATE)
-           
-
-            # refresh screen
-            # display map/world
-            #ship.display(screen, tile_sheet, camera)
-            # display player
-            #user.display(screen, character_sprite_sheet, camera)
-            # display NPCs
-           # for npc in npcs:
-                #npc.display(screen, camera)
-            # etc
 
         if state == LOAD_STATE:
             pass
@@ -89,6 +61,7 @@ def main():
 
         elif state == OPTIONS_MENU_STATE:
             gameInstance.display(screen, state)
+            
 
         pygame.display.set_caption(GAME_NAME)
         pygame.display.flip()                       # show screen

@@ -7,23 +7,24 @@ from pygame.locals import *
 from consts import *
 from menu import *
 from character import *
+from inventory import *
 from npc import *
 from shiplayout import *
 from GameState import *
-
-
 
 class Game:
     def __init__(self, screen, keybindings):
         self.mainMenuState = MainMenuState( screen )
         self.optionsMenuState = OptionsMenuState( screen )
         self.inGameState = InGameState(screen, keybindings)
+#        self.inventory = Inventory(INVENTORY_BACKGROUND_SHEET_DIR, ITEM_SHEET_SMALL_DIR, ITEM_SHEET_LARGE_DIR, ITEM_BOX_DIR, INVENTORY_BUTTONS_DIR)
 
         self.currentState = self.mainMenuState
         self.currentStateID = MAIN_MENU_STATE
 
         self.saveExists = False
         self.keybindings = keybindings
+
 	
     # Set the currentState to match the currentStateID
     def setState(self):
@@ -40,7 +41,7 @@ class Game:
         elif self.currentStateID == SETTINGS_STATE:
             pass
         elif self.currentStateID == INVENTORY_STATE:
-            pass
+            self.inventory.display(screen)
         elif self.currentStateID == PUZZLE_STATE:
             pass
         elif self.currentStateID == OPTIONS_MENU_STATE:
@@ -59,11 +60,6 @@ class Game:
         self.currentState.display()
 
         
-
-
-
-
-
 class SaveGame:
     def __init__(self):
         pass

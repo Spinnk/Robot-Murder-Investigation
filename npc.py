@@ -6,30 +6,35 @@ import pygame
 from consts import *
 
 class NPC:
-    def __init__(self, npc_type):
+    def __init__(self, npc_type, sprite_sheet):
         self.type = npc_type
         self.name = ""
-        self.__x = 0
-        self.__y = 0
-        self.__clip = 0                                # which image to clip from sprite sheet; also which direction player is facing
+        self.x = 0
+        self.y = 0
+        self.clip = 0                                # which image to clip from sprite sheet; also which direction player is facing
+        self.frame = 0                               # which frame to show
 
-    def set_name(self, name):
+        self.sprite = pygame.image.load(sprite_sheet)
+        if self.sprite == None:
+            sys.exit(IMAGE_DOES_NOT_EXIST)
+
+    def setname(self, name):
         self.name = name
 
-    def get_name(self):
+    def getname(self):
         return self.name
 
-    def set_x(self, new_x):
-        self.__x = new_x
+    def setx(self, new_x):
+        self.x = new_x
 
-    def set_y(self, new_y):
-        self.__y = new_y
+    def sety(self, new_y):
+        self.y = new_y
 
-    def x(self):
-        return self.__x
+    def getx(self):
+        return self.x
 
-    def y(self):
-        return self.__y
+    def gety(self):
+        return self.y
 
     # load npcs from save
     def load(self, data):
@@ -46,7 +51,10 @@ class NPC:
     def display(self, screen, camera):
         if screen == None:
             return SURFACE_DOES_NOT_EXIST
-        clip = pygame.Rect(self.__clip, 0, NPC_WIDTH, NPC_HEIGHT)
-        show = pygame.Rect((self.__x - camera.x) * TILE_WIDTH, (self.__y - camera.y) * TILE_HEIGHT, 0, 0)
-        screen.blit(self.__sheet, show, clip)
-        return 0
+        clip = pygame.Rect(self.clip, 0, NPC_WIDTH, NPC_HEIGHT)
+        show = pygame.Rect((self.x - camera.x) * TILE_WIDTH, (self.y - camera.y) * TILE_HEIGHT, 0, 0)
+        screen.blit(self.sprite, show, clip)
+        return NO_PROBLEM
+
+if __name__=='__main__':
+    pass

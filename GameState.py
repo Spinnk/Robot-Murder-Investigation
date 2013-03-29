@@ -1,13 +1,12 @@
 import sys, pygame
 
 from consts import *
-from menu import *
+
 from character import *
+from inventory import *
+from menu import *
 from npc import *
 from shiplayout import *
-
-
-
 
 class GameState:
     def __init__(self, screen):
@@ -65,7 +64,7 @@ class InGameState (GameState):
         self.user = character(CHARACTER_SPRITE_SHEET_DIR)
         self.ship = ShipLayout(TILE_SHEET_DIR, ITEM_SHEET_SMALL_DIR)
         self.ship.load(MAP_DEFAULT_DIR)
-	self.keybindings = keybindings
+        self.keybindings = keybindings
 
         self.screen = screen
               
@@ -96,6 +95,8 @@ class InGameState (GameState):
         if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             pygame.event.post(pygame.event.Event(EVENT_CHANGE_STATE, key = 0))
             return OPTIONS_MENU_STATE
+        elif event.type == pygame.KEYDOWN and pygame.key.get_pressed()[KB_INVENTORY]:
+            return INVENTORY_STATE
         self.user.update(pygame.key.get_pressed(), self.keybindings)
         return IN_GAME_STATE
 

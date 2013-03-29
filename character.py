@@ -75,10 +75,12 @@ class character:
             moved = True
 
     def display(self, screen, camera):
-        # maybe, instead of actually displaying, return clip # and Rect to display in main
         if screen == None:
             return SURFACE_DOES_NOT_EXIST
         clip = pygame.Rect(self.clip, 0, CHARACTER_WIDTH, CHARACTER_HEIGHT)
         show = pygame.Rect((self.x - camera.x) * TILE_WIDTH, (self.y - camera.y) * TILE_HEIGHT, 0, 0)
         screen.blit(self.sprite, show, clip)
-        return 0
+        return NO_PROBLEM
+
+if __name__=='__main__':
+    pass
