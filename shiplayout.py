@@ -108,15 +108,15 @@ class ShipLayout:
         if screen == None:
             return SURFACE_DOES_NOT_EXIST
         # display tiles
-        for x in xrange(SHOW_TILES_W):
-            for y in xrange(SHOW_TILES_H):
+        for x in xrange(TILE_SHOW_W):
+            for y in xrange(TILE_SHOW_H):
                 show = pygame.Rect(x * TILE_WIDTH, y * TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT)
                 clip = pygame.Rect(self.data[camera.x + x][camera.y + y] * TILE_WIDTH, 0, TILE_WIDTH, TILE_HEIGHT)
                 screen.blit(self.floor_tiles, show, clip)
         # display items
         for item in self.items:
             # if item is in camera
-            if (((camera.x <= item[0][0]) and (item[0][0] < (camera.x + SHOW_TILES_W))) and ((camera.y <= item[0][1]) and (item[0][1] < (camera.y + SHOW_TILES_H)))):
+            if (((camera.x <= item[0][0]) and (item[0][0] < (camera.x + TILE_SHOW_W))) and ((camera.y <= item[0][1]) and (item[0][1] < (camera.y + TILE_SHOW_H)))):
                 show = pygame.Rect((item[0][0] - camera.x) * TILE_WIDTH, (item[0][1] - camera.y) * TILE_HEIGHT, ITEM_SMALL_WIDTH, ITEM_SMALL_HEIGHT)
                 clip = pygame.Rect(ITEM_SMALL_WIDTH * item[1], 0 , ITEM_SMALL_WIDTH, ITEM_SMALL_HEIGHT)
                 screen.blit(self.item_tiles, show, clip)

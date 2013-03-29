@@ -102,12 +102,12 @@ class InGameState (GameState):
 
     def display(self):
         # reposition camera
-        self.camera.x = self.user.getx() - SHOW_TILES_W / 2
+        self.camera.x = self.user.getx() - TILE_SHOW_W / 2
         if self.camera.x < 0:
             self.camera.x = 0
         if (self.camera.x + 1) > MAP_WIDTH:
             self.camera.x = MAP_WIDTH - 1
-        self.camera.y = self.user.gety() - SHOW_TILES_H / 2 + 1
+        self.camera.y = self.user.gety() - TILE_SHOW_H / 2 + 1
         if self.camera.y < 0:
             self.camera.y = 0
         if (self.camera.y + 1) > MAP_HEIGHT:

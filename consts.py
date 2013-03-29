@@ -33,8 +33,8 @@ MAX_TILE_VALUE = 2
 TILE_SHEET_DIR = os.path.join(ART_DIR, "tiles.png") # tiles
 TILE_WIDTH = 80                             # pixels
 TILE_HEIGHT = 80                            # pixels
-SHOW_TILES_W = SCREEN_WIDTH / TILE_WIDTH    # number of tiles across that are shown at any one time
-SHOW_TILES_H = SCREEN_HEIGHT / TILE_HEIGHT  # number of tiles down that are shown at any one time
+TILE_SHOW_W = SCREEN_WIDTH / TILE_WIDTH    # number of tiles across that are shown at any one time
+TILE_SHOW_H = SCREEN_HEIGHT / TILE_HEIGHT  # number of tiles down that are shown at any one time
 
 TILE_SOLID = 0x01                           # mask for whether or not the tile can be walked through
 
