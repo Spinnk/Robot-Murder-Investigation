@@ -63,10 +63,10 @@ class ShipLayout:
             self.items += [((randint(0, MAP_WIDTH - 1), randint(0, MAP_HEIGHT - 1)), randint(0, len(ITEMS) - 1))]
 
     # load from file
-    def load(self, file_name):
-        file = open(file_name, 'rb')
-        data = file.read()
-        file.close()
+    def load(self, f_name):
+        f = open(f_name, 'rb')
+        data = f.read()
+        f.close()
 
         if sha512(data[:-64]).digest() != data[-64:]:
             return CHECKSUMS_DO_NOT_MATCH
@@ -79,7 +79,6 @@ class ShipLayout:
         for x in xrange(MAP_HEIGHT):
             self.data += [[ord(y) for y in data[:MAP_WIDTH]]]
             data = data[MAP_WIDTH:]
-        print len(data)
 
         # load items on map
         self.items = []
@@ -125,7 +124,7 @@ class ShipLayout:
 if __name__ == '__main__':
     pygame.init()
     pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.RESIZABLE)
-    test = ShipLayout()
+    test = ShipLayout(TILE_SHEET_DIR, ITEM_SHEET_SMALL_DIR)
     test.generaterandommap()
     test.save(os.path.join(CWD, "map.txt"))
     pygame.quit()

@@ -106,17 +106,16 @@ class InGameState (GameState):
         self.camera.x = self.user.getx() - TILE_SHOW_W / 2
         if self.camera.x < 0:
             self.camera.x = 0
-        if (self.camera.x + 1) > MAP_WIDTH:
-            self.camera.x = MAP_WIDTH - 1
+        if (self.camera.x + TILE_SHOW_W) > MAP_WIDTH:
+            self.camera.x = MAP_WIDTH - TILE_SHOW_W
         self.camera.y = self.user.gety() - TILE_SHOW_H / 2 + 1
         if self.camera.y < 0:
             self.camera.y = 0
-        if (self.camera.y + 1) > MAP_HEIGHT:
-            self.camera.y = MAP_HEIGHT - 1
-            
+        # needs fixing
+        if (self.camera.y + TILE_SHOW_H + 1) > MAP_HEIGHT:
+            self.camera.y = MAP_HEIGHT - TILE_SHOW_H - 1
         self.ship.display(self.screen, self.camera)
         self.user.display(self.screen, self.camera)
-
 
 class OptionsMenuState (GameState):
     def __init__(self, screen, save_exists):

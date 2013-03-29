@@ -25,16 +25,16 @@ SCREEN_WIDTH = 880                          # pixels
 SCREEN_HEIGHT = 640                         # pixels
 
 MAP_DEFAULT_DIR = os.path.join(CWD, "map.txt")  # default map configuration file
-MAP_WIDTH = 128                             # tiles
-MAP_HEIGHT = 128                            # tiles
+MAP_WIDTH = 15                             # tiles
+MAP_HEIGHT = 15                            # tiles
 
 MAX_TILE_VALUE = 2
 
 TILE_SHEET_DIR = os.path.join(ART_DIR, "tiles.png") # tiles
 TILE_WIDTH = 80                             # pixels
 TILE_HEIGHT = 80                            # pixels
-TILE_SHOW_W = SCREEN_WIDTH / TILE_WIDTH    # number of tiles across that are shown at any one time
-TILE_SHOW_H = SCREEN_HEIGHT / TILE_HEIGHT  # number of tiles down that are shown at any one time
+TILE_SHOW_W = SCREEN_WIDTH / TILE_WIDTH     # number of tiles across that are shown at any one time
+TILE_SHOW_H = SCREEN_HEIGHT / TILE_HEIGHT   # number of tiles down that are shown at any one time
 
 TILE_SOLID = 0x01                           # mask for whether or not the tile can be walked through
 
@@ -78,6 +78,9 @@ ITEMS = [   ["Item 1", ["Item 1 Description", "Line 2", "Line 3"]],
 ITEM_IMAGE_BOX = pygame.Rect(666, 37, 100, 100)        # location of items when displayed on screen; change as necessary
 ITEM_NAME_BOX = pygame.Rect(665, 250, 100, 100)        # location of name when item is displayed
 ITEM_DESCRIPTION_BOX = pygame.Rect(665, 300, 100, 100) # location of first line of descriptions
+
+ITEMS_ON_MAP = 5
+
 
 # Useful RGB Values
 WHITE = pygame.Color(0xff, 0xff, 0xff, 0xff)
