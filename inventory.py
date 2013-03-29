@@ -152,7 +152,7 @@ class Inventory:
 
 if __name__=='__main__':
     pygame.init()
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.RESIZABLE)    # create the screen
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))    # create the screen
     if screen == None:
         sys.exit(SCREEN_DOES_NOT_EXIST)
 
@@ -163,6 +163,7 @@ if __name__=='__main__':
     test_inventory.add(1) 
     test_inventory.add(2); test_inventory.add(2); test_inventory.add(2)
     keybindings = default_keybindings()
+    pygame.key.set_repeat(100, 100)
 
     quit = False
     while not(quit):
@@ -174,4 +175,4 @@ if __name__=='__main__':
         test_inventory.display(screen)
         pygame.display.flip()
 
-    pygame.quit()      
+    pygame.quit()

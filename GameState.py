@@ -64,10 +64,10 @@ class MainMenuState (GameState):
 
 class InGameState (GameState):
     def __init__(self, screen, keybindings):
-        self.user = character(CHARACTER_SPRITE_SHEET_DIR)
+        self.user = Character(CHARACTER_SPRITE_SHEET_DIR)
         self.ship = ShipLayout(TILE_SHEET_DIR, ITEM_SHEET_SMALL_DIR)
         self.ship.load(MAP_DEFAULT_DIR)
-	self.keybindings = keybindings
+    	self.keybindings = keybindings
 
         self.screen = screen
               

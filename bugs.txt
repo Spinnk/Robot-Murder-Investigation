@@ -6,5 +6,6 @@
         Keybindings do not work - fixed
 3/25 -  Weird syntax error - fixed
 3/26 -  ESC no longer goes to options menu from in-game state - fixed
-3/28 -  Inventory does not display images properly
-        Inventory highlight box does not work properly
+3/28 -  Inventory does not display images properly - fixed
+        Inventory highlight box does not work properly - fixed
+3/29 -  Character can walk off screen

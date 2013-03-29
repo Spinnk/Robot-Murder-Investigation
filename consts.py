@@ -12,11 +12,12 @@ import pygame
 
 GAME_NAME = "Sentience In Space"
 
+os.environ['SDL_VIDEO_CENTERED'] = '1'
 CWD = os.path.split(os.path.abspath(__file__))[0]
 os.chdir(CWD)
 ART_DIR = os.path.join( CWD, "art" )
 
-FPS = 50
+FPS = 60
 
 KEYBINDINGS_DIR = os.path.join(CWD, "settings.config")
 
@@ -49,7 +50,7 @@ NPC_HEIGHT = 80                             # pixels
 NPC_MAX_VALUE = 3
 NPC_COUNT = 3
 
-CHARACTER_SPRITE_SHEET_DIR = os.path.join( ART_DIR, "robot.png")
+CHARACTER_SPRITE_SHEET_DIR = os.path.join( ART_DIR, "robot front view.png")
 CHARACTER_WIDTH = 80                        # pixels
 CHARACTER_HEIGHT = 160                      # pixels
 
@@ -80,7 +81,6 @@ ITEM_NAME_BOX = pygame.Rect(665, 250, 100, 100)        # location of name when i
 ITEM_DESCRIPTION_BOX = pygame.Rect(665, 300, 100, 100) # location of first line of descriptions
 
 ITEMS_ON_MAP = 5
-
 
 # Useful RGB Values
 WHITE = pygame.Color(0xff, 0xff, 0xff, 0xff)

@@ -10,7 +10,6 @@ from consts import *
 from game import *
 from keybinding import *
 
-
 def main():
     # Set up screen #######
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.RESIZABLE)    # create the screen
@@ -21,7 +20,6 @@ def main():
 
     # Set up variables ####
     quit = False
-    clock = pygame.time.Clock()
 
     background = pygame.image.load(BACKGROUND_IMAGE_DIR)
 
@@ -29,21 +27,12 @@ def main():
     keybindings = read_keybindings(KEYBINDINGS_DIR)
     gameInstance = Game(screen, keybindings)
 
-    #camera = pygame.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT) # tile index, not pixel
-    #user = character()
-    #npcs = [NPC(random.randint(0, NPC_MAX_VALUE)) for x in xrange(NPC_COUNT)]
-    #npcs += [] # add special npcs
-    #ship = ShipLayout()
-    #ship.load(MAP_DEFAULT_DIR)
-
-
     gameInstance.update( pygame.event.Event(EVENT_CHANGE_STATE, key = 0) )
 
     pygame.key.set_repeat(100, 100)
 
     # #####################
     while not(quit):
-        clock.tick(FPS)
         
         # single key presses
         for event in pygame.event.get():
@@ -54,14 +43,12 @@ def main():
 
         # display background
         screen.blit(background, (0, 0))
-
         
-        gameInstance.display(screen, 0)
+        #gameInstance.display(screen, 0)
 
         gameInstance.display(screen, IN_GAME_STATE)
-           
-        pygame.display.set_caption(GAME_NAME)
         pygame.display.flip()                       # show screen
+        pygame.time.Clock().tick(FPS)
 
     return NO_PROBLEM
 
