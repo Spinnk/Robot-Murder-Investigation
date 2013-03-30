@@ -5,17 +5,19 @@
 # open images here and import them
 # into other files
 
-from math import ceil
+import binascii
 import os
 
 import pygame
 
+makehex = lambda value, size = 1: eval(('"%.' + str(size)) + 'x"%' + str(value))
 GAME_NAME = "Sentience In Space"
 
 os.environ['SDL_VIDEO_CENTERED'] = '1'
 CWD = os.path.split(os.path.abspath(__file__))[0]
 os.chdir(CWD)
 ART_DIR = os.path.join( CWD, "art" )
+SAVE_DIR = os.path.join(CWD, "saves")
 
 FPS = 60
 
@@ -120,6 +122,8 @@ IMAGE_DOES_NOT_EXIST = 2
 CHECKSUMS_DO_NOT_MATCH = 3
 INCORRECT_FILE_FORMAT = 4
 ITEM_DOES_NOT_EXIST = 5
+INCORRECT_DATA_FORMAT = 6
+INCORRECT_DATA_LENGTH = 7
 
 MUSIC_FILES = []                                # list of music file names
 

@@ -1,22 +1,31 @@
 # NPC class
-# does not quite work yet
+# Generic NPC class for basic storing of data,
+# updating, and displaying
+
+import binascii
 
 import pygame
 
 from consts import *
 
 class NPC:
-    def __init__(self, npc_type, sprite_sheet):
-        self.type = npc_type
+    def __init__(self):
+        self.type = 255
         self.name = ""
         self.x = 0
         self.y = 0
         self.clip = 0                                # which image to clip from sprite sheet; also which direction player is facing
         self.frame = 0                               # which frame to show
 
-        self.sprite = pygame.image.load(sprite_sheet)
+    def settype(self, new_type):
+        self.type = new_type
+
+        self.sprite = pygame.image.load(NPC_SHEETS_DIR[new_type])
         if self.sprite == None:
             sys.exit(IMAGE_DOES_NOT_EXIST)
+
+    def gettype(self):
+        return self.type
 
     def setname(self, name):
         self.name = name
@@ -27,24 +36,43 @@ class NPC:
     def setx(self, new_x):
         self.x = new_x
 
-    def sety(self, new_y):
-        self.y = new_y
-
     def getx(self):
         return self.x
+
+    def sety(self, new_y):
+        self.y = new_y
 
     def gety(self):
         return self.y
 
-    # load npcs from save
+    # load from save
     def load(self, data):
-        pass
+        self.type = ord(data[0])
+        name_len = int(binascii.hexlify(data[1:3]), 16)
+        data = data[3:]
+        self.name = data[:name_len]
+        data = data[name_len:]
+        self.x = ord(data[0])
+        self.y = ord(data[1])
+        self.clip = ord(data[2])
+        self.clip = ord(data[3])
+        return NO_PROBLEM
 
-    # save npcs to file or something (need other arguments)
     def save(self):
-        psss
+        '''
+        Format:
+            type | name_len | name | x | y | clip | frame
+            type      - 1 byte
+            name_len  - 2 bytes
+            name      - name_len bytes
+            x         - 1 byte
+            y         - 1 byte
+            clip      - 1 byte
+            frame     - 1 byte
+        '''
+        return chr(self.type) + binascii.unhexlify(makehex(len(self.name), 4)) + self.name + chr(self.x) + chr(self.y) + chr(self.clip) + chr(self.frame)
 
-    # grid is array of squares around npc to check if can be moved there or not
+    # grid is array Formatf squares around npc to check if can be moved there or not
     def update(self, grid):
         pass
 

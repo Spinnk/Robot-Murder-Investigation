@@ -8,4 +8,4 @@
 3/26 -  ESC no longer goes to options menu from in-game state - fixed
 3/28 -  Inventory does not display images properly - fixed
         Inventory highlight box does not work properly - fixed
-3/29 -  Character can walk off screen
+3/29 -  Character can walk off screen - fixed

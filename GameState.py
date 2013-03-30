@@ -1,4 +1,4 @@
-import sys, pygame
+import os, sys, pygame
 
 from consts import *
 from menu import *
@@ -63,11 +63,23 @@ class MainMenuState (GameState):
 
 
 class InGameState (GameState):
-    def __init__(self, screen, keybindings):
+    def __init__(self, screen, keybindings):        
+        # ######################################################
+        # need to rewrite this chunk
+        #
+        # Need to tell load new game if no saves found; os.listdir()
+        #
+
         self.user = Character(CHARACTER_SPRITE_SHEET_DIR)
         self.ship = ShipLayout(TILE_SHEET_DIR, ITEM_SHEET_SMALL_DIR)
-        self.ship.load(MAP_DEFAULT_DIR)
-    	self.keybindings = keybindings
+        f = open(os.path.join(CWD, "map.txt"), 'rb')
+        items_on_floor = f.read()
+        f.close()
+        self.ship.loadmap(MAP_DEFAULT_DIR)
+    	self.ship.load(items_on_floor)
+        self.keybindings = keybindings
+
+        # ######################################################
 
         self.screen = screen
               

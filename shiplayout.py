@@ -11,7 +11,6 @@ import sys
 import pygame
 
 from consts import *
-from hashlib import sha512
 
 class ShipLayout:
     def __init__(self, floor_tiles, small_items):
@@ -30,13 +29,13 @@ class ShipLayout:
         self.item_tiles.set_colorkey(COLOR_KEY)
         self.item_tiles = self.item_tiles.convert()
 
-    def change_tile(self, new_tile, location):
+    def changetile(self, new_tile, location):
         self.data[location[0]][location[1]] = new_tile
 
-    def get_items(self):
+    def getitems(self):
         return self.items
 
-    def add_item(self, location, item):
+    def additem(self, location, item):
         self.items += [(location, item)]
 
     # remove item from map
@@ -62,45 +61,44 @@ class ShipLayout:
         for x in xrange(ITEMS_ON_MAP):
             self.items += [((randint(0, MAP_WIDTH - 1), randint(0, MAP_HEIGHT - 1)), randint(0, len(ITEMS) - 1))]
 
-    # load from file
-    def load(self, f_name):
-        f = open(f_name, 'rb')
+    def loadmap(self, file_name):
+        f = open(file_name, 'rb')
         data = f.read()
         f.close()
-
-        if sha512(data[:-64]).digest() != data[-64:]:
-            return CHECKSUMS_DO_NOT_MATCH
-
-        # remove checksum
-        data = data[:-64]
-
-        # load map
         self.data = []
         for x in xrange(MAP_HEIGHT):
             self.data += [[ord(y) for y in data[:MAP_WIDTH]]]
             data = data[MAP_WIDTH:]
+        if len(self.data) != MAP_HEIGHT:
+            self.data = []
+            return INCORRECT_DATA_LENGTH
+        return NO_PROBLEM
 
-        # load items on map
+    def savemap(self, file_name):
+        f = open(file_name, 'wb')
+        for row in self.data:
+            for tile in row:
+                 f.write(chr(tile))
+        f.close()
+        return NO_PROBLEM        
+
+    def load(self, data):
+        # load items onto map
         self.items = []
         while len(data):
             self.items += [((ord(data[0]), ord(data[1])), ord(data[2]))]
             data = data[3:]
-
         return NO_PROBLEM
 
-    # save to file
-    def save(self, file_name):
-        out = ''
-        for row in self.data:
-            for tile in row:
-                 out += chr(tile)
-        for item in self.items:
-            out += chr(item[0][0]) + chr(item[0][1]) + chr(item[1])
-        out += sha512(out).digest()
-        file = open(file_name, 'wb')
-        file.write(out)
-        file.close()
-        return NO_PROBLEM
+    def save(self):
+        '''
+        Format:
+            item_x | item_y | item_type | item_x | item_y | item_type | ...
+            item_x       - 1 byte
+            item_y       - 1 byte
+            item_type    - 1 byte
+        '''
+        return ''.join([chr(item[0][0]) + chr(item[0][1]) + chr(item[1]) for item in self.items])
 
     # display map on screen
     def display(self, screen, camera):
@@ -123,8 +121,8 @@ class ShipLayout:
 
 if __name__ == '__main__':
     pygame.init()
-    pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.RESIZABLE)
+    pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     test = ShipLayout(TILE_SHEET_DIR, ITEM_SHEET_SMALL_DIR)
     test.generaterandommap()
-    test.save(os.path.join(CWD, "map.txt"))
+    test.savemap(os.path.join(CWD, "map.txt"))
     pygame.quit()

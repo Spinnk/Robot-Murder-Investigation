@@ -22,13 +22,10 @@ def main():
     quit = False
 
     background = pygame.image.load(BACKGROUND_IMAGE_DIR)
-
     keybindings = default_keybindings()
     keybindings = read_keybindings(KEYBINDINGS_DIR)
     gameInstance = Game(screen, keybindings)
-
     gameInstance.update( pygame.event.Event(EVENT_CHANGE_STATE, key = 0) )
-
     pygame.key.set_repeat(100, 100)
 
     # #####################

@@ -2,6 +2,8 @@
 # Generic Character class for basic storing of data,
 # updating, and displaying
 
+# Run this file to display a character on screen
+
 # need to figure out how to keep character
 # centered except when near edges of map
 
@@ -18,8 +20,8 @@ class Character:
     # or instead of using file name, open all images in main, and clip with display()
     def __init__(self, sprite_sheet):   # taking in string to save memory + faster since surfaces are passed by value, not reference
         # remember sprite will be standing on tile x+1
-        self.x = 0.0                                 # tile position on map
-        self.y = 0.0                                 # tile position on map
+        self.x = 0                                   # tile position on map
+        self.y = 0                                   # tile position on map
         self.clip = 0                                # which image to clip from sprite sheet; also which direction player is facing
         self.frame = 0                               # use for animations
         self.moved = False
@@ -28,31 +30,48 @@ class Character:
         if self.sprite == None:
             sys.exit(IMAGE_DOES_NOT_EXIST)
 
-    # modifiers (for forcing movement)
     def setx(self, x):
         self.x = x
+
+    def getx(self):
+        return self.x
 
     def sety(self, y):
         self.y = y
 
-    # accessors
-    def getx(self):
-        return self.x
-
     def gety(self):
         return self.y
 
-    # other functions
     def save(self):
         pass
 
-    # default location
     def spawn():
         self.x = 0
         self.y = 0
 
     def interact(self):
         pass
+
+    def load(self, data):
+        if len(data) != 4:
+            return INCORRECT_DATA_LENGTH
+        self.x = ord(data[0])
+        self.y = ord(data[1])
+        self.clip = ord(data[2])
+        self.frame = ord(data[3])
+        self.moved = False
+        return NO_PROBLEM   
+
+    def save(self):
+        '''
+        Format:
+            x | y | clip | frame
+            x     - 1 byte
+            y     - 1 byte
+            clip  - 1 byte
+            frame - 1 byte
+        '''
+        return chr(self.x) + chr(self.y) + chr(self.clip) + chr(self.frame)
 
     def update(self, keystates, keybindings): # add argument for collision detection?
         self.moved = False
@@ -70,8 +89,8 @@ class Character:
             self.clip = 0
         elif keystates[keybindings[KB_DOWN]]:
             self.y += 1
-            if (self.y >= MAP_HEIGHT):
-                self.y = MAP_HEIGHT - 1
+            if (self.y + 2 >= MAP_HEIGHT):
+                self.y = MAP_HEIGHT - 3
             self.moved = True
             self.clip = 0
         elif keystates[keybindings[KB_RIGHT]]:

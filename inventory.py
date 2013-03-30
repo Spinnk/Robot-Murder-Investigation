@@ -67,6 +67,24 @@ class Inventory:
                 return NO_PROBLEM
         return ITEM_DOES_NOT_EXIST
 
+    def load(self, data):
+        if len(data) & 1: # odd number of characters
+            return INCORRECT_DATA_FORMAT
+
+        for x in xrange(len(data) / 2):
+            self.items += [(ord(data[2 * x]), ord(data[2 * x + 1]))]
+
+        return NO_PROBLEM  
+
+    def save(self):
+        '''
+        Format: 
+            item | count | item | count | ...
+            item  - 1 byte
+            count - 1 byte
+        '''
+        return ''.join([chr(item) + chr(count) for item, count in self.items])
+
     def update(self, keystates, keybinding):
         # cursor in items area
         if self.mode == 0:
@@ -101,7 +119,6 @@ class Inventory:
 
         return NO_PROBLEM
 
-    # display unselected items
     def display(self, screen):
         if screen == None:
             return SURFACE_DOES_NOT_EXIST
@@ -110,7 +127,6 @@ class Inventory:
         screen.blit(self.background, (0, 0))
         
         # display items
-        # should display count of items too
         count = 0
         font = pygame.font.Font(FONT_DIR, FONT_SIZE_SMALL)
         dy = ITEM_SMALL_HEIGHT - font.size("A")[1]
