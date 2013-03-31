@@ -80,7 +80,7 @@ class ShipLayout:
             for tile in row:
                  f.write(chr(tile))
         f.close()
-        return NO_PROBLEM        
+        return NO_PROBLEM
 
     def load(self, data):
         # load items onto map

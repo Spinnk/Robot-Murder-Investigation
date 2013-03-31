@@ -3,7 +3,7 @@
 # The functions should be moved into some other class after they are completed
 
 '''
-Sentience in Space 
+Sentience in Space
 	Save File Format (*.rmis)
 
 	A save file will consist of concatenations of save data in the following order:
@@ -22,7 +22,7 @@ Sentience in Space
             clip  - 1 byte
             frame - 1 byte
 
-        Inventory Format: 
+        Inventory Format:
             item | count | item | count | ...
             item  - 1 byte
             count - 1 byte

@@ -12,7 +12,7 @@ from shiplayout import *
 class GameState:
     def __init__(self, screen):
         pass
-        
+
 
     def update(self, event):
         pass
@@ -43,7 +43,7 @@ class MainMenuState (GameState):
 
     def __init__(self, screen, save_exists):
         self.save_exists = save_exists
-        
+
         self.menu = cMenu(50, 50, 20, 5, 'vertical', 100, screen,
                             [('New Game', IN_GAME_STATE, None, True),
                              ('Load Game', LOAD_STATE, None, self.save_exists),
@@ -51,7 +51,7 @@ class MainMenuState (GameState):
 
         self.menu.set_center(True, True)
         self.menu.set_alignment('center', 'center')
-        
+
     def update(self, event):
         state = MAIN_MENU_STATE
         if event.type == pygame.KEYDOWN or event.type == EVENT_CHANGE_STATE:
@@ -63,7 +63,7 @@ class MainMenuState (GameState):
 
 
 class InGameState (GameState):
-    def __init__(self, screen, keybindings):        
+    def __init__(self, screen, keybindings):
         # ######################################################
         # need to rewrite this chunk
         #
@@ -82,11 +82,11 @@ class InGameState (GameState):
         # ######################################################
 
         self.screen = screen
-              
+
         self.character_sprite_sheet = pygame.image.load(CHARACTER_SPRITE_SHEET_DIR)
         self.tile_sheet = pygame.image.load(TILE_SHEET_DIR)
         self.npc_sheets = [pygame.image.load(file) for file in NPC_SHEETS_DIR]
-        
+
         if self.character_sprite_sheet == None:
             return IMAGE_DOES_NOT_EXIST
         if self.tile_sheet == None:
@@ -123,7 +123,6 @@ class InGameState (GameState):
         self.camera.y = self.user.gety() - TILE_SHOW_H / 2 + 1
         if self.camera.y < 0:
             self.camera.y = 0
-        # needs fixing
         if (self.camera.y + TILE_SHOW_H + 1) > MAP_HEIGHT:
             self.camera.y = MAP_HEIGHT - TILE_SHOW_H - 1
         self.ship.display(self.screen, self.camera)
@@ -149,4 +148,4 @@ class OptionsMenuState (GameState):
 
     def display(self):
         self.menu.draw_buttons()
-    
+

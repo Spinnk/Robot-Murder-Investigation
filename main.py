@@ -30,7 +30,6 @@ def main():
 
     # #####################
     while not(quit):
-        
         # single key presses
         for event in pygame.event.get():
             if (event.type == pygame.QUIT): # exit when close window "X" is pressed
@@ -40,7 +39,7 @@ def main():
 
         # display background
         screen.blit(background, (0, 0))
-        
+
         #gameInstance.display(screen, 0)
 
         gameInstance.display(screen, IN_GAME_STATE)

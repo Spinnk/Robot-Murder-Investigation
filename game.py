@@ -27,7 +27,7 @@ class Game:
 
         self.save_exists = False
         self.keybindings = keybindings
-	
+
     # Set the currentState to match the currentStateID
     def setState(self):
         if self.current_state_id == MAIN_MENU_STATE:
@@ -48,7 +48,7 @@ class Game:
             pass
         elif self.current_state_id == OPTIONS_MENU_STATE:
             self.current_state = self.options_menu_state
-        
+
 
     def update(self, event):
         newStateID = self.current_state.update(event)
@@ -60,17 +60,3 @@ class Game:
 
     def display(self, screen, state):
         self.current_state.display()
-
-
-
-
-
-
-
-
-
-
-
-
-
-

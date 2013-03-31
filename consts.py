@@ -1,9 +1,7 @@
+#! /usr/bin/python
+
 # consts.py
 # List of Game Constants / Global Variables
-
-# maybe use this file as initializer
-# open images here and import them
-# into other files
 
 import binascii
 import os
@@ -28,8 +26,8 @@ SCREEN_WIDTH = 880                          # pixels
 SCREEN_HEIGHT = 640                         # pixels
 
 MAP_DEFAULT_DIR = os.path.join(CWD, "map.txt")  # default map configuration file
-MAP_WIDTH = 15                             # tiles
-MAP_HEIGHT = 15                            # tiles
+MAP_WIDTH = 15                              # tiles
+MAP_HEIGHT = 15                             # tiles
 
 MAX_TILE_VALUE = 2
 
@@ -50,7 +48,7 @@ NPC_SHEETS_DIR = [os.path.join(ART_DIR, fname + ".png") for fname in NPCS]
 NPC_WIDTH = 80                              # pixels
 NPC_HEIGHT = 80                             # pixels
 NPC_MAX_VALUE = 3
-NPC_COUNT = 3
+NPC_COUNT = 4
 
 CHARACTER_SPRITE_SHEET_DIR = os.path.join( ART_DIR, "robot front view.png")
 CHARACTER_WIDTH = 80                        # pixels

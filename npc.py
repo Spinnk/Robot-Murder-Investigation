@@ -3,14 +3,16 @@
 # updating, and displaying
 
 import binascii
+import random
 
 import pygame
 
 from consts import *
+from keybinding import *
 
 class NPC:
     def __init__(self):
-        self.type = 255
+        self.type = 0
         self.name = ""
         self.x = 0
         self.y = 0
@@ -22,7 +24,8 @@ class NPC:
 
         self.sprite = pygame.image.load(NPC_SHEETS_DIR[new_type])
         if self.sprite == None:
-            sys.exit(IMAGE_DOES_NOT_EXIST)
+            return IMAGE_DOES_NOT_EXIST
+        return NO_PROBLEM
 
     def gettype(self):
         return self.type
@@ -44,6 +47,10 @@ class NPC:
 
     def gety(self):
         return self.y
+
+    def spawn(self):
+        self.x = random.randint(0, MAP_WIDTH - 1)
+        self.y = random.randint(0, MAP_HEIGHT - 1)
 
     # load from save
     def load(self, data):
@@ -74,7 +81,23 @@ class NPC:
 
     # grid is array Formatf squares around npc to check if can be moved there or not
     def update(self, grid):
-        pass
+        direction = random.randint(0, 3)
+        if direction == 0:
+            self.x += 1
+        if direction == 1:
+            self.x -= 1
+        if direction == 2:
+            self.y += 1
+        if direction == 3:
+            self.y -= 1
+        if self.x < 0:
+            self.x = 0
+        if self.x >= MAP_WIDTH:
+            self.x = MAP_WIDTH - 1
+        if self.y < 0:
+            self.y = 0
+        if self.y >= MAP_HEIGHT:
+            self.y = MAP_HEIGHT - 1
 
     def display(self, screen, camera):
         if screen == None:
@@ -85,4 +108,49 @@ class NPC:
         return NO_PROBLEM
 
 if __name__=='__main__':
-    pass
+    pygame.init()
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))    # create the screen
+    if screen == None:
+        sys.exit(SCREEN_DOES_NOT_EXIST)
+
+    pygame.display.set_caption("Character Demo")
+    keybindings = default_keybindings()
+    camera = pygame.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
+
+    test = [NPC() for x in xrange(4)]
+    test[0].settype(0); test[1].settype(1)
+    test[2].settype(2); test[3].settype(3)
+
+    quit = False
+    while not(quit):
+        # single key presses
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: # exit when close window "X" is pressed
+                quit = True
+
+        keystates = pygame.key.get_pressed()
+        if keystates[keybindings[KB_UP]]:
+            camera.y -= 1
+        elif keystates[keybindings[KB_LEFT]]:
+            camera.x -= 1
+        elif keystates[keybindings[KB_DOWN]]:
+            camera.y += 1
+        elif keystates[keybindings[KB_RIGHT]]:
+            camera.x += 1
+        if camera.x < 0:
+            camera.x = 0
+        if (camera.x + TILE_SHOW_W) > MAP_WIDTH:
+            camera.x = MAP_WIDTH - TILE_SHOW_W
+        if camera.y < 0:
+            camera.y = 0
+        if (camera.y + TILE_SHOW_H + 1) > MAP_HEIGHT:
+            camera.y = MAP_HEIGHT - TILE_SHOW_H - 1
+
+        screen.fill(WHITE)
+        for npc in test:
+            npc.update(None)
+            npc.display(screen, camera)
+
+        pygame.display.flip()
+        pygame.time.Clock().tick(10)
+    pygame.quit()

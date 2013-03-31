@@ -40,7 +40,7 @@ class Inventory:
             sys.exit(IMAGE_DOES_NOT_EXIST)
         self.box.set_colorkey(COLOR_KEY)
         self.box = self.box.convert()
-        
+
         self.option_box = pygame.image.load(option_box)
         if self.option_box == None:
             sys.exit(IMAGE_DOES_NOT_EXIST)
@@ -74,11 +74,11 @@ class Inventory:
         for x in xrange(len(data) / 2):
             self.items += [(ord(data[2 * x]), ord(data[2 * x + 1]))]
 
-        return NO_PROBLEM  
+        return NO_PROBLEM
 
     def save(self):
         '''
-        Format: 
+        Format:
             item | count | item | count | ...
             item  - 1 byte
             count - 1 byte
@@ -95,7 +95,7 @@ class Inventory:
             elif keystates[keybinding[KB_LEFT]]:
                 self.selected -= 1
             elif keystates[keybinding[KB_RIGHT]]:
-                self.selected += 1 
+                self.selected += 1
             elif keystates[keybindings[KB_ENTER]]:
 #                if not (self.items[self.selected] == None):
 #                    self.mode = 1
@@ -125,7 +125,7 @@ class Inventory:
 
         # display inventory background
         screen.blit(self.background, (0, 0))
-        
+
         # display items
         count = 0
         font = pygame.font.Font(FONT_DIR, FONT_SIZE_SMALL)
@@ -176,7 +176,7 @@ if __name__=='__main__':
 
     test_inventory = Inventory(INVENTORY_BACKGROUND_SHEET_DIR, ITEM_SHEET_SMALL_DIR, ITEM_SHEET_LARGE_DIR, ITEM_BOX_DIR, INVENTORY_BUTTONS_DIR)
     test_inventory.add(0); test_inventory.add(0); test_inventory.add(0); test_inventory.add(0)
-    test_inventory.add(1) 
+    test_inventory.add(1)
     test_inventory.add(2); test_inventory.add(2); test_inventory.add(2)
     keybindings = default_keybindings()
     pygame.key.set_repeat(100, 100)
