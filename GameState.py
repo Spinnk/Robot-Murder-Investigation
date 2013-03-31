@@ -142,10 +142,17 @@ class InGameState (GameState):
         if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             pygame.event.post(pygame.event.Event(EVENT_CHANGE_STATE, key = 0))
             return OPTIONS_MENU_STATE
-        if event.type == pygame.KEYDOWN and event.key == self.keybindings[KB_INVENTORY]:
+        elif event.type == pygame.KEYDOWN and event.key == self.keybindings[KB_INVENTORY]:
             return INVENTORY_STATE
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+            self.take_item()
         self.user.update(pygame.key.get_pressed(), self.keybindings)
         return IN_GAME_STATE
+
+    def take_item(self):
+        self.ship.remove_item((self.user.getx(), self.user.gety() + 1))
+
+    
 
     def display(self):
         # reposition camera
@@ -166,10 +173,10 @@ class OptionsMenuState (GameState):
     def __init__(self, screen, save_exists):
         self.save_exists = save_exists
         self.menu = cMenu(50, 50, 20, 5, 'vertical', 100, screen,
-                            [('Save Game', SAVE_STATE, None, True),
+                            [('Resume Game', IN_GAME_STATE, None, True),
+                            ('Save Game', SAVE_STATE, None, True),
                              ('Load Game', LOAD_STATE, None, save_exists),
-                             ('Modify Settings', SETTINGS_STATE, None, True),
-                             ('Resume Game', IN_GAME_STATE, None, True),
+                             ('Modify Settings', SETTINGS_STATE, None, True),                             
                              ('Quit', EXIT_STATE, None, True)])
         self.menu.set_center(True, True)
         self.menu.set_alignment('center', 'center')

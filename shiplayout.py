@@ -40,17 +40,19 @@ class ShipLayout:
 
     # remove item from map
     # if a tile has multiple items stacked on top of it, include item type
-    def remove_time(self, location, item = None):
+    def remove_item(self, location, item = None):
         for i in xrange(len(self.items)):
             if self.items[i][0] == location:
                 if item:
                     if self.items[i][1] == item:
+                        out = self.items[i]
                         del self.items[i]
-                        return True
+                        return out
                 if not item:
+                    out = self.items[i]
                     del self.items[i]
-                    return True
-        return False
+                    return out
+        return None
 
     # generates a random map with items
     def generaterandommap(self):
@@ -58,8 +60,8 @@ class ShipLayout:
         from random import randint
         for x in xrange(MAP_HEIGHT):
             self.data += [[randint(0, MAX_TILE_VALUE) for x in xrange(MAP_WIDTH)]]
-        for x in xrange(ITEMS_ON_MAP):
-            self.items += [((randint(0, MAP_WIDTH - 1), randint(0, MAP_HEIGHT - 1)), randint(0, len(ITEMS) - 1))]
+        for x in xrange(3):
+            self.items += [((x, x), randint(0, len(ITEMS) - 1))]
 
     def loadmap(self, file_name):
         f = open(file_name, 'rb')
