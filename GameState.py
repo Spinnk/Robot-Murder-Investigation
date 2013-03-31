@@ -1,11 +1,12 @@
-import os, sys, pygame
+import os, sys, pygame, hashlib
 
 from consts import *
 from menu import *
 from character import *
 from npc import *
 from shiplayout import *
-
+from inventory import *
+from keybinding import *
 
 
 
@@ -37,6 +38,45 @@ class LoadGameState (GameState):
     def display(self):
         pass
 
+class SaveGameState (GameState):
+    def __init__(self, screen):
+         
+        pass
+
+    def update(self, event):
+        pass
+
+    def save(save_location, character, inventory, ship, npcs):
+	c = character.save()
+	i = inventory.save()
+	s = ship.save()
+	ns = [npc.save() for npc in npcs]
+	out = binascii.unhexlify(makehex(len(c), 4)) + c + binascii.unhexlify(makehex(len(i), 4)) + i + binascii.unhexlify(makehex(len(s), 4)) + s + binascii.unhexlify(makehex(len(ns), 4)) + ''.join([binascii.unhexlify(makehex(len(n), 4)) + n for n in ns])
+	out += hashlib.sha512(out).digest()
+	f = open(save_location, 'wb')
+	f.write(out)
+	f.close()
+	return NO_PROBLEM
+
+    def display(self):
+        pass    
+
+# Inventory/Map/Journal State
+class IMJState (GameState):
+    def __init__(self, screen, keybindings):
+        self.inventory = Inventory(INVENTORY_BACKGROUND_SHEET_DIR, ITEM_SHEET_SMALL_DIR, ITEM_SHEET_LARGE_DIR, ITEM_BOX_DIR, INVENTORY_BUTTONS_DIR)
+        self.screen = screen
+        self.keybindings = keybindings
+
+    def update(self, event):
+        if event.type == pygame.KEYDOWN and event.key == self.keybindings[KB_INVENTORY]:
+            return IN_GAME_STATE
+        return INVENTORY_STATE
+
+    def display(self):
+        self.inventory.display(self.screen)
+
+
 
 
 class MainMenuState (GameState):
@@ -64,12 +104,6 @@ class MainMenuState (GameState):
 
 class InGameState (GameState):
     def __init__(self, screen, keybindings):
-        # ######################################################
-        # need to rewrite this chunk
-        #
-        # Need to tell load new game if no saves found; os.listdir()
-        #
-
         self.user = Character(CHARACTER_SPRITE_SHEET_DIR)
         self.ship = ShipLayout(TILE_SHEET_DIR, ITEM_SHEET_SMALL_DIR)
         f = open(os.path.join(CWD, "map.txt"), 'rb')
@@ -78,8 +112,6 @@ class InGameState (GameState):
         self.ship.loadmap(MAP_DEFAULT_DIR)
     	self.ship.load(items_on_floor)
         self.keybindings = keybindings
-
-        # ######################################################
 
         self.screen = screen
 
@@ -110,6 +142,8 @@ class InGameState (GameState):
         if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             pygame.event.post(pygame.event.Event(EVENT_CHANGE_STATE, key = 0))
             return OPTIONS_MENU_STATE
+        if event.type == pygame.KEYDOWN and event.key == self.keybindings[KB_INVENTORY]:
+            return INVENTORY_STATE
         self.user.update(pygame.key.get_pressed(), self.keybindings)
         return IN_GAME_STATE
 

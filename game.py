@@ -19,8 +19,7 @@ class Game:
         self.main_menu_state = MainMenuState( screen, False )
         self.options_menu_state = OptionsMenuState( screen, False )
         self.in_game_state = InGameState(screen, keybindings)
-        self.inventory = Inventory(INVENTORY_BACKGROUND_SHEET_DIR, ITEM_SHEET_SMALL_DIR, ITEM_SHEET_LARGE_DIR, ITEM_BOX_DIR, INVENTORY_BUTTONS_DIR)
-        self.screen = screen
+        self.imj_state = IMJState(screen, keybindings)
 
         self.current_state = self.main_menu_state
         self.current_state_id = MAIN_MENU_STATE
@@ -29,7 +28,7 @@ class Game:
         self.keybindings = keybindings
 
     # Set the currentState to match the currentStateID
-    def setState(self):
+    def set_state(self):
         if self.current_state_id == MAIN_MENU_STATE:
             self.current_state = self.main_menu_state
         elif self.current_state_id == IN_GAME_STATE:
@@ -43,7 +42,8 @@ class Game:
         elif self.current_state_id == SETTINGS_STATE:
             pass
         elif self.current_state_id == INVENTORY_STATE:
-            self.inventory.display(screen)
+            self.current_state = self.imj_state
+            pass
         elif self.current_state_id == PUZZLE_STATE:
             pass
         elif self.current_state_id == OPTIONS_MENU_STATE:
@@ -56,7 +56,7 @@ class Game:
             if newStateID == LOAD_STATE and not self.save_exists:
                 return NO_SAVED_GAMES
             self.current_state_id = newStateID
-            self.setState()
+            self.set_state()
 
     def display(self, screen, state):
         self.current_state.display()

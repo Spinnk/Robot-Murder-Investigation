@@ -173,14 +173,16 @@ if __name__=='__main__':
         sys.exit(SCREEN_DOES_NOT_EXIST)
 
     pygame.display.set_caption("Inventory Demo")
-
+    
     test_inventory = Inventory(INVENTORY_BACKGROUND_SHEET_DIR, ITEM_SHEET_SMALL_DIR, ITEM_SHEET_LARGE_DIR, ITEM_BOX_DIR, INVENTORY_BUTTONS_DIR)
+
     test_inventory.add(0); test_inventory.add(0); test_inventory.add(0); test_inventory.add(0)
     test_inventory.add(1)
     test_inventory.add(2); test_inventory.add(2); test_inventory.add(2)
+
     keybindings = default_keybindings()
     pygame.key.set_repeat(100, 100)
-
+    
     quit = False
     while not(quit):
         # single key presses
