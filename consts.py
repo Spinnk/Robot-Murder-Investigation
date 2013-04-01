@@ -50,7 +50,7 @@ NPC_HEIGHT = 80                             # pixels
 NPC_MAX_VALUE = 3
 NPC_COUNT = 4
 
-CHARACTER_SPRITE_SHEET_DIR = os.path.join( ART_DIR, "robot front view.png")
+CHARACTER_SPRITE_SHEET_DIR = os.path.join( ART_DIR, "robot.png")
 CHARACTER_WIDTH = 80                        # pixels
 CHARACTER_HEIGHT = 160                      # pixels
 

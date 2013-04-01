@@ -45,7 +45,7 @@ class Character:
     def save(self):
         pass
 
-    def spawn():
+    def spawn(self):
         self.x = 0
         self.y = 0
 
@@ -60,7 +60,7 @@ class Character:
         self.clip = ord(data[2])
         self.frame = ord(data[3])
         self.moved = False
-        return NO_PROBLEM   
+        return NO_PROBLEM
 
     def save(self):
         '''
@@ -80,13 +80,13 @@ class Character:
             if (self.y < 0):
                 self.y = 0
             self.moved = True
-            self.clip = 0
+            self.clip = 2
         elif keystates[keybindings[KB_LEFT]]:
             self.x -= 1
             if (self.x < 0):
                 self.x = 0
             self.moved = True
-            self.clip = 0
+            self.clip = 3
         elif keystates[keybindings[KB_DOWN]]:
             self.y += 1
             if (self.y + 2 >= MAP_HEIGHT):
@@ -98,18 +98,17 @@ class Character:
             if (self.x >= MAP_WIDTH):
                 self.x = MAP_WIDTH - 1
             self.moved = True
-            self.clip = 0
+            self.clip = 1
 
     def display(self, screen, camera):
         if screen == None:
             return SURFACE_DOES_NOT_EXIST
-        clip = pygame.Rect(0, 0, CHARACTER_WIDTH, CHARACTER_HEIGHT)
         show = pygame.Rect((self.x - camera.x) * TILE_WIDTH, (self.y - camera.y) * TILE_HEIGHT, 0, 0)
         if self.moved:
             self.moved = False
             self.frame += 1
             self.frame %= 5
-            clip = pygame.Rect(self.frame * CHARACTER_WIDTH, self.clip * CHARACTER_HEIGHT, CHARACTER_WIDTH, CHARACTER_HEIGHT)
+        clip = pygame.Rect(self.frame * CHARACTER_WIDTH, self.clip * CHARACTER_HEIGHT, CHARACTER_WIDTH, CHARACTER_HEIGHT)
         screen.blit(self.sprite, show, clip)
         return NO_PROBLEM
 
@@ -120,10 +119,11 @@ if __name__=='__main__':
         sys.exit(SCREEN_DOES_NOT_EXIST)
 
     pygame.display.set_caption("Character Demo")
+    pygame.key.set_repeat(100, 100)
+    keybindings = default_keybindings()
 
     test = Character(CHARACTER_SPRITE_SHEET_DIR)
-    keybindings = default_keybindings()
-    pygame.key.set_repeat(100, 100)
+    test.spawn()
 
     quit = False
     while not(quit):

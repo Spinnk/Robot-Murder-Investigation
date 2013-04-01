@@ -18,6 +18,7 @@ class NPC:
         self.y = 0
         self.clip = 0                                # which image to clip from sprite sheet; also which direction player is facing
         self.frame = 0                               # which frame to show
+        self.moved = False
 
     def settype(self, new_type):
         self.type = new_type
@@ -102,8 +103,13 @@ class NPC:
     def display(self, screen, camera):
         if screen == None:
             return SURFACE_DOES_NOT_EXIST
-        clip = pygame.Rect(self.clip, 0, NPC_WIDTH, NPC_HEIGHT)
         show = pygame.Rect((self.x - camera.x) * TILE_WIDTH, (self.y - camera.y) * TILE_HEIGHT, 0, 0)
+#        if self.moved:
+#            self.moved = False
+#            self.frame += 1
+#            self.frame %= 5
+#        clip = pygame.Rect(self.frame * CHARACTER_WIDTH, self.clip * CHARACTER_HEIGHT, CHARACTER_WIDTH, CHARACTER_HEIGHT)
+        clip = pygame.Rect(self.clip, 0, NPC_WIDTH, NPC_HEIGHT)
         screen.blit(self.sprite, show, clip)
         return NO_PROBLEM
 
