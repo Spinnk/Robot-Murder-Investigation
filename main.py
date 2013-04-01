@@ -40,10 +40,11 @@ def main():
         # display background
         screen.blit(background, (0, 0))
 
-        #gameInstance.display(screen, 0)
-
+        # update and display game
         gameInstance.display(screen, IN_GAME_STATE)
-        pygame.display.flip()                       # show screen
+        # bring screen changes up
+        pygame.display.flip()
+        # cap framerate
         pygame.time.Clock().tick(FPS)
 
     return NO_PROBLEM

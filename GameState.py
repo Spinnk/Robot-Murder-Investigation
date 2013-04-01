@@ -40,7 +40,7 @@ class LoadGameState (GameState):
 
 class SaveGameState (GameState):
     def __init__(self, screen):
-         
+
         pass
 
     def update(self, event):
@@ -59,7 +59,7 @@ class SaveGameState (GameState):
 	return NO_PROBLEM
 
     def display(self):
-        pass    
+        pass
 
 # Inventory/Map/Journal State
 class IMJState (GameState):
@@ -103,21 +103,18 @@ class MainMenuState (GameState):
 
 
 class InGameState (GameState):
+    # initialize with only map
     def __init__(self, screen, keybindings):
-        self.user = Character(CHARACTER_SPRITE_SHEET_DIR)
-        self.ship = ShipLayout(TILE_SHEET_DIR, ITEM_SHEET_SMALL_DIR)
-        f = open(os.path.join(CWD, "map.txt"), 'rb')
-        items_on_floor = f.read()
-        f.close()
-        self.ship.loadmap(MAP_DEFAULT_DIR)
-    	self.ship.load(items_on_floor)
+        self.screen = screen
         self.keybindings = keybindings
 
-        self.screen = screen
+        self.user = Character(CHARACTER_SPRITE_SHEET_DIR)
+        self.ship = ShipLayout(TILE_SHEET_DIR, ITEM_SHEET_SMALL_DIR)
+        self.ship.loadmap(MAP_DEFAULT_DIR)
 
         self.character_sprite_sheet = pygame.image.load(CHARACTER_SPRITE_SHEET_DIR)
         self.tile_sheet = pygame.image.load(TILE_SHEET_DIR)
-        self.npc_sheets = [pygame.image.load(file) for file in NPC_SHEETS_DIR]
+        self.npc_sheets = [pygame.image.load(npc_file) for npc_file in NPC_SHEETS_DIR]
 
         if self.character_sprite_sheet == None:
             return IMAGE_DOES_NOT_EXIST
@@ -149,13 +146,30 @@ class InGameState (GameState):
         self.user.update(pygame.key.get_pressed(), self.keybindings)
         return IN_GAME_STATE
 
-    def take_item(self):
-        self.ship.remove_item((self.user.getx(), self.user.gety() + 1))
+    # modify items on floor
+    # add single item to character location
+    def additem(self, item):
+        self.ship.additem((self.user.getx(), self.user.gety() + 1), item)
 
-    
+    # remove single item to character location
+    def removeitem(self):
+        self.ship.removeitem((self.user.getx(), self.user.gety() + 1))
+
+    # set all floor items
+    def setitemsonfloor(self, itemsonfloor):
+        self.items = itemsonfloor
+
+    def removeitemsonfloor(self):
+        self.items = []
+
+    # get copy of items on floor
+    def getitemsonfloor(self):
+        return self.items
 
     def display(self):
-        # reposition camera
+        # reposition camera to center around character
+        # limit camera to edge of map so character will be
+        # not center for those cases
         self.camera.x = self.user.getx() - TILE_SHOW_W / 2
         if self.camera.x < 0:
             self.camera.x = 0
@@ -176,7 +190,7 @@ class OptionsMenuState (GameState):
                             [('Resume Game', IN_GAME_STATE, None, True),
                             ('Save Game', SAVE_STATE, None, True),
                              ('Load Game', LOAD_STATE, None, save_exists),
-                             ('Modify Settings', SETTINGS_STATE, None, True),                             
+                             ('Modify Settings', SETTINGS_STATE, None, True),
                              ('Quit', EXIT_STATE, None, True)])
         self.menu.set_center(True, True)
         self.menu.set_alignment('center', 'center')

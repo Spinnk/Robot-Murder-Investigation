@@ -29,18 +29,21 @@ class ShipLayout:
         self.item_tiles.set_colorkey(COLOR_KEY)
         self.item_tiles = self.item_tiles.convert()
 
+    # change a tile type
     def changetile(self, new_tile, location):
         self.data[location[0]][location[1]] = new_tile
 
+    # get copy of all items
     def getitems(self):
         return self.items
 
+    # add one item to the map
     def additem(self, location, item):
         self.items += [(location, item)]
 
     # remove item from map
-    # if a tile has multiple items stacked on top of it, include item type
-    def remove_item(self, location, item = None):
+    # might be changed: if a tile has multiple items stacked on top of it, include item type
+    def removeitem(self, location, item = None):
         for i in xrange(len(self.items)):
             if self.items[i][0] == location:
                 if item:
@@ -48,7 +51,7 @@ class ShipLayout:
                         out = self.items[i]
                         del self.items[i]
                         return out
-                if not item:
+                elif not item:
                     out = self.items[i]
                     del self.items[i]
                     return out
@@ -63,6 +66,7 @@ class ShipLayout:
         for x in xrange(3):
             self.items += [((x, x), randint(0, len(ITEMS) - 1))]
 
+    # load a map file to memory
     def loadmap(self, file_name):
         f = open(file_name, 'rb')
         data = f.read()
@@ -76,22 +80,25 @@ class ShipLayout:
             return INCORRECT_DATA_LENGTH
         return NO_PROBLEM
 
+    # save only the map
     def savemap(self, file_name):
         f = open(file_name, 'wb')
+        # write every tile as an ASCII characters to a file
         for row in self.data:
             for tile in row:
                  f.write(chr(tile))
         f.close()
         return NO_PROBLEM
 
+    # load items onto map
     def load(self, data):
-        # load items onto map
         self.items = []
         while len(data):
             self.items += [((ord(data[0]), ord(data[1])), ord(data[2]))]
             data = data[3:]
         return NO_PROBLEM
 
+    # save items into a string of the specified format
     def save(self):
         '''
         Format:

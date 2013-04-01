@@ -4,9 +4,6 @@
 
 # Run this file to display a character on screen
 
-# need to figure out how to keep character
-# centered except when near edges of map
-
 # need frame independent animation and movement
 
 import sys
@@ -30,6 +27,7 @@ class Character:
         if self.sprite == None:
             sys.exit(IMAGE_DOES_NOT_EXIST)
 
+    # Accessors and Modifiers
     def setx(self, x):
         self.x = x
 
@@ -45,13 +43,15 @@ class Character:
     def save(self):
         pass
 
+    # set an initial character location
     def spawn(self):
         self.x = 0
         self.y = 0
 
-    def interact(self):
-        pass
+#    def interact(self):
+#        pass
 
+    # load from save string
     def load(self, data):
         if len(data) != 4:
             return INCORRECT_DATA_LENGTH
@@ -62,6 +62,7 @@ class Character:
         self.moved = False
         return NO_PROBLEM
 
+    # save character to a string of specified format
     def save(self):
         '''
         Format:
@@ -73,6 +74,7 @@ class Character:
         '''
         return chr(self.x) + chr(self.y) + chr(self.clip) + chr(self.frame)
 
+    # check for movement
     def update(self, keystates, keybindings): # add argument for collision detection?
         self.moved = False
         if keystates[keybindings[KB_UP]]:
@@ -100,6 +102,7 @@ class Character:
             self.moved = True
             self.clip = 1
 
+    # display character
     def display(self, screen, camera):
         if screen == None:
             return SURFACE_DOES_NOT_EXIST

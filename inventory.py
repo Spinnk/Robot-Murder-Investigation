@@ -14,9 +14,10 @@ class Inventory:
     def __init__(self, background, small, large, box, option_box):
         self.items = []             # list of (item #, count)
         self.mode = 0               # 0 in items area; 1 in options area
-        self.selected = 0
-        self.option = 0
+        self.selected = 0           # which items is selected
+        self.option = 0             # which "option" button is selected. 0 is none
 
+        # load images and check to make sure they loaded properly
         self.background = pygame.image.load(background)
         if self.background == None:
             sys.exit(IMAGE_DOES_NOT_EXIST)
@@ -47,6 +48,7 @@ class Inventory:
         self.option_box.set_colorkey(COLOR_KEY)
         self.option_box = self.option_box.convert()
 
+    # add item to inventory
     def add(self, item):# item is an integer
         found = False
         for i in xrange(len(self.items)):
@@ -58,6 +60,7 @@ class Inventory:
             self.items += [[item, 1]]
         return NO_PROBLEM
 
+    # remove item from inventory
     def remove(self, to_rem):
         for i in xrange(len(self.items)):
             if self.items[i][0] == to_rem:
@@ -67,6 +70,7 @@ class Inventory:
                 return NO_PROBLEM
         return ITEM_DOES_NOT_EXIST
 
+    # load inventory from string
     def load(self, data):
         if len(data) & 1: # odd number of characters
             return INCORRECT_DATA_FORMAT
@@ -76,6 +80,7 @@ class Inventory:
 
         return NO_PROBLEM
 
+    # save inventory into a string of the specified format
     def save(self):
         '''
         Format:
@@ -85,6 +90,7 @@ class Inventory:
         '''
         return ''.join([chr(item) + chr(count) for item, count in self.items])
 
+    # update location of "cursor"
     def update(self, keystates, keybinding):
         # cursor in items area
         if self.mode == 0:
@@ -119,6 +125,7 @@ class Inventory:
 
         return NO_PROBLEM
 
+    # display inventory
     def display(self, screen):
         if screen == None:
             return SURFACE_DOES_NOT_EXIST
@@ -173,7 +180,7 @@ if __name__=='__main__':
         sys.exit(SCREEN_DOES_NOT_EXIST)
 
     pygame.display.set_caption("Inventory Demo")
-    
+
     test_inventory = Inventory(INVENTORY_BACKGROUND_SHEET_DIR, ITEM_SHEET_SMALL_DIR, ITEM_SHEET_LARGE_DIR, ITEM_BOX_DIR, INVENTORY_BUTTONS_DIR)
 
     test_inventory.add(0); test_inventory.add(0); test_inventory.add(0); test_inventory.add(0)
@@ -182,7 +189,7 @@ if __name__=='__main__':
 
     keybindings = default_keybindings()
     pygame.key.set_repeat(100, 100)
-    
+
     quit = False
     while not(quit):
         # single key presses

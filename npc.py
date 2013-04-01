@@ -2,6 +2,9 @@
 # Generic NPC class for basic storing of data,
 # updating, and displaying
 
+# Run this file to display random NPCs on screen
+# Can move camera with up, down, left, and right keys
+
 import binascii
 import random
 
@@ -20,6 +23,9 @@ class NPC:
         self.frame = 0                               # which frame to show
         self.moved = False
 
+    # Accessors and Modifiers
+
+    # should run this function before using NPC
     def settype(self, new_type):
         self.type = new_type
 
@@ -49,11 +55,16 @@ class NPC:
     def gety(self):
         return self.y
 
-    def spawn(self):
-        self.x = random.randint(0, MAP_WIDTH - 1)
-        self.y = random.randint(0, MAP_HEIGHT - 1)
+    # set an initial NPC location
+    def spawn(self, location = None):
+        if not location:
+            self.x = random.randint(0, MAP_WIDTH - 1)
+            self.y = random.randint(0, MAP_HEIGHT - 1)
+        else:
+            self.x = location[0]
+            self.y = location[1]
 
-    # load from save
+    # load from save string
     def load(self, data):
         self.type = ord(data[0])
         name_len = int(binascii.hexlify(data[1:3]), 16)
@@ -66,6 +77,7 @@ class NPC:
         self.clip = ord(data[3])
         return NO_PROBLEM
 
+    # save NPC to a string of specified format
     def save(self):
         '''
         Format:
@@ -80,7 +92,9 @@ class NPC:
         '''
         return chr(self.type) + binascii.unhexlify(makehex(len(self.name), 4)) + self.name + chr(self.x) + chr(self.y) + chr(self.clip) + chr(self.frame)
 
-    # grid is array Formatf squares around npc to check if can be moved there or not
+    # move NPC and use grid to check for collisions
+    # ill need to be changed if some NPCs can only
+    # be in certain areas
     def update(self, grid):
         direction = random.randint(0, 3)
         if direction == 0:
@@ -100,6 +114,7 @@ class NPC:
         if self.y >= MAP_HEIGHT:
             self.y = MAP_HEIGHT - 1
 
+    # display NPC
     def display(self, screen, camera):
         if screen == None:
             return SURFACE_DOES_NOT_EXIST
