@@ -26,7 +26,7 @@ import random
 import pygame
 
 from consts import *
-from game import *
+from Game import *
 from keybinding import *
 
 def main():
@@ -67,7 +67,7 @@ def main():
         screen.blit(background, (0, 0))
 
         # display game
-        gameInstance.display(screen, IN_GAME_STATE)
+        gameInstance.display()
 
         # bring screen changes up
         pygame.display.flip()

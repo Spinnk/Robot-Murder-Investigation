@@ -1,5 +1,16 @@
 #! /usr/bin/python
 
+# GameState and all its inherited classes
+#
+# The GameState class provides the foundation for the possible game states.
+# Included in this file are the LoadGameState, SaveGameState, IMJState (for
+# displaying the inventory/map/journal), MainMenuState, InGameState and
+# OptionsMenuState.
+#
+# These states each recieve input through an update() function and print to the
+# screen using a display() function. The update() function returns an integer
+# representation of the state the game should be in, given the input.
+
 # GameState.py is part of Sentience in Space.
 #
 # Sentience in Space is free software: you can redistribute it and/or modify
@@ -26,24 +37,28 @@ from inventory import *
 from keybinding import *
 
 
-
-
-
+#-------------------------------------------------------------------------------
+#---[ GameState Class ]---------------------------------------------------------
+#-------------------------------------------------------------------------------
+## This class is used as a template to allow easy transition between game states
+## by declaring common functionality
 class GameState:
     def __init__(self, screen):
         pass
-
 
     def update(self, event):
         pass
 
     def display(self):
         pass
-
-
+    
+#-------------------------------------------------------------------------------
+#---[ LoadGameState Class ]-----------------------------------------------------
+#-------------------------------------------------------------------------------
+## This class handles loading a game from a save file
+#
 class LoadGameState (GameState):
     def __init__(self, screen):
-         #self.loadable = loadable
         pass
 
     def load(self):
@@ -59,7 +74,6 @@ class LoadGameState (GameState):
 
 class SaveGameState (GameState):
     def __init__(self, screen):
-
         pass
 
     def update(self, event):
@@ -80,7 +94,12 @@ class SaveGameState (GameState):
     def display(self):
         pass
 
-# Inventory/Map/Journal State
+
+#-------------------------------------------------------------------------------
+#---[ IMJState Class ]----------------------------------------------------------
+#-------------------------------------------------------------------------------
+## This class is used to handle the Inventory/Map/Journal State
+#
 class IMJState (GameState):
     def __init__(self, screen, keybindings):
         self.inventory = Inventory(INVENTORY_BACKGROUND_SHEET_DIR, ITEM_SHEET_SMALL_DIR, ITEM_SHEET_LARGE_DIR, ITEM_BOX_DIR, INVENTORY_BUTTONS_DIR)
@@ -97,7 +116,12 @@ class IMJState (GameState):
 
 
 
-
+#-------------------------------------------------------------------------------
+#---[ MainMenuState Class ]-----------------------------------------------------
+#-------------------------------------------------------------------------------
+## This class handles the functionality for the main menu (allowing "new game,"
+## "load game" and "exit" options)
+#
 class MainMenuState (GameState):
 
     def __init__(self, screen, save_exists):
@@ -120,7 +144,11 @@ class MainMenuState (GameState):
     def display(self):
         self.menu.draw_buttons()
 
-
+#-------------------------------------------------------------------------------
+#---[ InGameState Class ]-------------------------------------------------------
+#-------------------------------------------------------------------------------
+## This class handles the functionality for in-game actions and display
+#
 class InGameState (GameState):
     # initialize with only map
     def __init__(self, screen, keybindings):
@@ -202,6 +230,12 @@ class InGameState (GameState):
         self.ship.display(self.screen, self.camera)
         self.user.display(self.screen, self.camera)
 
+#-------------------------------------------------------------------------------
+#---[ OptionsMenuState Class ]--------------------------------------------------
+#-------------------------------------------------------------------------------
+## This class handles the functionality for the options menu (allowing
+## "resume game," "save game," "load game," "modify settings" and "exit" options)
+#
 class OptionsMenuState (GameState):
     def __init__(self, screen, save_exists):
         self.save_exists = save_exists
