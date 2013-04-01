@@ -51,7 +51,7 @@ class GameState:
 
     def display(self):
         pass
-    
+
 #-------------------------------------------------------------------------------
 #---[ LoadGameState Class ]-----------------------------------------------------
 #-------------------------------------------------------------------------------
@@ -71,7 +71,7 @@ class LoadGameState (GameState):
 
     def display(self):
         pass
-    
+
 #-------------------------------------------------------------------------------
 #---[ SaveGameState Class ]-----------------------------------------------------
 #-------------------------------------------------------------------------------
@@ -214,7 +214,8 @@ class InGameState (GameState):
     # remove single item to character location
     def removeitem(self):
         item = self.ship.removeitem((self.user.getx(), self.user.gety() + 1))
-        self.inventory.add(item)
+        print item
+        self.inventory.additem(item)
 
     # set all floor items
     def setitemsonfloor(self, itemsonfloor):

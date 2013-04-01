@@ -66,7 +66,7 @@ class Inventory:
         self.option_box = self.option_box.convert()
 
     # add item to inventory
-    def add(self, item):# item is an integer
+    def additem(self, item):# item is an integer
         found = False
         for i in xrange(len(self.items)):
             if self.items[i][0] == item:
@@ -78,7 +78,7 @@ class Inventory:
         return NO_PROBLEM
 
     # remove item from inventory
-    def remove(self, to_rem):
+    def removeitem(self, to_rem):
         for i in xrange(len(self.items)):
             if self.items[i][0] == to_rem:
                 self.items[i][1] -= 1
@@ -109,6 +109,7 @@ class Inventory:
 
     # update location of "cursor"
     def update(self, keystates, keybinding):
+        keystates = pygame.key.get_pressed()
         # cursor in items area
         if self.mode == 0:
             if keystates[keybinding[KB_UP]]:
@@ -124,6 +125,10 @@ class Inventory:
 #                    self.mode = 1
                 if self.selected < len(self.items):
                     self.mode = 1
+            if self.selected >= 56:
+                self.selected += 1
+            if self.selected < 0:
+                self.selected -= 1
             self.selected %= 56
         # cursor in buttons area
         elif self.mode == 1:
@@ -134,7 +139,7 @@ class Inventory:
             if keystates[keybindings[KB_ENTER]]:
                 self.mode = 0
                 out = self.items[self.selected][0]
-                self.remove(out)
+                self.removeitem(out)
                 return out
             elif keystates[keybindings[KB_ESCAPE]]:
                 self.mode = 0
@@ -200,9 +205,9 @@ if __name__=='__main__':
 
     test_inventory = Inventory(INVENTORY_BACKGROUND_SHEET_DIR, ITEM_SHEET_SMALL_DIR, ITEM_SHEET_LARGE_DIR, ITEM_BOX_DIR, INVENTORY_BUTTONS_DIR)
 
-    test_inventory.add(0); test_inventory.add(0); test_inventory.add(0); test_inventory.add(0)
-    test_inventory.add(1)
-    test_inventory.add(2); test_inventory.add(2); test_inventory.add(2)
+    test_inventory.additem(0); test_inventory.additem(0); test_inventory.additem(0); test_inventory.additem(0)
+    test_inventory.additem(1)
+    test_inventory.additem(2); test_inventory.additem(2); test_inventory.additem(2)
 
     keybindings = default_keybindings()
     pygame.key.set_repeat(100, 100)

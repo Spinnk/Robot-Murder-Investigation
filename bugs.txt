@@ -9,3 +9,4 @@
 3/28 -  Inventory does not display images properly - fixed
         Inventory highlight box does not work properly - fixed
 3/29 -  Character can walk off screen - fixed
+4/1  -  Going to inventory would crash game - fixed

@@ -63,11 +63,11 @@ class ShipLayout:
             if self.items[i][0] == location:
                 if item:
                     if self.items[i][1] == item:
-                        out = self.items[i]
+                        out = self.items[i][1]
                         del self.items[i]
                         return out
                 elif not item:
-                    out = self.items[i]
+                    out = self.items[i][1]
                     del self.items[i]
                     return out
         return None
