@@ -30,7 +30,7 @@ from consts import *
 class ShipLayout:
     def __init__(self, floor_tiles, small_items):
         self.data = []  # 2D array
-        self.items = [] # ((x, y), item)
+        self.items = [] # [[x, y], item]
 
         self.floor_tiles = pygame.image.load(floor_tiles)
         if self.floor_tiles == None:
@@ -45,8 +45,8 @@ class ShipLayout:
         self.item_tiles = self.item_tiles.convert()
 
     # change a tile type
-    def changetile(self, new_tile, location):
-        self.data[location[0]][location[1]] = new_tile
+    def changetile(self, newtile, location):
+        self.data[location[0]][location[1]] = newtile
 
     # get copy of all items
     def getitems(self):
@@ -54,7 +54,7 @@ class ShipLayout:
 
     # add one item to the map
     def additem(self, location, item):
-        self.items += [(location, item)]
+        self.items += [[location, item]]
 
     # remove item from map
     # might be changed: if a tile has multiple items stacked on top of it, include item type
@@ -79,7 +79,7 @@ class ShipLayout:
         for x in xrange(MAP_HEIGHT):
             self.data += [[randint(0, MAX_TILE_VALUE) for x in xrange(MAP_WIDTH)]]
         for x in xrange(3):
-            self.items += [((x, x), randint(0, len(ITEMS) - 1))]
+            self.items += [[[x, x], randint(0, len(ITEMS) - 1)]]
 
     # load a map file to memory
     def loadmap(self, file_name):
@@ -109,7 +109,7 @@ class ShipLayout:
     def load(self, data):
         self.items = []
         while len(data):
-            self.items += [((ord(data[0]), ord(data[1])), ord(data[2]))]
+            self.items += [[[ord(data[0]), ord(data[1])], ord(data[2])]]
             data = data[3:]
         return NO_PROBLEM
 

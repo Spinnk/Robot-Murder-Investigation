@@ -93,7 +93,7 @@ class Inventory:
             return INCORRECT_DATA_FORMAT
 
         for x in xrange(len(data) / 2):
-            self.items += [(ord(data[2 * x]), ord(data[2 * x + 1]))]
+            self.items += [[ord(data[2 * x]), ord(data[2 * x + 1])]]
 
         return NO_PROBLEM
 

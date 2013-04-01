@@ -71,7 +71,12 @@ class LoadGameState (GameState):
 
     def display(self):
         pass
-
+    
+#-------------------------------------------------------------------------------
+#---[ SaveGameState Class ]-----------------------------------------------------
+#-------------------------------------------------------------------------------
+## This class handles save
+#
 class SaveGameState (GameState):
     def __init__(self, screen):
         pass
@@ -110,6 +115,9 @@ class IMJState (GameState):
         if event.type == pygame.KEYDOWN and event.key == self.keybindings[KB_INVENTORY]:
             return IN_GAME_STATE
         return INVENTORY_STATE
+
+    def newinventory(self, inventory):
+        self.inventory = inventory
 
     def display(self):
         self.inventory.display(self.screen)
@@ -154,10 +162,15 @@ class InGameState (GameState):
     def __init__(self, screen, keybindings):
         self.screen = screen
         self.keybindings = keybindings
+        self.inventory = Inventory(INVENTORY_BACKGROUND_SHEET_DIR, ITEM_SHEET_SMALL_DIR, ITEM_SHEET_LARGE_DIR, ITEM_BOX_DIR, INVENTORY_BUTTONS_DIR)
 
         self.user = Character(CHARACTER_SPRITE_SHEET_DIR)
         self.ship = ShipLayout(TILE_SHEET_DIR, ITEM_SHEET_SMALL_DIR)
         self.ship.loadmap(MAP_DEFAULT_DIR)
+
+        self.ship.additem((1,1), 1)
+        self.ship.additem((1,4), 2)
+        self.ship.additem((3,3), 0)
 
         self.character_sprite_sheet = pygame.image.load(CHARACTER_SPRITE_SHEET_DIR)
         self.tile_sheet = pygame.image.load(TILE_SHEET_DIR)
@@ -189,7 +202,7 @@ class InGameState (GameState):
         elif event.type == pygame.KEYDOWN and event.key == self.keybindings[KB_INVENTORY]:
             return INVENTORY_STATE
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-            self.take_item()
+            self.removeitem()
         self.user.update(pygame.key.get_pressed(), self.keybindings)
         return IN_GAME_STATE
 
@@ -200,7 +213,8 @@ class InGameState (GameState):
 
     # remove single item to character location
     def removeitem(self):
-        self.ship.removeitem((self.user.getx(), self.user.gety() + 1))
+        item = self.ship.removeitem((self.user.getx(), self.user.gety() + 1))
+        self.inventory.add(item)
 
     # set all floor items
     def setitemsonfloor(self, itemsonfloor):
@@ -212,6 +226,9 @@ class InGameState (GameState):
     # get copy of items on floor
     def getitemsonfloor(self):
         return self.items
+
+    def getinventory(self):
+        return self.inventory
 
     def display(self):
         # reposition camera to center around character

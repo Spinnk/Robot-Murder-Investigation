@@ -52,6 +52,9 @@ class Game:
         self.in_game_state = InGameState(screen, keybindings)
         self.imj_state = IMJState(screen, keybindings)
 
+        self.inventory = Inventory(INVENTORY_BACKGROUND_SHEET_DIR, ITEM_SHEET_SMALL_DIR, ITEM_SHEET_LARGE_DIR, ITEM_BOX_DIR, INVENTORY_BUTTONS_DIR)
+     
+
         # Set current_state to reference main_menu_state
         self.current_state = self.main_menu_state
         # An integer representation of the current state
@@ -79,6 +82,7 @@ class Game:
         elif self.current_state_id == SETTINGS_STATE:
             pass
         elif self.current_state_id == INVENTORY_STATE:
+            self.imj_state.newinventory( self.in_game_state.getinventory() )
             self.current_state = self.imj_state
             pass
         elif self.current_state_id == PUZZLE_STATE:
