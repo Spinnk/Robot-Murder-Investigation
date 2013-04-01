@@ -1,5 +1,24 @@
-# main.py
-# Main program to combine everything together
+#! /usr/bin/python
+
+# Sentience in Space
+# Copyright (C) 2013  T.J. Callahan
+# Copyright (C) 2013  Jonathan Cann
+# Copyright (C) 2013  Geo Kersey
+# Copyright (C) 2013  Jason Lee
+# Copyright (C) 2013  Kate Spinney
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
 import random
@@ -12,11 +31,14 @@ from keybinding import *
 
 def main():
     # Set up screen #######
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.RESIZABLE)    # create the screen
+    # create the screen
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.RESIZABLE)
+    # make sure screen was created
     if screen == None:
         return SCREEN_DOES_NOT_EXIST
 
-    pygame.display.set_caption(GAME_NAME)                   # give the screen a title
+    # give the screen a title
+    pygame.display.set_caption(GAME_NAME)
 
     # Set up variables ####
     quit = False
@@ -26,24 +48,30 @@ def main():
     keybindings = read_keybindings(KEYBINDINGS_DIR)
     gameInstance = Game(screen, keybindings)
     gameInstance.update( pygame.event.Event(EVENT_CHANGE_STATE, key = 0) )
-    pygame.key.set_repeat(100, 100)
 
     # #####################
+
+    # set key repeat to 100 ms
+    pygame.key.set_repeat(100, 100)
+
     while not(quit):
         # single key presses
         for event in pygame.event.get():
             if (event.type == pygame.QUIT): # exit when close window "X" is pressed
                 quit = True
 
+            # update game
             gameInstance.update( event )
 
         # display background
         screen.blit(background, (0, 0))
 
-        # update and display game
+        # display game
         gameInstance.display(screen, IN_GAME_STATE)
+
         # bring screen changes up
         pygame.display.flip()
+
         # cap framerate
         pygame.time.Clock().tick(FPS)
 
