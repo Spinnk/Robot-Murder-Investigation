@@ -28,7 +28,7 @@ class Game:
         self.keybindings = keybindings
 
     # Set the currentState to match the currentStateID
-    def set_state(self):
+    def setstate(self):
         if self.current_state_id == MAIN_MENU_STATE:
             self.current_state = self.main_menu_state
         elif self.current_state_id == IN_GAME_STATE:
@@ -56,7 +56,7 @@ class Game:
             if newStateID == LOAD_STATE and not self.save_exists:
                 return NO_SAVED_GAMES
             self.current_state_id = newStateID
-            self.set_state()
+            self.setstate()
 
     def display(self, screen, state):
         self.current_state.display()
