@@ -78,6 +78,8 @@ def main():
     return NO_PROBLEM
 
 if __name__=='__main__':
+    os.environ['SDL_VIDEO_CENTERED'] = '1'
+    os.chdir(CWD)
     pygame.init()
     main()
     pygame.quit()
