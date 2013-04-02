@@ -43,8 +43,9 @@ from keybinding import *
 ## This class is used as a template to allow easy transition between game states
 ## by declaring common functionality
 class GameState:
-    def __init__(self, screen):
-        pass
+    def __init__(self, state_id):
+        # self.state_id is the int id associated with the GameState subclass
+        self.state_id = state_id
 
     def update(self, event):
         pass
@@ -52,14 +53,18 @@ class GameState:
     def display(self):
         pass
 
-    ## ---[ optionsmenucheck ]--------------------------------------------------
+    ## ---[ checkstatechanges ]--------------------------------------------------
     #  @param   self    The class itself, Python standard
     #  @param   event   A pygame event
     #
-    # Checks if the event indicates that the state should change to options menu
+    # Checks if the event indicates that the state should change and returns the
+    # state associated with the given event
     def checkstatechange(self, event):
         if event.type == pygame.KEYDOWN and event.key == self.keybindings[KB_INVENTORY]:
-            return IMJ_STATE
+            if self.state_id == IMJ_STATE:
+                return IN_GAME_STATE
+            else:
+                return IMJ_STATE
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             pygame.event.post(pygame.event.Event(EVENT_CHANGE_STATE, key = 0))
             return OPTIONS_MENU_STATE
@@ -71,8 +76,6 @@ class GameState:
 ## This class handles loading a game from a save file
 #
 class LoadGameState (GameState):
-    def __init__(self, screen = None):
-        pass
 
     def load(self, save_location):
         f = open(save_location, 'rb')
@@ -110,8 +113,6 @@ class LoadGameState (GameState):
 ## This class handles save
 #
 class SaveGameState (GameState):
-    def __init__(self, screen = None):
-        pass
 
     def update(self, event):
         pass
@@ -138,12 +139,14 @@ class SaveGameState (GameState):
 ## This class is used to handle the Inventory/Map/Journal State
 #
 class IMJState (GameState):
-    def __init__(self, screen, keybindings):
+    def __init__(self, screen, keybindings, state_id):
+        self.state_id = state_id
         self.inventory = None
         self.screen = screen
         self.keybindings = keybindings
+        
         # The possible states that this state may change to
-        self.state_changes = [IMJ_STATE, OPTIONS_MENU_STATE]
+        self.state_changes = [IMJ_STATE, OPTIONS_MENU_STATE, IN_GAME_STATE]
 
     def update(self, event):
         changed_state = self.checkstatechange(event)
@@ -178,7 +181,8 @@ class IMJState (GameState):
 #
 class MainMenuState (GameState):
 
-    def __init__(self, screen, save_exists):
+    def __init__(self, screen, save_exists, state_id):
+        self.state_id = state_id
         self.save_exists = save_exists
 
         self.menu = cMenu(50, 50, 20, 5, 'vertical', 100, screen,
@@ -205,7 +209,8 @@ class MainMenuState (GameState):
 #
 class InGameState (GameState):
     # initialize with only map
-    def __init__(self, screen, keybindings):
+    def __init__(self, screen, keybindings, state_id):
+        self.state_id = state_id
 
         # load images, check if they exist, and apply colorkey
         self.character_sprite_sheet = pygame.image.load(CHARACTER_SPRITE_SHEET_DIR)
@@ -314,7 +319,8 @@ class InGameState (GameState):
 ## "resume game," "save game," "load game," "modify settings" and "exit" options)
 #
 class OptionsMenuState (GameState):
-    def __init__(self, screen, save_exists):
+    def __init__(self, screen, save_exists, state_id):
+        self.state_id = state_id
         self.save_exists = save_exists
         self.menu = cMenu(50, 50, 20, 5, 'vertical', 100, screen,
                             [('Resume Game', IN_GAME_STATE, None, True),

@@ -50,12 +50,12 @@ class Game:
         self.save_exists = True
         
         # Create instances of each child of GameState:
-        self.main_menu_state = MainMenuState( screen, self.save_exists )
-        self.options_menu_state = OptionsMenuState( screen, self.save_exists )
-        self.in_game_state = InGameState(screen, keybindings)
-        self.imj_state = IMJState(screen, keybindings)
-        self.load_game_state = LoadGameState()
-        self.save_game_state = SaveGameState()
+        self.main_menu_state = MainMenuState( screen, self.save_exists, MAIN_MENU_STATE )
+        self.options_menu_state = OptionsMenuState( screen, self.save_exists, OPTIONS_MENU_STATE )
+        self.in_game_state = InGameState(screen, keybindings, IN_GAME_STATE)
+        self.imj_state = IMJState(screen, keybindings, IMJ_STATE)
+        self.load_game_state = LoadGameState(LOAD_STATE)
+        self.save_game_state = SaveGameState(SAVE_STATE)
 
 
         # Set current_state to reference main_menu_state
