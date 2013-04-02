@@ -114,6 +114,7 @@ class IMJState (GameState):
     def update(self, event):
         if event.type == pygame.KEYDOWN and event.key == self.keybindings[KB_INVENTORY]:
             return IN_GAME_STATE
+        self.inventory.update(pygame.key.get_pressed(), self.keybindings)
         return INVENTORY_STATE
 
     def newinventory(self, inventory):

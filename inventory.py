@@ -119,7 +119,7 @@ class Inventory:
                 self.selected -= 1
             elif keystates[keybinding[KB_RIGHT]]:
                 self.selected += 1
-            elif keystates[keybindings[KB_ENTER]]:
+            elif keystates[keybinding[KB_ENTER]]:
 #                if not (self.items[self.selected] == None):
 #                    self.mode = 1
                 if self.selected < len(self.items):
