@@ -54,7 +54,7 @@ class Game:
         self.options_menu_state = OptionsMenuState( screen, self.save_exists, OPTIONS_MENU_STATE )
         self.in_game_state = InGameState(screen, keybindings, IN_GAME_STATE)
         self.imj_state = IMJState(screen, keybindings, IMJ_STATE)
-        self.load_game_state = LoadGameState(LOAD_STATE)
+        self.load_game_state = LoadGameState(screen, LOAD_STATE)
         self.save_game_state = SaveGameState(screen, SAVE_STATE)
 
         # Set current_state to reference main_menu_state
@@ -74,17 +74,17 @@ class Game:
             self.current_state = self.in_game_state
         elif self.current_state_id == LOAD_STATE:
             print "Loading Game..."
+            pygame.event.post(pygame.event.Event(EVENT_CHANGE_STATE, key = 0))
             c, i, s, ns = self.load_game_state.load(os.path.join(SAVE_DIR, "empty save.rmis"))
             self.in_game_state.load(c, i, s, ns)
-            self.current_state = self.in_game_state
-            self.current_state_id = IN_GAME_STATE
+            self.current_state = self.load_game_state
+            self.current_state_id = LOAD_STATE
         elif self.current_state_id == SAVE_STATE:
             pygame.event.post(pygame.event.Event(EVENT_CHANGE_STATE, key = 0))
             self.save_exists = True
             c, i, s, ns = self.in_game_state.save()
-            self.save_game_state.save(os.path.join(SAVE_DIR, "empty save.rmis"), c, i, s, ns)
+            self.save_game_state.save( c, i, s, ns)
             self.current_state = self.save_game_state
-            print "Game Saved!"
         elif self.current_state_id == EXIT_STATE:
             pygame.event.post(pygame.event.Event(pygame.QUIT, key = 0))
         elif self.current_state_id == SETTINGS_STATE:

@@ -654,6 +654,8 @@ class cMenu:
       # have entered this menu, so lets set it up
       if e.type == EVENT_CHANGE_STATE:
          self.selection = 0
+         if self.menu_items[self.selection]['selectable'] == False:
+            self.selection += 1
          self.menu_items[self.selection_prev]['selected'] = False
          self.menu_items[self.selection]['selected'] = True
          self.redraw_all()
@@ -731,6 +733,11 @@ class cMenu:
             rect_list.append(drawn_rect)
 
       return rect_list
+
+   def set_selectable(self, name, selectable):
+      for button in self.menu_items:
+         if button['text'] == name:
+            button['selectable'] = selectable
 
 
 #---[ END OF FILE ]-------------------------------------------------------------

@@ -78,6 +78,31 @@ class GameState:
 #
 class LoadGameState (GameState):
 
+    def __init__(self, screen, state_id):
+        self.state_id = state_id
+        os.listdir( SAVE_DIR )
+        save_state = 101
+        self.menu = cMenu( 50, 50, 20, 5, 'vertical', 15, screen,
+                           [('Resume Game', IN_GAME_STATE, None, True),
+                            ('', IN_GAME_STATE, None, False)])
+        d = os.listdir( SAVE_DIR )
+        for f in d:
+            self.menu.add_buttons( [(f[:-5], save_state, None, True)])
+            save_state += 1
+        self.menu.set_center(True, True)
+        self.menu.set_alignment('center', 'center')
+        
+    def update(self, event):
+        state = self.state_id
+        if event.type == pygame.KEYDOWN or event.type == EVENT_CHANGE_STATE:
+            rectList, state = self.menu.update(event, self.state_id)
+        if state >= 100:
+            pass
+        return state
+
+    def display(self):
+        self.menu.draw_buttons()
+
     def load(self, save_location):
         f = open(save_location, 'rb')
         data = f.read()
@@ -112,38 +137,50 @@ class LoadGameState (GameState):
 class SaveGameState (GameState):
 
     def __init__(self, screen, state_id):
+        self.save_location = os.path.join(SAVE_DIR, "Save 1")
         self.state_id = state_id
+        self.num_saves = 0
         os.listdir( SAVE_DIR )
         save_state = 100
-        self.menu = cMenu( 50, 50, 20, 5, 'vertical', 100, screen,
-                           [('New Save', save_state, None, True),
-                            ('Resume Game', IN_GAME_STATE, None, True)])
+        self.menu = cMenu( 50, 50, 20, 5, 'vertical', 15, screen,
+                           [('Resume Game', IN_GAME_STATE, None, True),
+                            ('', IN_GAME_STATE, None, False),
+                            ('New Save', save_state, None, True)])
         d = os.listdir( SAVE_DIR )
         save_state += 1
         for f in d:
-            self.menu.add_buttons( [(f, save_state, None, True)])
+            self.menu.add_buttons( [(f[:-5], save_state, None, True)])
             save_state += 1
-            print save_state
+            self.num_saves += 1
         self.menu.set_center(True, True)
         self.menu.set_alignment('center', 'center')
-
+        
     def update(self, event):
         state = self.state_id
         if event.type == pygame.KEYDOWN or event.type == EVENT_CHANGE_STATE:
             rectList, state = self.menu.update(event, self.state_id)
+        if state >= 100:
+            if self.num_saves >= 9:
+                self.menu.set_selectable('New Save', False)
+            if state == 100:
+                save_name = "Save " + str(self.num_saves + 1)
+                self.menu.add_buttons([( save_name, 100 + self.num_saves + 1, None, True)])
+                self.num_saves += 1
+                self.save_location = os.path.join(SAVE_DIR, save_name + ".rmis")
+                print "Saved Game as " + save_name
         return state
 
     def display(self):
         self.menu.draw_buttons()
 
-    def save(self, save_location, character, inventory, ship, npcs):
+    def save(self, character, inventory, ship, npcs):
         c = character.save()
         i = inventory.save()
         s = ship.save()
         ns = [npc.save() for npc in npcs]
         out = binascii.unhexlify(makehex(len(c), 4)) + c + binascii.unhexlify(makehex(len(i), 4)) + i + binascii.unhexlify(makehex(len(s), 4)) + s + binascii.unhexlify(makehex(len(ns), 4)) + ''.join([binascii.unhexlify(makehex(len(n), 4)) + n for n in ns])
         out += hashlib.sha512(out).digest()
-        f = open(save_location, 'wb')
+        f = open(self.save_location, 'wb')
         f.write(out)
         f.close()
         return NO_PROBLEM
@@ -160,7 +197,7 @@ class IMJState (GameState):
         self.inventory = None
         self.screen = screen
         self.keybindings = keybindings
-
+        
         # The possible states that this state may change to
         self.state_changes = [IMJ_STATE, OPTIONS_MENU_STATE, IN_GAME_STATE]
 
@@ -170,12 +207,12 @@ class IMJState (GameState):
             return changed_state
         self.inventory.update(pygame.key.get_pressed(), self.keybindings)
         return IMJ_STATE
-
+    
 ## ---[ setinventory ]----------------------------------------------------------
 #  @param   self        The class itself, Python standard
 #  @param   inventory   The current game inventory
 #
-#  Sets the inventory to match the given inventory
+#  Sets the inventory to match the given inventory 
     def setinventory(self, inventory):
         self.inventory = inventory
 
@@ -185,7 +222,7 @@ class IMJState (GameState):
         except AttributeError:
             print "Error: Inventory not set."
             exit(1)
-
+            
 
 
 
@@ -281,7 +318,7 @@ class InGameState (GameState):
     def load(self, character, inventory, ship_layout, npcs):
         self.user = character
         self.inventory = inventory
-        self.ship.set_items(ship_layout.get_items())
+        self.ship.setitems(ship_layout.getitems())
         self.npcs = npcs
 
     def save(self):
