@@ -26,7 +26,7 @@ import random
 import pygame
 
 from consts import *
-from game import *
+from Game import *
 from keybinding import *
 
 def main():

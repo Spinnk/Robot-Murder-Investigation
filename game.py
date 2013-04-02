@@ -57,8 +57,6 @@ class Game:
         self.load_game_state = LoadGameState()
         self.save_game_state = SaveGameState()
 
-        self.inventory = Inventory(INVENTORY_BACKGROUND_SHEET_DIR, ITEM_SHEET_SMALL_DIR, ITEM_SHEET_LARGE_DIR, ITEM_BOX_DIR, INVENTORY_BUTTONS_DIR)
-     
 
         # Set current_state to reference main_menu_state
         self.current_state = self.main_menu_state
@@ -76,28 +74,19 @@ class Game:
         elif self.current_state_id == IN_GAME_STATE:
             self.current_state = self.in_game_state
         elif self.current_state_id == LOAD_STATE:
-            
             c, i, s, ns = self.load_game_state.load(os.path.join(SAVE_DIR, "empty save.rmis"))
             self.in_game_state.load(c, i, s, ns)
-        
-
-
-
-
-            
         elif self.current_state_id == SAVE_STATE:
             self.save_exists = True
             c, i, s, ns = self.in_game_state.save()
             self.save_game_state.save(os.path.join(SAVE_DIR, "empty save.rmis"), c, i, s, ns)
             print "Game Saved!"
-
-            
         elif self.current_state_id == EXIT_STATE:
             pygame.event.post(pygame.event.Event(pygame.QUIT, key = 0))
         elif self.current_state_id == SETTINGS_STATE:
             pass
-        elif self.current_state_id == INVENTORY_STATE:
-            self.imj_state.newinventory( self.in_game_state.getinventory() )
+        elif self.current_state_id == IMJ_STATE:
+            self.imj_state.setinventory( self.in_game_state.getinventory() )
             self.current_state = self.imj_state
             pass
         elif self.current_state_id == PUZZLE_STATE:

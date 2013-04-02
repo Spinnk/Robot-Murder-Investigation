@@ -52,6 +52,19 @@ class GameState:
     def display(self):
         pass
 
+    ## ---[ optionsmenucheck ]--------------------------------------------------
+    #  @param   self    The class itself, Python standard
+    #  @param   event   A pygame event
+    #
+    # Checks if the event indicates that the state should change to options menu
+    def checkstatechange(self, event):
+        if event.type == pygame.KEYDOWN and event.key == self.keybindings[KB_INVENTORY]:
+            return IMJ_STATE
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+            pygame.event.post(pygame.event.Event(EVENT_CHANGE_STATE, key = 0))
+            return OPTIONS_MENU_STATE
+
+
 #-------------------------------------------------------------------------------
 #---[ LoadGameState Class ]-----------------------------------------------------
 #-------------------------------------------------------------------------------
@@ -126,21 +139,34 @@ class SaveGameState (GameState):
 #
 class IMJState (GameState):
     def __init__(self, screen, keybindings):
-        self.inventory = Inventory(INVENTORY_BACKGROUND_SHEET_DIR, ITEM_SHEET_SMALL_DIR, ITEM_SHEET_LARGE_DIR, ITEM_BOX_DIR, INVENTORY_BUTTONS_DIR)
+        self.inventory = None
         self.screen = screen
         self.keybindings = keybindings
+        # The possible states that this state may change to
+        self.state_changes = [IMJ_STATE, OPTIONS_MENU_STATE]
 
     def update(self, event):
-        if event.type == pygame.KEYDOWN and event.key == self.keybindings[KB_INVENTORY]:
-            return IN_GAME_STATE
+        changed_state = self.checkstatechange(event)
+        if changed_state in self.state_changes:
+            return changed_state
         self.inventory.update(pygame.key.get_pressed(), self.keybindings)
-        return INVENTORY_STATE
-
-    def newinventory(self, inventory):
+        return IMJ_STATE
+    
+## ---[ setinventory ]----------------------------------------------------------
+#  @param   self        The class itself, Python standard
+#  @param   inventory   The current game inventory
+#
+#  Sets the inventory to match the given inventory 
+    def setinventory(self, inventory):
         self.inventory = inventory
 
     def display(self):
-        self.inventory.display(self.screen)
+        try:
+            self.inventory.display(self.screen)
+        except AttributeError:
+            print "Error: Inventory not set."
+            exit(1)
+            
 
 
 
@@ -220,13 +246,13 @@ class InGameState (GameState):
 
         self.camera = pygame.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT) # tile index, not pixel
 
+        # The possible states that this state may change to
+        self.state_changes = [IMJ_STATE, OPTIONS_MENU_STATE]
+
     def update(self, event):
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-            pygame.event.post(pygame.event.Event(EVENT_CHANGE_STATE, key = 0))
-            return OPTIONS_MENU_STATE
-        elif event.type == pygame.KEYDOWN and event.key == self.keybindings[KB_INVENTORY]:
-            return INVENTORY_STATE
-        elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+        if self.checkstatechange(event) in self.state_changes:
+            return self.checkstatechange(event)
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
             self.removeitem()
         self.user.update(pygame.key.get_pressed(), self.keybindings)
         return IN_GAME_STATE
