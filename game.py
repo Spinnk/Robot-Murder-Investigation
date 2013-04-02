@@ -28,7 +28,7 @@
 import sys, pygame
 
 from consts import *
-from GameState import *
+from gamestate import *
 
 #-------------------------------------------------------------------------------
 #---[ Game Class ]--------------------------------------------------------------
@@ -57,7 +57,6 @@ class Game:
         self.load_game_state = LoadGameState(LOAD_STATE)
         self.save_game_state = SaveGameState(SAVE_STATE)
 
-
         # Set current_state to reference main_menu_state
         self.current_state = self.main_menu_state
         # An integer representation of the current state
@@ -76,6 +75,8 @@ class Game:
         elif self.current_state_id == LOAD_STATE:
             c, i, s, ns = self.load_game_state.load(os.path.join(SAVE_DIR, "empty save.rmis"))
             self.in_game_state.load(c, i, s, ns)
+            self.current_state = self.in_game_state
+            self.current_state_id = IN_GAME_STATE
         elif self.current_state_id == SAVE_STATE:
             self.save_exists = True
             c, i, s, ns = self.in_game_state.save()
