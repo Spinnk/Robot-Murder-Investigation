@@ -46,11 +46,16 @@ class Game:
     #  Initialize the class
     #
     def __init__(self, screen, keybindings):
+        # Bool to determine if the "load game" option should be available
+        self.save_exists = True
+        
         # Create instances of each child of GameState:
-        self.main_menu_state = MainMenuState( screen, False )
-        self.options_menu_state = OptionsMenuState( screen, False )
+        self.main_menu_state = MainMenuState( screen, self.save_exists )
+        self.options_menu_state = OptionsMenuState( screen, self.save_exists )
         self.in_game_state = InGameState(screen, keybindings)
         self.imj_state = IMJState(screen, keybindings)
+        self.load_game_state = LoadGameState()
+        self.save_game_state = SaveGameState()
 
         self.inventory = Inventory(INVENTORY_BACKGROUND_SHEET_DIR, ITEM_SHEET_SMALL_DIR, ITEM_SHEET_LARGE_DIR, ITEM_BOX_DIR, INVENTORY_BUTTONS_DIR)
      
@@ -59,9 +64,6 @@ class Game:
         self.current_state = self.main_menu_state
         # An integer representation of the current state
         self.current_state_id = MAIN_MENU_STATE
-
-        # Bool to determine if the "load game" option should be available
-        self.save_exists = False
         
         # See description above for keybindings
         self.keybindings = keybindings
@@ -74,9 +76,22 @@ class Game:
         elif self.current_state_id == IN_GAME_STATE:
             self.current_state = self.in_game_state
         elif self.current_state_id == LOAD_STATE:
-            pass
+            
+            c, i, s, ns = self.load_game_state.load(os.path.join(SAVE_DIR, "empty save.rmis"))
+            self.in_game_state.load(c, i, s, ns)
+        
+
+
+
+
+            
         elif self.current_state_id == SAVE_STATE:
-            pass
+            self.save_exists = True
+            c, i, s, ns = self.in_game_state.save()
+            self.save_game_state.save(os.path.join(SAVE_DIR, "empty save.rmis"), c, i, s, ns)
+            print "Game Saved!"
+
+            
         elif self.current_state_id == EXIT_STATE:
             pygame.event.post(pygame.event.Event(pygame.QUIT, key = 0))
         elif self.current_state_id == SETTINGS_STATE:

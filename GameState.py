@@ -58,13 +58,34 @@ class GameState:
 ## This class handles loading a game from a save file
 #
 class LoadGameState (GameState):
-    def __init__(self, screen):
+    def __init__(self, screen = None):
         pass
 
-    def load(self):
-        saved_file = open(SAVE_FILE, 'rb')
-        data = saved_file.read()
-        saved_file.close()
+    def load(self, save_location):
+        f = open(save_location, 'rb')
+	data = f.read()
+	f.close()
+	checksum = data[-64:]
+	data = data[:-64]
+	if hashlib.sha512(data).digest() != checksum:
+		return CHECKSUMS_DO_NOT_MATCH, None, None, None
+	c_len = int(binascii.hexlify(data[:2]), 16); data = data[2:]
+	c = Character(CHARACTER_SPRITE_SHEET_DIR); c.load(data[:c_len]); data = data[c_len:]
+	i_len = int(binascii.hexlify(data[:2]), 16); data = data[2:]
+	i = Inventory(INVENTORY_BACKGROUND_SHEET_DIR, ITEM_SHEET_SMALL_DIR, ITEM_SHEET_LARGE_DIR, ITEM_BOX_DIR, INVENTORY_BUTTONS_DIR); i.load(data[:i_len]); data = data[i_len:]
+	s_len = int(binascii.hexlify(data[:2]), 16); data = data[2:]
+	s = ShipLayout(TILE_SHEET_DIR, ITEM_SHEET_SMALL_DIR); s.load(data[:s_len]); data = data[s_len:]
+	npc_count = int(binascii.hexlify(data[:2]), 16); data = data[2:]
+
+	ns = []
+	for x in xrange(npc_count):
+		n_len = int(binascii.hexlify(data[:2]), 16); data = data[2:]
+		n = NPC(); n.load(data[:n_len]); data = data[n_len:]
+	if len(data):
+		return INCORRECT_DATA_LENGTH, None, None, None
+	return c, i, s, ns
+
+
 
     def update(self, event):
         pass
@@ -78,13 +99,13 @@ class LoadGameState (GameState):
 ## This class handles save
 #
 class SaveGameState (GameState):
-    def __init__(self, screen):
+    def __init__(self, screen = None):
         pass
 
     def update(self, event):
         pass
 
-    def save(save_location, character, inventory, ship, npcs):
+    def save(self, save_location, character, inventory, ship, npcs):
 	c = character.save()
 	i = inventory.save()
 	s = ship.save()
@@ -206,6 +227,15 @@ class InGameState (GameState):
             self.removeitem()
         self.user.update(pygame.key.get_pressed(), self.keybindings)
         return IN_GAME_STATE
+
+    def load(self, character, inventory, ship_layout, npcs):
+        self.user = character
+        self.inventory = inventory
+        self.ship = ship_layout
+        self.npc_sheets = npcs
+
+    def save(self):
+        return self.user, self.inventory, self.ship, self.npc_sheets
 
     # modify items on floor
     # add single item to character location
