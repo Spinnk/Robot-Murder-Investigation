@@ -48,6 +48,10 @@ class ShipLayout:
     def changetile(self, newtile, location):
         self.data[location[0]][location[1]] = newtile
 
+    # set items
+    def setitems(self, items):
+        self.items = items
+
     # get copy of all items
     def getitems(self):
         return self.items

@@ -126,7 +126,7 @@ class SaveGameState (GameState):
             print save_state
         self.menu.set_center(True, True)
         self.menu.set_alignment('center', 'center')
-        
+
     def update(self, event):
         state = self.state_id
         if event.type == pygame.KEYDOWN or event.type == EVENT_CHANGE_STATE:
@@ -160,7 +160,7 @@ class IMJState (GameState):
         self.inventory = None
         self.screen = screen
         self.keybindings = keybindings
-        
+
         # The possible states that this state may change to
         self.state_changes = [IMJ_STATE, OPTIONS_MENU_STATE, IN_GAME_STATE]
 
@@ -170,12 +170,12 @@ class IMJState (GameState):
             return changed_state
         self.inventory.update(pygame.key.get_pressed(), self.keybindings)
         return IMJ_STATE
-    
+
 ## ---[ setinventory ]----------------------------------------------------------
 #  @param   self        The class itself, Python standard
 #  @param   inventory   The current game inventory
 #
-#  Sets the inventory to match the given inventory 
+#  Sets the inventory to match the given inventory
     def setinventory(self, inventory):
         self.inventory = inventory
 
@@ -185,7 +185,7 @@ class IMJState (GameState):
         except AttributeError:
             print "Error: Inventory not set."
             exit(1)
-            
+
 
 
 
