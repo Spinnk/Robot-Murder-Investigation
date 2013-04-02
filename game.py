@@ -55,7 +55,7 @@ class Game:
         self.in_game_state = InGameState(screen, keybindings, IN_GAME_STATE)
         self.imj_state = IMJState(screen, keybindings, IMJ_STATE)
         self.load_game_state = LoadGameState(LOAD_STATE)
-        self.save_game_state = SaveGameState(SAVE_STATE)
+        self.save_game_state = SaveGameState(screen, SAVE_STATE)
 
         # Set current_state to reference main_menu_state
         self.current_state = self.main_menu_state
@@ -73,14 +73,17 @@ class Game:
         elif self.current_state_id == IN_GAME_STATE:
             self.current_state = self.in_game_state
         elif self.current_state_id == LOAD_STATE:
+            print "Loading Game..."
             c, i, s, ns = self.load_game_state.load(os.path.join(SAVE_DIR, "empty save.rmis"))
             self.in_game_state.load(c, i, s, ns)
             self.current_state = self.in_game_state
             self.current_state_id = IN_GAME_STATE
         elif self.current_state_id == SAVE_STATE:
+            pygame.event.post(pygame.event.Event(EVENT_CHANGE_STATE, key = 0))
             self.save_exists = True
             c, i, s, ns = self.in_game_state.save()
             self.save_game_state.save(os.path.join(SAVE_DIR, "empty save.rmis"), c, i, s, ns)
+            self.current_state = self.save_game_state
             print "Game Saved!"
         elif self.current_state_id == EXIT_STATE:
             pygame.event.post(pygame.event.Event(pygame.QUIT, key = 0))
@@ -93,6 +96,7 @@ class Game:
         elif self.current_state_id == PUZZLE_STATE:
             pass
         elif self.current_state_id == OPTIONS_MENU_STATE:
+            pygame.event.post(pygame.event.Event(EVENT_CHANGE_STATE, key = 0))
             self.current_state = self.options_menu_state
 
     ## ---[ update ]-------------------------------------------------------

@@ -36,7 +36,6 @@ from shiplayout import *
 from inventory import *
 from keybinding import *
 
-
 #-------------------------------------------------------------------------------
 #---[ GameState Class ]---------------------------------------------------------
 #-------------------------------------------------------------------------------
@@ -66,8 +65,10 @@ class GameState:
             else:
                 return IMJ_STATE
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-            pygame.event.post(pygame.event.Event(EVENT_CHANGE_STATE, key = 0))
-            return OPTIONS_MENU_STATE
+            if self.state_id == OPTIONS_MENU_STATE:
+                return IN_GAME_STATE
+            else:
+                return OPTIONS_MENU_STATE
 
 
 #-------------------------------------------------------------------------------
@@ -101,11 +102,7 @@ class LoadGameState (GameState):
             return INCORRECT_DATA_LENGTH, None, None, None
         return c, i, s, ns
 
-    def update(self, event):
-        pass
 
-    def display(self):
-        pass
 
 #-------------------------------------------------------------------------------
 #---[ SaveGameState Class ]-----------------------------------------------------
@@ -114,8 +111,30 @@ class LoadGameState (GameState):
 #
 class SaveGameState (GameState):
 
+    def __init__(self, screen, state_id):
+        self.state_id = state_id
+        os.listdir( SAVE_DIR )
+        save_state = 100
+        self.menu = cMenu( 50, 50, 20, 5, 'vertical', 100, screen,
+                           [('New Save', save_state, None, True),
+                            ('Resume Game', IN_GAME_STATE, None, True)])
+        d = os.listdir( SAVE_DIR )
+        save_state += 1
+        for f in d:
+            self.menu.add_buttons( [(f, save_state, None, True)])
+            save_state += 1
+            print save_state
+        self.menu.set_center(True, True)
+        self.menu.set_alignment('center', 'center')
+        
     def update(self, event):
-        pass
+        state = self.state_id
+        if event.type == pygame.KEYDOWN or event.type == EVENT_CHANGE_STATE:
+            rectList, state = self.menu.update(event, self.state_id)
+        return state
+
+    def display(self):
+        self.menu.draw_buttons()
 
     def save(self, save_location, character, inventory, ship, npcs):
         c = character.save()
@@ -128,9 +147,6 @@ class SaveGameState (GameState):
         f.write(out)
         f.close()
         return NO_PROBLEM
-
-    def display(self):
-        pass
 
 
 #-------------------------------------------------------------------------------
@@ -265,7 +281,7 @@ class InGameState (GameState):
     def load(self, character, inventory, ship_layout, npcs):
         self.user = character
         self.inventory = inventory
-        self.ship = ship_layout
+        self.ship.set_items(ship_layout.get_items())
         self.npcs = npcs
 
     def save(self):
