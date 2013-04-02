@@ -54,8 +54,8 @@ class Game:
         self.options_menu_state = OptionsMenuState( screen, self.save_exists, OPTIONS_MENU_STATE )
         self.in_game_state = InGameState(screen, keybindings, IN_GAME_STATE)
         self.imj_state = IMJState(screen, keybindings, IMJ_STATE)
-        self.load_game_state = LoadGameState(screen, LOAD_STATE)
         self.save_game_state = SaveGameState(screen, SAVE_STATE)
+        self.load_game_state = LoadGameState(screen, LOAD_STATE)
 
         # Set current_state to reference main_menu_state
         self.current_state = self.main_menu_state
@@ -75,8 +75,8 @@ class Game:
         elif self.current_state_id == LOAD_STATE:
             print "Loading Game..."
             pygame.event.post(pygame.event.Event(EVENT_CHANGE_STATE, key = 0))
-            c, i, s, ns = self.load_game_state.load(os.path.join(SAVE_DIR, "empty save.rmis"))
-            self.in_game_state.load(c, i, s, ns)
+            #c, i, s, ns = self.load_game_state
+            #self.in_game_state.load(c, i, s, ns)
             self.current_state = self.load_game_state
             self.current_state_id = LOAD_STATE
         elif self.current_state_id == SAVE_STATE:
@@ -98,7 +98,15 @@ class Game:
         elif self.current_state_id == OPTIONS_MENU_STATE:
             pygame.event.post(pygame.event.Event(EVENT_CHANGE_STATE, key = 0))
             self.current_state = self.options_menu_state
+        elif self.current_state_id > 100:
+            save_location = os.path.join(SAVE_DIR, "Save " + str(self.current_state_id - 100) + ".rmis")
+            c, i, s, ns = self.load_game_state.load( save_location )
+            self.in_game_state.load(c, i, s, ns)
+            self.current_state = self.in_game_state
+            self.current_state_id = IN_GAME_STATE
 
+
+            
     ## ---[ update ]-------------------------------------------------------
     #  @param   self    The class itself, Python standard
     #  @param   event   A pygame event

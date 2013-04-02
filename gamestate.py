@@ -82,6 +82,7 @@ class LoadGameState (GameState):
         self.state_id = state_id
         os.listdir( SAVE_DIR )
         save_state = 101
+        self.screen = screen
         self.menu = cMenu( 50, 50, 20, 5, 'vertical', 15, screen,
                            [('Resume Game', IN_GAME_STATE, None, True),
                             ('', IN_GAME_STATE, None, False)])
@@ -96,14 +97,26 @@ class LoadGameState (GameState):
         state = self.state_id
         if event.type == pygame.KEYDOWN or event.type == EVENT_CHANGE_STATE:
             rectList, state = self.menu.update(event, self.state_id)
-        if state >= 100:
-            pass
         return state
 
     def display(self):
+        self.setmenu()
         self.menu.draw_buttons()
 
+    def setmenu(self):
+        save_state = 101
+        self.menu = cMenu( 50, 50, 20, 5, 'vertical', 15, self.screen,
+                           [('Resume Game', IN_GAME_STATE, None, True),
+                            ('', IN_GAME_STATE, None, False)])
+        d = os.listdir( SAVE_DIR )
+        for f in d:
+            self.menu.add_buttons( [(f[:-5], save_state, None, True)])
+            save_state += 1
+        self.menu.set_center(True, True)
+        self.menu.set_alignment('center', 'center')
+
     def load(self, save_location):
+        print "Attempting to load from " + save_location
         f = open(save_location, 'rb')
         data = f.read()
         f.close()
@@ -137,6 +150,8 @@ class LoadGameState (GameState):
 class SaveGameState (GameState):
 
     def __init__(self, screen, state_id):
+        if not os.path.isdir(SAVE_DIR):
+            os.mkdir(SAVE_DIR)
         self.save_location = os.path.join(SAVE_DIR, "Save 1")
         self.state_id = state_id
         self.num_saves = 0
