@@ -63,29 +63,27 @@ class LoadGameState (GameState):
 
     def load(self, save_location):
         f = open(save_location, 'rb')
-	data = f.read()
-	f.close()
-	checksum = data[-64:]
-	data = data[:-64]
-	if hashlib.sha512(data).digest() != checksum:
-		return CHECKSUMS_DO_NOT_MATCH, None, None, None
-	c_len = int(binascii.hexlify(data[:2]), 16); data = data[2:]
-	c = Character(CHARACTER_SPRITE_SHEET_DIR); c.load(data[:c_len]); data = data[c_len:]
-	i_len = int(binascii.hexlify(data[:2]), 16); data = data[2:]
-	i = Inventory(INVENTORY_BACKGROUND_SHEET_DIR, ITEM_SHEET_SMALL_DIR, ITEM_SHEET_LARGE_DIR, ITEM_BOX_DIR, INVENTORY_BUTTONS_DIR); i.load(data[:i_len]); data = data[i_len:]
-	s_len = int(binascii.hexlify(data[:2]), 16); data = data[2:]
-	s = ShipLayout(TILE_SHEET_DIR, ITEM_SHEET_SMALL_DIR); s.load(data[:s_len]); data = data[s_len:]
-	npc_count = int(binascii.hexlify(data[:2]), 16); data = data[2:]
+        data = f.read()
+        f.close()
+        checksum = data[-64:]
+        data = data[:-64]
+        if hashlib.sha512(data).digest() != checksum:
+            return CHECKSUMS_DO_NOT_MATCH, None, None, None
+        c_len = int(binascii.hexlify(data[:2]), 16); data = data[2:]
+        c = Character(CHARACTER_SPRITE_SHEET_DIR); c.load(data[:c_len]); data = data[c_len:]
+        i_len = int(binascii.hexlify(data[:2]), 16); data = data[2:]
+        i = Inventory(INVENTORY_BACKGROUND_SHEET_DIR, ITEM_SHEET_SMALL_DIR, ITEM_SHEET_LARGE_DIR, ITEM_BOX_DIR, INVENTORY_BUTTONS_DIR); i.load(data[:i_len]); data = data[i_len:]
+        s_len = int(binascii.hexlify(data[:2]), 16); data = data[2:]
+        s = ShipLayout(TILE_SHEET_DIR, ITEM_SHEET_SMALL_DIR); s.load(data[:s_len]); data = data[s_len:]
+        npc_count = int(binascii.hexlify(data[:2]), 16); data = data[2:]
 
-	ns = []
-	for x in xrange(npc_count):
-		n_len = int(binascii.hexlify(data[:2]), 16); data = data[2:]
-		n = NPC(); n.load(data[:n_len]); data = data[n_len:]
-	if len(data):
-		return INCORRECT_DATA_LENGTH, None, None, None
-	return c, i, s, ns
-
-
+        ns = []
+        for x in xrange(npc_count):
+            n_len = int(binascii.hexlify(data[:2]), 16); data = data[2:]
+            n = NPC(); n.load(data[:n_len]); data = data[n_len:]
+        if len(data):
+            return INCORRECT_DATA_LENGTH, None, None, None
+        return c, i, s, ns
 
     def update(self, event):
         pass
@@ -106,16 +104,16 @@ class SaveGameState (GameState):
         pass
 
     def save(self, save_location, character, inventory, ship, npcs):
-	c = character.save()
-	i = inventory.save()
-	s = ship.save()
-	ns = [npc.save() for npc in npcs]
-	out = binascii.unhexlify(makehex(len(c), 4)) + c + binascii.unhexlify(makehex(len(i), 4)) + i + binascii.unhexlify(makehex(len(s), 4)) + s + binascii.unhexlify(makehex(len(ns), 4)) + ''.join([binascii.unhexlify(makehex(len(n), 4)) + n for n in ns])
-	out += hashlib.sha512(out).digest()
-	f = open(save_location, 'wb')
-	f.write(out)
-	f.close()
-	return NO_PROBLEM
+        c = character.save()
+        i = inventory.save()
+        s = ship.save()
+        ns = [npc.save() for npc in npcs]
+        out = binascii.unhexlify(makehex(len(c), 4)) + c + binascii.unhexlify(makehex(len(i), 4)) + i + binascii.unhexlify(makehex(len(s), 4)) + s + binascii.unhexlify(makehex(len(ns), 4)) + ''.join([binascii.unhexlify(makehex(len(n), 4)) + n for n in ns])
+        out += hashlib.sha512(out).digest()
+        f = open(save_location, 'wb')
+        f.write(out)
+        f.close()
+        return NO_PROBLEM
 
     def display(self):
         pass
@@ -182,38 +180,43 @@ class MainMenuState (GameState):
 class InGameState (GameState):
     # initialize with only map
     def __init__(self, screen, keybindings):
+
+        # load images, check if they exist, and apply colorkey
+        self.character_sprite_sheet = pygame.image.load(CHARACTER_SPRITE_SHEET_DIR)
+        if self.character_sprite_sheet == None:
+            sys.exit(IMAGE_DOES_NOT_EXIST)
+        # don't do set_colorkey and convert on character image due to background already being transparent
+
+        self.tile_sheet = pygame.image.load(TILE_SHEET_DIR)
+        if self.tile_sheet == None:
+            sys.exit(IMAGE_DOES_NOT_EXIST)
+        self.tile_sheet.set_colorkey(COLOR_KEY)
+        self.tile_sheet = self.tile_sheet.convert()
+
+        self.npc_sheets = [pygame.image.load(npc_file) for npc_file in NPC_SHEETS_DIR]
+        for sheet in self.npc_sheets:
+            if sheet == None:
+                sys.exit(IMAGE_DOES_NOT_EXIST)
+        for sheet in self.npc_sheets:
+            sheet.set_colorkey(COLOR_KEY)
+        for i in xrange(len(self.npc_sheets)):
+            self.npc_sheets[i] = self.npc_sheets[i].convert()
+
+        # set system stuff
         self.screen = screen
         self.keybindings = keybindings
-        self.inventory = Inventory(INVENTORY_BACKGROUND_SHEET_DIR, ITEM_SHEET_SMALL_DIR, ITEM_SHEET_LARGE_DIR, ITEM_BOX_DIR, INVENTORY_BUTTONS_DIR)
 
+        # create default objects
         self.user = Character(CHARACTER_SPRITE_SHEET_DIR)
+        self.inventory = Inventory(INVENTORY_BACKGROUND_SHEET_DIR, ITEM_SHEET_SMALL_DIR, ITEM_SHEET_LARGE_DIR, ITEM_BOX_DIR, INVENTORY_BUTTONS_DIR)
         self.ship = ShipLayout(TILE_SHEET_DIR, ITEM_SHEET_SMALL_DIR)
         self.ship.loadmap(MAP_DEFAULT_DIR)
+        self.npcs = []
 
+        # temporary test items
         self.ship.additem((1,1), 1)
         self.ship.additem((1,4), 2)
         self.ship.additem((3,3), 0)
-
-        self.character_sprite_sheet = pygame.image.load(CHARACTER_SPRITE_SHEET_DIR)
-        self.tile_sheet = pygame.image.load(TILE_SHEET_DIR)
-        self.npc_sheets = [pygame.image.load(npc_file) for npc_file in NPC_SHEETS_DIR]
-
-        if self.character_sprite_sheet == None:
-            return IMAGE_DOES_NOT_EXIST
-        if self.tile_sheet == None:
-            return IMAGE_DOES_NOT_EXIST
-        for sheet in self.npc_sheets:
-            if sheet == None:
-                return IMAGE_DOES_NOT_EXIST
-
-        self.tile_sheet.set_colorkey(COLOR_KEY)
-        for sheet in self.npc_sheets:
-            sheet.set_colorkey(COLOR_KEY)
-
-        self.tile_sheet = self.tile_sheet.convert()
-
-        for i in xrange(len(self.npc_sheets)):
-            self.npc_sheets[i] = self.npc_sheets[i].convert()
 
         self.camera = pygame.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT) # tile index, not pixel
 
@@ -232,10 +235,10 @@ class InGameState (GameState):
         self.user = character
         self.inventory = inventory
         self.ship = ship_layout
-        self.npc_sheets = npcs
+        self.npcs = npcs
 
     def save(self):
-        return self.user, self.inventory, self.ship, self.npc_sheets
+        return self.user, self.inventory, self.ship, self.npcs
 
     # modify items on floor
     # add single item to character location
@@ -245,7 +248,6 @@ class InGameState (GameState):
     # remove single item to character location
     def removeitem(self):
         item = self.ship.removeitem((self.user.getx(), self.user.gety() + 1))
-        print item
         self.inventory.additem(item)
 
     # set all floor items
