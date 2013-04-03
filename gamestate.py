@@ -46,9 +46,17 @@ class GameState:
         # self.state_id is the int id associated with the GameState subclass
         self.state_id = state_id
 
+    ## ---[ update ]------------------------------------------------------------
+    #  @param   self    The class itself, Python standard
+    #  @param   event   A pygame event
+    #
+    # Updates the GameState, returns the (new) game state
     def update(self, event):
         pass
-
+    
+    ## ---[ display ]----------------------------------------------------------
+    #  
+    # Prints the game state's current image to the screen
     def display(self):
         pass
 
@@ -80,41 +88,65 @@ class LoadGameState (GameState):
 
     def __init__(self, screen, state_id):
         self.state_id = state_id
-        os.listdir( SAVE_DIR )
-        save_state = 101
-        self.screen = screen
-        self.menu = cMenu( 50, 50, 20, 5, 'vertical', 15, screen,
+        self.num_saves = 0
+        load_state = 201                        # The first load_state
+        self.screen = screen                    # A copy of the screen
+
+        # self.menu provides the interface for loading a game
+        self.menu = cMenu( 50, 50, 20, 5, 'vertical', 15, self.screen,
                            [('Resume Game', IN_GAME_STATE, None, True),
                             ('', IN_GAME_STATE, None, False)])
-        d = os.listdir( SAVE_DIR )
-        for f in d:
-            self.menu.add_buttons( [(f[:-5], save_state, None, True)])
-            save_state += 1
         self.menu.set_center(True, True)
         self.menu.set_alignment('center', 'center')
 
+        # Iterate through the save directory and add a menu button for each
+        #  saved game
+        d = os.listdir( SAVE_DIR )
+        for f in d:
+            self.menu.add_buttons( [(f[:-5], load_state, None, True)])
+            load_state += 1
+            self.num_saves += 1
+            
+    ## ---[ update ]------------------------------------------------------------
     def update(self, event):
         state = self.state_id
         if event.type == pygame.KEYDOWN or event.type == EVENT_CHANGE_STATE:
             rectList, state = self.menu.update(event, self.state_id)
         return state
 
+    ## ---[ display ]----------------------------------------------------------
     def display(self):
-        self.setmenu()
+        #self.setmenu()
         self.menu.draw_buttons()
 
-    def setmenu(self):
-        save_state = 101
-        self.menu = cMenu( 50, 50, 20, 5, 'vertical', 15, self.screen,
-                           [('Resume Game', IN_GAME_STATE, None, True),
-                            ('', IN_GAME_STATE, None, False)])
+    ## ---[ updatemenu ]-------------------------------------------------------
+    #
+    # This updates the load menu to reflect any changes in the save directory
+    def updatemenu(self, new_num_saves):
+        # Return if the number of saves has not changed
+        if self.num_saves == new_num_saves:
+            return
+
+        # remove all "saved game" buttons
+        self.menu.remove_end( self.num_saves )
+        
+        load_state = 201                # The first save_state
+        
+        # Iterate through the save directory and add a menu button for each
+        #  saved game
         d = os.listdir( SAVE_DIR )
         for f in d:
-            self.menu.add_buttons( [(f[:-5], save_state, None, True)])
-            save_state += 1
-        self.menu.set_center(True, True)
-        self.menu.set_alignment('center', 'center')
+            self.menu.add_buttons( [(f[:-5], load_state, None, True)])
+            load_state += 1
 
+        self.num_saves = new_num_saves
+        
+
+    ## ---[ load ]------------------------------------------------------------
+    #  @param   self            The class itself, Python standard
+    #  @param   save_location   A string representing the save location
+    #
+    # loads the game from a given save location
     def load(self, save_location):
         print "Attempting to load from " + save_location
         f = open(save_location, 'rb')
@@ -185,6 +217,7 @@ class SaveGameState (GameState):
                 print "Saved Game as " + save_name
         return state
 
+    ## ---[ display ]----------------------------------------------------------
     def display(self):
         self.menu.draw_buttons()
 
@@ -198,7 +231,7 @@ class SaveGameState (GameState):
         f = open(self.save_location, 'wb')
         f.write(out)
         f.close()
-        return NO_PROBLEM
+        return self.num_saves
 
 
 #-------------------------------------------------------------------------------
@@ -223,21 +256,22 @@ class IMJState (GameState):
         self.inventory.update(self.keybindings)
         return IMJ_STATE
 
-## ---[ setinventory ]----------------------------------------------------------
-#  @param   self        The class itself, Python standard
-#  @param   inventory   The current game inventory
-#
-#  Sets the inventory to match the given inventory
-    def setinventory(self, inventory):
-        self.inventory = inventory
 
+    ## ---[ display ]----------------------------------------------------------
     def display(self):
         try:
             self.inventory.display(self.screen)
         except AttributeError:
             print "Error: Inventory not set."
             exit(1)
-
+            
+    ## ---[ setinventory ]-----------------------------------------------------
+    #  @param   self        The class itself, Python standard
+    #  @param   inventory   The current game inventory
+    #
+    #  Sets the inventory to match the given inventory
+    def setinventory(self, inventory):
+        self.inventory = inventory
 
 
 
@@ -266,7 +300,8 @@ class MainMenuState (GameState):
         if event.type == pygame.KEYDOWN or event.type == EVENT_CHANGE_STATE:
             rectList, state = self.menu.update(event, MAIN_MENU_STATE)
         return state
-
+    
+    ## ---[ display ]----------------------------------------------------------
     def display(self):
         self.menu.draw_buttons()
 
@@ -330,6 +365,24 @@ class InGameState (GameState):
         self.user.update(self.keybindings)
         return IN_GAME_STATE
 
+    ## ---[ display ]----------------------------------------------------------
+    def display(self):
+        # reposition camera to center around character
+        # limit camera to edge of map so character will be
+        # not center for those cases
+        self.camera.x = self.user.getx() - TILE_SHOW_W / 2
+        if self.camera.x < 0:
+            self.camera.x = 0
+        if (self.camera.x + TILE_SHOW_W) > MAP_WIDTH:
+            self.camera.x = MAP_WIDTH - TILE_SHOW_W
+        self.camera.y = self.user.gety() - TILE_SHOW_H / 2 + 1
+        if self.camera.y < 0:
+            self.camera.y = 0
+        if (self.camera.y + TILE_SHOW_H + 1) > MAP_HEIGHT:
+            self.camera.y = MAP_HEIGHT - TILE_SHOW_H - 1
+        self.ship.display(self.screen, self.camera)
+        self.user.display(self.screen, self.camera)
+
     def load(self, character, inventory, ship_layout, npcs):
         self.user = character
         self.inventory = inventory
@@ -363,22 +416,6 @@ class InGameState (GameState):
     def getinventory(self):
         return self.inventory
 
-    def display(self):
-        # reposition camera to center around character
-        # limit camera to edge of map so character will be
-        # not center for those cases
-        self.camera.x = self.user.getx() - TILE_SHOW_W / 2
-        if self.camera.x < 0:
-            self.camera.x = 0
-        if (self.camera.x + TILE_SHOW_W) > MAP_WIDTH:
-            self.camera.x = MAP_WIDTH - TILE_SHOW_W
-        self.camera.y = self.user.gety() - TILE_SHOW_H / 2 + 1
-        if self.camera.y < 0:
-            self.camera.y = 0
-        if (self.camera.y + TILE_SHOW_H + 1) > MAP_HEIGHT:
-            self.camera.y = MAP_HEIGHT - TILE_SHOW_H - 1
-        self.ship.display(self.screen, self.camera)
-        self.user.display(self.screen, self.camera)
 
 #-------------------------------------------------------------------------------
 #---[ OptionsMenuState Class ]--------------------------------------------------
@@ -399,12 +436,16 @@ class OptionsMenuState (GameState):
         self.menu.set_center(True, True)
         self.menu.set_alignment('center', 'center')
 
+    def loadable(self, save_exists = True):
+        self.menu.set_selectable( 'Load Game', save_exists )
+
     def update(self, event):
         state = OPTIONS_MENU_STATE
         if event.type == pygame.KEYDOWN or event.type == EVENT_CHANGE_STATE:
             rectList, state = self.menu.update(event, OPTIONS_MENU_STATE)
         return state
 
+    ## ---[ display ]----------------------------------------------------------
     def display(self):
         self.menu.draw_buttons()
 

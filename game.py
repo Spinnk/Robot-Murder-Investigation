@@ -47,11 +47,11 @@ class Game:
     #
     def __init__(self, screen, keybindings):
         # Bool to determine if the "load game" option should be available
-        self.save_exists = True
-
+        self.num_saves = len([name for name in os.listdir(SAVE_DIR)])
+        
         # Create instances of each child of GameState:
-        self.main_menu_state = MainMenuState( screen, self.save_exists, MAIN_MENU_STATE )
-        self.options_menu_state = OptionsMenuState( screen, self.save_exists, OPTIONS_MENU_STATE )
+        self.main_menu_state = MainMenuState( screen, self.num_saves, MAIN_MENU_STATE )
+        self.options_menu_state = OptionsMenuState( screen, self.num_saves, OPTIONS_MENU_STATE )
         self.in_game_state = InGameState(screen, keybindings, IN_GAME_STATE)
         self.imj_state = IMJState(screen, keybindings, IMJ_STATE)
         self.save_game_state = SaveGameState(screen, SAVE_STATE)
@@ -77,13 +77,14 @@ class Game:
             pygame.event.post(pygame.event.Event(EVENT_CHANGE_STATE, key = 0))
             #c, i, s, ns = self.load_game_state
             #self.in_game_state.load(c, i, s, ns)
+            self.load_game_state.updatemenu( self.num_saves )
             self.current_state = self.load_game_state
             self.current_state_id = LOAD_STATE
         elif self.current_state_id == SAVE_STATE:
             pygame.event.post(pygame.event.Event(EVENT_CHANGE_STATE, key = 0))
-            self.save_exists = True
-            c, i, s, ns = self.in_game_state.save()
-            self.save_game_state.save( c, i, s, ns)
+            #c, i, s, ns = self.in_game_state.save()
+            #old_num_saves = self.num_saves
+            #self.num_saves = self.save_game_state.save( c, i, s, ns)
             self.current_state = self.save_game_state
         elif self.current_state_id == EXIT_STATE:
             pygame.event.post(pygame.event.Event(pygame.QUIT, key = 0))
@@ -98,12 +99,19 @@ class Game:
         elif self.current_state_id == OPTIONS_MENU_STATE:
             pygame.event.post(pygame.event.Event(EVENT_CHANGE_STATE, key = 0))
             self.current_state = self.options_menu_state
-        elif self.current_state_id > 100:
-            save_location = os.path.join(SAVE_DIR, "Save " + str(self.current_state_id - 100) + ".rmis")
+        elif self.current_state_id > 200:
+            save_location = os.path.join(SAVE_DIR, "Save " + str(self.current_state_id - 200) + ".rmis")
             c, i, s, ns = self.load_game_state.load( save_location )
             self.in_game_state.load(c, i, s, ns)
             self.current_state = self.in_game_state
             self.current_state_id = IN_GAME_STATE
+
+        elif self.current_state_id >= 100:
+            c, i, s, ns = self.in_game_state.save()
+            old_num_saves = self.num_saves
+            self.num_saves = self.save_game_state.save( c, i, s, ns)
+            if old_num_saves == 0 and self.num_saves > 0:
+                self.options_menu_state.loadable()
 
 
 

@@ -349,7 +349,6 @@ class cMenu:
       self.update_buttons = True
       return old_contained_rect
 
-
    ## ---[ update_button_locations ]--------------------------------------------
    #  @param   self         The class itself, Python standard
    #
@@ -738,6 +737,12 @@ class cMenu:
       for button in self.menu_items:
          if button['text'] == name:
             button['selectable'] = selectable
+
+   def remove_end(self, end):
+      for index in range( 0, end ) :
+         if len(self.menu_items) > 1:
+            self.menu_items.pop()
+      self.update_buttons = True
 
 
 #---[ END OF FILE ]-------------------------------------------------------------
