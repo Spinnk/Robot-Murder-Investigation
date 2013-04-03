@@ -48,7 +48,7 @@ class Game:
     def __init__(self, screen, keybindings):
         # Bool to determine if the "load game" option should be available
         self.save_exists = True
-        
+
         # Create instances of each child of GameState:
         self.main_menu_state = MainMenuState( screen, self.save_exists, MAIN_MENU_STATE )
         self.options_menu_state = OptionsMenuState( screen, self.save_exists, OPTIONS_MENU_STATE )
@@ -61,10 +61,10 @@ class Game:
         self.current_state = self.main_menu_state
         # An integer representation of the current state
         self.current_state_id = MAIN_MENU_STATE
-        
+
         # See description above for keybindings
         self.keybindings = keybindings
-        
+
     ## ---[ setstate ]-------------------------------------------------------
     # Set the current_state to match the current_state_id
     def setstate(self):
@@ -106,7 +106,7 @@ class Game:
             self.current_state_id = IN_GAME_STATE
 
 
-            
+
     ## ---[ update ]-------------------------------------------------------
     #  @param   self    The class itself, Python standard
     #  @param   event   A pygame event

@@ -36,6 +36,10 @@ KEYBINDINGS_DIR = os.path.join(CWD, "settings.config")
 SAVE_DIR = os.path.join(CWD, "saves")
 MUSIC_DIR = os.path.join(CWD, "music")
 
+# Some quick scripting
+os.environ['SDL_VIDEO_CENTERED'] = '1'
+os.chdir(CWD)
+
 # Framerate
 FPS = 60
 
@@ -111,6 +115,7 @@ ITEMS_ON_MAP = 5
 WHITE = pygame.Color(0xff, 0xff, 0xff, 0xff)
 BLACK = pygame.Color(0x00, 0x00, 0x00, 0xff)
 HOTPINK = pygame.Color(0xff, 0x69, 0xb4, 0xff)
+YELLOW = pygame.Color(0xff, 0xff, 0x00, 0xff)
 
 COLOR_KEY = HOTPINK
 
@@ -154,3 +159,13 @@ FONT_SIZE_LARGE = 24
 FONT_SIZE_SMALL = 12
 FONT_COLOR = BLACK
 FONT_ANTIALIAS = True
+
+# Save GUI Info
+# might not be used
+SAVE_SHOW = 5
+SAVE_SHOW_BOX = pygame.Rect(300, 200, 100, 100)
+SAVE_BACKGROUND_COLOR = YELLOW
+SAVE_FONT_SIZE_LARGE = 32
+SAVE_DISPLAY_BOX = pygame.Rect(150, 100, 100, 100)
+SAVE_FONT_SIZE = 24
+SAVE_INPUT_BOX = pygame.Rect(200, 300, 100, 100)

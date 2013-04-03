@@ -92,7 +92,8 @@ class Character:
         return chr(self.x) + chr(self.y) + chr(self.clip) + chr(self.frame)
 
     # check for movement
-    def update(self, keystates, keybindings): # add argument for collision detection?
+    def update(self, keybindings): # add argument for collision detection?
+        keystates = pygame.key.get_pressed()
         self.moved = False
         if keystates[keybindings[KB_UP]]:
             self.y -= 1

@@ -110,7 +110,7 @@ class NPC:
         return chr(self.type) + binascii.unhexlify(makehex(len(self.name), 4)) + self.name + chr(self.x) + chr(self.y) + chr(self.clip) + chr(self.frame)
 
     # move NPC and use grid to check for collisions
-    # ill need to be changed if some NPCs can only
+    # it will need to be changed if some NPCs can only
     # be in certain areas
     def update(self, grid):
         direction = random.randint(0, 3)

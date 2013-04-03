@@ -92,7 +92,7 @@ class LoadGameState (GameState):
             save_state += 1
         self.menu.set_center(True, True)
         self.menu.set_alignment('center', 'center')
-        
+
     def update(self, event):
         state = self.state_id
         if event.type == pygame.KEYDOWN or event.type == EVENT_CHANGE_STATE:
@@ -169,7 +169,7 @@ class SaveGameState (GameState):
             self.num_saves += 1
         self.menu.set_center(True, True)
         self.menu.set_alignment('center', 'center')
-        
+
     def update(self, event):
         state = self.state_id
         if event.type == pygame.KEYDOWN or event.type == EVENT_CHANGE_STATE:
@@ -212,7 +212,7 @@ class IMJState (GameState):
         self.inventory = None
         self.screen = screen
         self.keybindings = keybindings
-        
+
         # The possible states that this state may change to
         self.state_changes = [IMJ_STATE, OPTIONS_MENU_STATE, IN_GAME_STATE]
 
@@ -220,14 +220,14 @@ class IMJState (GameState):
         changed_state = self.checkstatechange(event)
         if changed_state in self.state_changes:
             return changed_state
-        self.inventory.update(pygame.key.get_pressed(), self.keybindings)
+        self.inventory.update(self.keybindings)
         return IMJ_STATE
-    
+
 ## ---[ setinventory ]----------------------------------------------------------
 #  @param   self        The class itself, Python standard
 #  @param   inventory   The current game inventory
 #
-#  Sets the inventory to match the given inventory 
+#  Sets the inventory to match the given inventory
     def setinventory(self, inventory):
         self.inventory = inventory
 
@@ -237,7 +237,7 @@ class IMJState (GameState):
         except AttributeError:
             print "Error: Inventory not set."
             exit(1)
-            
+
 
 
 
@@ -327,7 +327,7 @@ class InGameState (GameState):
             return self.checkstatechange(event)
         if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
             self.removeitem()
-        self.user.update(pygame.key.get_pressed(), self.keybindings)
+        self.user.update(self.keybindings)
         return IN_GAME_STATE
 
     def load(self, character, inventory, ship_layout, npcs):

@@ -108,7 +108,9 @@ class Inventory:
         return ''.join([chr(item) + chr(count) for item, count in self.items])
 
     # update location of "cursor"
-    def update(self, keystates, keybinding):
+    def update(self, keybinding):
+        keystates = pygame.key.get_pressed()
+
         # cursor in items area
         if self.mode == 0:
             if keystates[keybinding[KB_UP]]:
