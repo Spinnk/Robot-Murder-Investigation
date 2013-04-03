@@ -77,8 +77,11 @@ class Inventory:
             self.items += [[item, 1]]
         return NO_PROBLEM
 
-    # remove item from inventory
-    def removeitem(self, to_rem):
+    # remove item from inventory, removes currently selected item on default
+    def removeitem(self, to_rem = None):
+        if to_rem == None:
+            to_rem = self.selected + 1
+        print self.selected 
         for i in xrange(len(self.items)):
             if self.items[i][0] == to_rem:
                 self.items[i][1] -= 1

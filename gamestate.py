@@ -245,15 +245,18 @@ class IMJState (GameState):
         self.inventory = None
         self.screen = screen
         self.keybindings = keybindings
+        self.ship = None
 
         # The possible states that this state may change to
         self.state_changes = [IMJ_STATE, OPTIONS_MENU_STATE, IN_GAME_STATE]
 
     def update(self, event):
+        self.inventory.update(self.keybindings)
         changed_state = self.checkstatechange(event)
         if changed_state in self.state_changes:
             return changed_state
-        self.inventory.update(self.keybindings)
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+            self.inventory.removeitem()
         return IMJ_STATE
 
 
@@ -273,6 +276,11 @@ class IMJState (GameState):
     def setinventory(self, inventory):
         self.inventory = inventory
 
+    def setship(self, ship):
+        self.ship = ship
+
+    def getship(self):
+        return self.ship
 
 
 #-------------------------------------------------------------------------------
@@ -397,7 +405,7 @@ class InGameState (GameState):
     def additem(self, item):
         self.ship.additem((self.user.getx(), self.user.gety() + 1), item)
 
-    # remove single item to character location
+    # remove single item from character location and add to inventory
     def removeitem(self):
         item = self.ship.removeitem((self.user.getx(), self.user.gety() + 1))
         self.inventory.additem(item)
@@ -415,6 +423,12 @@ class InGameState (GameState):
 
     def getinventory(self):
         return self.inventory
+    
+    def getship(self):
+        return self.ship
+
+    def setship(self, ship):
+        self.ship = ship
 
 
 #-------------------------------------------------------------------------------
