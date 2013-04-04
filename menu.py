@@ -643,10 +643,10 @@ class cMenu:
          self.selection = self.selection_prev
 
       if self.menu_items[self.selection]['selectable'] == False:
-         if e.key == pygame.K_DOWN or e.key == KB_DOWN:
+         if e.key == pygame.K_DOWN or e.key == keybindings[KB_DOWN]:
             if (o == 'vertical') and ((s + 1) % n != 0):
                self.selection += 1
-         elif e.key == pygame.K_UP or e.key == KB_UP:
+         elif e.key == pygame.K_UP or e.key == keybindings[KB_UP]:
             if (o == 'vertical') and ((s) % n != 0):
                self.selection -= 1
 

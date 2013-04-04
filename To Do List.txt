@@ -2,7 +2,5 @@ To Do:
 -- saveability
 -- assimilate code to naming conventions
 -- consider other coding standards
--- comment
--- add/remove items
 -- resume game from load state after main menu
--- save doesn't overwrite
+-- bugzilla
