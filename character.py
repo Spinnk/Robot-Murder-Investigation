@@ -153,7 +153,7 @@ if __name__=='__main__':
             if event.type == pygame.QUIT: # exit when close window "X" is pressed
                 quit = True
         screen.fill(WHITE)
-        test.update(pygame.key.get_pressed(), keybindings)
+        test.update(keybindings)
         test.display(screen, pygame.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT))
         pygame.display.flip()
 

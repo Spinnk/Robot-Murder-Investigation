@@ -83,6 +83,8 @@ NPC_COUNT = 4
 
 # Inventory Info
 INVENTORY_BACKGROUND_SHEET_DIR = os.path.join(ART_DIR, "inventory.png")
+INVENTORY_X = 8                             # spaces across
+INVENTORY_Y = 7                             # spaces down
 INVENTORY_BUTTONS_DIR = os.path.join(ART_DIR, "option box.png")
 INVENTORY_BUTTONS = [pygame.Rect(735, 566, 68, 38)] # location of buttons
 
@@ -149,6 +151,7 @@ INCORRECT_FILE_FORMAT = 4
 ITEM_DOES_NOT_EXIST = 5
 INCORRECT_DATA_FORMAT = 6
 INCORRECT_DATA_LENGTH = 7
+NO_SPACE_IN_INEVENTORY = 8
 
 # Music Info
 MUSIC_FILES = []                                # list of music file names

@@ -29,10 +29,11 @@ import pygame
 
 class Inventory:
     def __init__(self, background, small, large, box, option_box):
-        self.items = []             # list of (item #, count)
+        self.items = [[[None, None] for x in xrange(INVENTORY_X)] for y in xrange(INVENTORY_Y)]             # 2D list of (item #, count)
         self.mode = 0               # 0 in items area; 1 in options area
-        self.selected = 0           # which items is selected
         self.option = 0             # which "option" button is selected. 0 is none
+        self.x = 0                  # cursor x coordinate
+        self.y = 0                  # cursor y coordinate
 
         # load images and check to make sure they loaded properly
         self.background = pygame.image.load(background)
@@ -68,30 +69,37 @@ class Inventory:
     # add item to inventory
     def additem(self, item):# item is an integer
         found = False
-        for i in xrange(len(self.items)):
-            if self.items[i][0] == item:
-                found = True
-                self.items[i][1] += 1
-                break;
+        empty_x = INVENTORY_X
+        empty_y = INVENTORY_Y
+        for i in xrange(INVENTORY_Y):
+            for j in xrange(INVENTORY_X):
+                # find empty space if item is new
+                if self.items[i][j] == [None, None]:
+                    if (i * INVENTORY_X + j) < (empty_y * INVENTORY_X + empty_x):
+                        empty_y = i
+                        empty_x = j
+
+                # if item is found
+                if self.items[i][j][0] == item:
+                    found = True
+                    self.items[i][j][1] += 1
+                    break;
+            if found:
+                break
+
+        # add new item
         if not found:
-            self.items += [[item, 1]]
+            if (empty_x == INVENTORY_X) and (empty_y == INVENTORY_Y):
+                return NO_SPACE_IN_INEVENTORY
+            self.items[empty_y][empty_x] = [item, 1]
         return NO_PROBLEM
 
-    # remove item from inventory, removes currently selected item on default
-    def removeitem(self, to_rem = None):
-        out = None
-        if to_rem == None:
-            if len(self.items) > self.selected:
-                out = self.items[self.selected][0]
-                del self.items[self.selected]
-                return out
-        
-        for i in xrange(len(self.items)):
-            if self.items[i][0] == to_rem:
-                self.items[i][1] -= 1
-                if self.items[i][1] == 0:
-                    out = self.items[i][0]
-                    del self.items[i]
+    # remove currently selected item
+    def removeitem(self):
+        out = self.items[self.y][self.x][0]
+        self.items[self.y][self.x][1] -= 1
+        if self.items[self.y][self.x][1] == 0:
+            self.items[self.y][self.x] = [None, None]
         return out
 
     # load inventory from string
@@ -117,40 +125,45 @@ class Inventory:
     # update location of "cursor"
     def update(self, keybinding):
         keystates = pygame.key.get_pressed()
-
         # cursor in items area
         if self.mode == 0:
             if keystates[keybinding[KB_UP]]:
-                self.selected -= 8
+                self.y -= 1
             elif keystates[keybinding[KB_DOWN]]:
-                self.selected += 8
+                self.y += 1
             elif keystates[keybinding[KB_LEFT]]:
-                self.selected -= 1
+                self.x -= 1
             elif keystates[keybinding[KB_RIGHT]]:
-                self.selected += 1
+                self.x += 1
             elif keystates[keybinding[KB_ENTER]]:
-#                if not (self.items[self.selected] == None):
-#                    self.mode = 1
-                if self.selected < len(self.items):
+                if self.items[self.y][self.x] != [None, None]:
                     self.mode = 1
-            if self.selected >= 56:
-                self.selected += 1
-            if self.selected < 0:
-                self.selected -= 1
-            self.selected %= 56
+            # do this step a few times to clean up
+            # values that are too large or small
+            for i in xrange(3):
+                if self.x > 7:
+                    self.x = 0
+                    self.y += 1
+                if self.x < 0:
+                    self.x = 7
+                    self.y -= 1
+                if self.y > 6:
+                    self.x += 1
+                    self.y = 0
+                if self.y < 0:
+                    self.x -= 1
+                    self.y = 6
         # cursor in buttons area
         elif self.mode == 1:
             if keystates[keybinding[KB_LEFT]]:
                 self.option -= 1
             elif keystates[keybinding[KB_RIGHT]]:
                 self.option += 1
-            if keystates[keybindings[KB_ENTER]]:
+            if keystates[keybinding[KB_ENTER]]:
                 self.mode = 0
-                out = self.items[self.selected][0]
-                self.removeitem(out)
-                return out
-            elif keystates[keybindings[KB_ESCAPE]]:
-                self.mode = 0
+                return self.removeitem()
+#            elif keystates[keybinding[KB_ESCAPE]]:
+#                self.mode = 0
             self.option %= len(INVENTORY_BUTTONS)
 
         return NO_PROBLEM
@@ -162,42 +175,40 @@ class Inventory:
 
         # display inventory background
         screen.blit(self.background, (0, 0))
-
         # display items
-        count = 0
         font = pygame.font.Font(FONT_DIR, FONT_SIZE_SMALL)
         dy = ITEM_SMALL_HEIGHT - font.size("A")[1]
-
-        for item in self.items:
-            clip = pygame.Rect(ITEM_SMALL_WIDTH * item[0], 0, ITEM_SMALL_WIDTH, ITEM_SMALL_HEIGHT)
-            show = pygame.Rect((ITEM_SMALL_WIDTH + 1)  * (count % 8) + 1, (ITEM_SMALL_HEIGHT + 1) * (count / 8) + 37, ITEM_SMALL_WIDTH, ITEM_SMALL_HEIGHT)
-            screen.blit(self.small, show, clip)
-            show.y += dy
-            text_image = font.render(str(item[1]), FONT_ANTIALIAS, FONT_COLOR)
-            screen.blit(text_image, show)
-            count += 1
+        for i in xrange(INVENTORY_Y):
+            for j in xrange(INVENTORY_X):
+                if self.items[i][j] != [None, None]:
+                    clip = pygame.Rect(ITEM_SMALL_WIDTH * self.items[i][j][0], 0, ITEM_SMALL_WIDTH, ITEM_SMALL_HEIGHT)
+                    show = pygame.Rect((ITEM_SMALL_WIDTH + 1) * j + 1, (ITEM_SMALL_HEIGHT + 1) * i + 37, ITEM_SMALL_WIDTH, ITEM_SMALL_HEIGHT)
+                    screen.blit(self.small, show, clip)
+                    show.y += dy
+                    text_image = font.render(str(self.items[i][j][1]), FONT_ANTIALIAS, FONT_COLOR)
+                    screen.blit(text_image, show)
 
         # display highlight
-        show = pygame.Rect((ITEM_SMALL_WIDTH + 1)  * (self.selected % 8) + 1, (ITEM_SMALL_HEIGHT + 1) * (self.selected / 8) + 37, ITEM_SMALL_WIDTH, ITEM_SMALL_HEIGHT)
+        show = pygame.Rect((ITEM_SMALL_WIDTH + 1)  * self.x + 1, (ITEM_SMALL_HEIGHT + 1) * self.y + 37, ITEM_SMALL_WIDTH, ITEM_SMALL_HEIGHT)
         screen.blit(self.box, show)
 
         # if an item is selected for usage
         if self.mode == 1:
             screen.blit(self.option_box, INVENTORY_BUTTONS[self.option])
 
-        if self.selected < len(self.items):
+        if self.items[self.y][self.x] != [None, None]:
             # display selected item
-            clip = pygame.Rect(ITEM_LARGE_WIDTH * self.items[self.selected][0], ITEM_LARGE_HEIGHT * (count / 8), ITEM_LARGE_WIDTH, ITEM_LARGE_HEIGHT)
+            clip = pygame.Rect(ITEM_LARGE_WIDTH * self.y, ITEM_LARGE_HEIGHT * self.x, ITEM_LARGE_WIDTH, ITEM_LARGE_HEIGHT)
             screen.blit(self.large, ITEM_IMAGE_BOX, clip)
 
             font = pygame.font.Font(FONT_DIR, FONT_SIZE_LARGE)
-            text_image = font.render(ITEMS[self.selected][0], FONT_ANTIALIAS, FONT_COLOR)
+            text_image = font.render(ITEMS[self.items[self.y][self.x][0]][0], FONT_ANTIALIAS, FONT_COLOR)
             screen.blit(text_image, ITEM_NAME_BOX)
 
             show = copy.deepcopy(ITEM_DESCRIPTION_BOX)
             font = pygame.font.Font(FONT_DIR, FONT_SIZE_SMALL)
-            dy = font.size("A")[1]
-            for desc in ITEMS[self.selected][1]:
+            dy = font.size("")[1]
+            for desc in ITEMS[self.items[self.y][self.x][0]][1]:
                 text_image = font.render(desc, FONT_ANTIALIAS, FONT_COLOR)
                 screen.blit(text_image, show)
                 show.y += dy
@@ -211,15 +222,14 @@ if __name__=='__main__':
         sys.exit(SCREEN_DOES_NOT_EXIST)
 
     pygame.display.set_caption("Inventory Demo")
+    pygame.key.set_repeat(100, 100)
+
+    keybindings = default_keybindings()
 
     test_inventory = Inventory(INVENTORY_BACKGROUND_SHEET_DIR, ITEM_SHEET_SMALL_DIR, ITEM_SHEET_LARGE_DIR, ITEM_BOX_DIR, INVENTORY_BUTTONS_DIR)
-
     test_inventory.additem(0); test_inventory.additem(0); test_inventory.additem(0); test_inventory.additem(0)
     test_inventory.additem(1)
     test_inventory.additem(2); test_inventory.additem(2); test_inventory.additem(2)
-
-    keybindings = default_keybindings()
-    pygame.key.set_repeat(100, 100)
 
     quit = False
     while not(quit):
@@ -227,7 +237,7 @@ if __name__=='__main__':
         for event in pygame.event.get():
             if event.type == pygame.QUIT: # exit when close window "X" is pressed
                 quit = True
-        test_inventory.update(pygame.key.get_pressed(), keybindings)
+        test_inventory.update(keybindings)
         test_inventory.display(screen)
         pygame.display.flip()
 
