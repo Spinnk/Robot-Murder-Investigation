@@ -382,7 +382,9 @@ class InGameState (GameState):
         self.inventory = Inventory(INVENTORY_BACKGROUND_SHEET_DIR, ITEM_SHEET_SMALL_DIR, ITEM_SHEET_LARGE_DIR, ITEM_BOX_DIR, INVENTORY_BUTTONS_DIR)
         self.ship = ShipLayout(TILE_SHEET_DIR, ITEM_SHEET_SMALL_DIR)
         self.ship.loadmap(MAP_DEFAULT_DIR)
-        self.npcs = []
+        self.npcs = [NPC()]
+        self.npcs[0].settype(0)
+        self.npcs[0].spawn([5,5])
 
         # temporary test items
         self.ship.additem([1,1], 1)
@@ -401,6 +403,8 @@ class InGameState (GameState):
         if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
             self.removeitem()
         self.user.update(self.keybindings)
+        for npc in self.npcs:
+            npc.update( None )
         return IN_GAME_STATE
 
     ## ---[ display ]----------------------------------------------------------
@@ -420,6 +424,8 @@ class InGameState (GameState):
             self.camera.y = MAP_HEIGHT - TILE_SHOW_H - 1
         self.ship.display(self.screen, self.camera)
         self.user.display(self.screen, self.camera)
+        for npc in self.npcs:
+            npc.display(self.screen, self.camera)
         
     ## ---[ load ]------------------------------------------------------------
     # Sets the user, inventory, ship, and npcs according to the input
