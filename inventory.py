@@ -79,16 +79,20 @@ class Inventory:
 
     # remove item from inventory, removes currently selected item on default
     def removeitem(self, to_rem = None):
+        out = None
         if to_rem == None:
-            to_rem = self.selected + 1
-        print self.selected 
+            if len(self.items) > self.selected:
+                out = self.items[self.selected][0]
+                del self.items[self.selected]
+                return out
+        
         for i in xrange(len(self.items)):
             if self.items[i][0] == to_rem:
                 self.items[i][1] -= 1
                 if self.items[i][1] == 0:
+                    out = self.items[i][0]
                     del self.items[i]
-                return NO_PROBLEM
-        return ITEM_DOES_NOT_EXIST
+        return out
 
     # load inventory from string
     def load(self, data):
@@ -163,6 +167,7 @@ class Inventory:
         count = 0
         font = pygame.font.Font(FONT_DIR, FONT_SIZE_SMALL)
         dy = ITEM_SMALL_HEIGHT - font.size("A")[1]
+
         for item in self.items:
             clip = pygame.Rect(ITEM_SMALL_WIDTH * item[0], 0, ITEM_SMALL_WIDTH, ITEM_SMALL_HEIGHT)
             show = pygame.Rect((ITEM_SMALL_WIDTH + 1)  * (count % 8) + 1, (ITEM_SMALL_HEIGHT + 1) * (count / 8) + 37, ITEM_SMALL_WIDTH, ITEM_SMALL_HEIGHT)

@@ -148,7 +148,7 @@ class LoadGameState (GameState):
     #
     # loads the game from a given save location
     def load(self, save_location):
-        print "Attempting to load from " + save_location
+        print "Loaded from " + save_location
         f = open(save_location, 'rb')
         data = f.read()
         f.close()
@@ -225,6 +225,8 @@ class SaveGameState (GameState):
                 self.num_saves += 1
                 self.save_location = os.path.join(SAVE_DIR, save_name + ".rmis")
                 print "Saved Game as " + save_name
+            else:
+                self.save_location = os.path.join( SAVE_DIR, "Save " + str(state - 100) + ".rmis" )
         return state
 
     ## ---[ display ]----------------------------------------------------------
@@ -263,7 +265,7 @@ class IMJState (GameState):
         self.inventory = None
         self.screen = screen
         self.keybindings = keybindings
-        self.ship = None
+        self.dropped_items = []
 
         # The possible states that this state may change to
         self.state_changes = [IMJ_STATE, OPTIONS_MENU_STATE, IN_GAME_STATE]
@@ -275,7 +277,7 @@ class IMJState (GameState):
         if changed_state in self.state_changes:
             return changed_state
         if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-            self.inventory.removeitem()
+            self.removeitem()
         return IMJ_STATE
 
 
@@ -286,6 +288,19 @@ class IMJState (GameState):
         except AttributeError:
             print "Error: Inventory not set."
             exit(1)
+
+    def removeitem(self):
+        item = self.inventory.removeitem()
+        if item != None:
+            self.dropped_items += [item]
+
+    ## ---[ setinventory ]-----------------------------------------------------
+    # return a list of the items that were dropped when the inventory was last
+    # open
+    def getdroppeditems(self):
+        dropped_list = self.dropped_items
+        self.dropped_items = []
+        return dropped_list
             
     ## ---[ setinventory ]-----------------------------------------------------
     #  @param   self        The class itself, Python standard
@@ -294,14 +309,6 @@ class IMJState (GameState):
     #  Sets the inventory to match the given inventory
     def setinventory(self, inventory):
         self.inventory = inventory
-
-    ## ---[ setship ]----------------------------------------------------------
-    def setship(self, ship):
-        self.ship = ship
-
-    ## ---[ getship ]-----------------------------------------------------------
-    def getship(self):
-        return self.ship
 
 
 #-------------------------------------------------------------------------------
@@ -378,9 +385,9 @@ class InGameState (GameState):
         self.npcs = []
 
         # temporary test items
-        self.ship.additem((1,1), 1)
-        self.ship.additem((1,4), 2)
-        self.ship.additem((3,3), 0)
+        self.ship.additem([1,1], 1)
+        self.ship.additem([1,4], 2)
+        self.ship.additem([3,3], 0)
 
         self.camera = pygame.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT) # tile index, not pixel
 
@@ -428,14 +435,16 @@ class InGameState (GameState):
         return self.user, self.inventory, self.ship, self.npcs
 
     # modify items on floor
-    # add single item to character location
-    def additem(self, item):
-        self.ship.additem((self.user.getx(), self.user.gety() + 1), item)
+    # add items to character location
+    def additems(self, items):
+        for item in items:
+            self.ship.additem([self.user.getx(), self.user.gety() + 1], item)
 
     # remove single item from character location and add to inventory
     def removeitem(self):
-        item = self.ship.removeitem((self.user.getx(), self.user.gety() + 1))
-        self.inventory.additem(item)
+        item = self.ship.removeitem([self.user.getx(), self.user.gety() + 1])
+        if item != None:
+            self.inventory.additem(item)
 
     # set all floor items
     def setitemsonfloor(self, itemsonfloor):

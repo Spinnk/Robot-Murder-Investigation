@@ -57,8 +57,6 @@ class Game:
         self.save_game_state = SaveGameState(screen, SAVE_STATE)
         self.load_game_state = LoadGameState(screen, LOAD_STATE)
 
-        self.imj_state.setship( self.in_game_state.getship() )
-
         # Set current_state to reference main_menu_state
         self.current_state = self.main_menu_state
         # An integer representation of the current state
@@ -74,11 +72,11 @@ class Game:
             self.current_state = self.main_menu_state
 
         elif self.current_state_id == IN_GAME_STATE:
-            self.in_game_state.setship( self.imj_state.getship() )
+            #self.in_game_state.setship( self.imj_state.getship() )
+            self.in_game_state.additems(self.imj_state.getdroppeditems())
             self.current_state = self.in_game_state
 
         elif self.current_state_id == LOAD_STATE:
-            print "Loading Game..."
             pygame.event.post(pygame.event.Event(EVENT_CHANGE_STATE, key = 0))
             self.load_game_state.updatemenu( self.num_saves )
             self.current_state = self.load_game_state
@@ -96,7 +94,6 @@ class Game:
 
         elif self.current_state_id == IMJ_STATE:
             self.imj_state.setinventory( self.in_game_state.getinventory() )
-            self.imj_state.setship( self.in_game_state.getship() )
             self.current_state = self.imj_state
             
         elif self.current_state_id == PUZZLE_STATE:

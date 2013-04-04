@@ -142,9 +142,12 @@ class ShipLayout:
         for item in self.items:
             # if item is in camera
             if (((camera.x <= item[0][0]) and (item[0][0] < (camera.x + TILE_SHOW_W))) and ((camera.y <= item[0][1]) and (item[0][1] < (camera.y + TILE_SHOW_H)))):
-                show = pygame.Rect((item[0][0] - camera.x) * TILE_WIDTH, (item[0][1] - camera.y) * TILE_HEIGHT, ITEM_SMALL_WIDTH, ITEM_SMALL_HEIGHT)
-                clip = pygame.Rect(ITEM_SMALL_WIDTH * item[1], 0 , ITEM_SMALL_WIDTH, ITEM_SMALL_HEIGHT)
-                screen.blit(self.item_tiles, show, clip)
+                try:
+                    show = pygame.Rect((item[0][0] - camera.x) * TILE_WIDTH, (item[0][1] - camera.y) * TILE_HEIGHT, ITEM_SMALL_WIDTH, ITEM_SMALL_HEIGHT)
+                    clip = pygame.Rect(ITEM_SMALL_WIDTH * item[1], 0 , ITEM_SMALL_WIDTH, ITEM_SMALL_HEIGHT)
+                    screen.blit(self.item_tiles, show, clip)
+                except TypeError:
+                    print "Error displaying item: " + str(item)
         return 0
 
 if __name__ == '__main__':
