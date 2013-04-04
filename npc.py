@@ -40,6 +40,9 @@ class NPC:
         self.frame = 0                               # which frame to show
         self.moved = False
 
+        self.count = 0          # Count the number of times update was called
+                                # to limit updates per second
+
     # Accessors and Modifiers
 
     # should run this function before using NPC
@@ -113,6 +116,13 @@ class NPC:
     # it will need to be changed if some NPCs can only
     # be in certain areas
     def update(self, grid):
+        # Limit updates to once every 15 calls
+        self.count += 1
+        if self.count == 15:
+            self.count = 0
+        if self.count != 0:
+            return
+        
         direction = random.randint(0, 3)
         if direction == 0:
             self.x += 1

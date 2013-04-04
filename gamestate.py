@@ -403,8 +403,6 @@ class InGameState (GameState):
         if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
             self.removeitem()
         self.user.update(self.keybindings)
-        for npc in self.npcs:
-            npc.update( None )
         return IN_GAME_STATE
 
     ## ---[ display ]----------------------------------------------------------
@@ -425,6 +423,7 @@ class InGameState (GameState):
         self.ship.display(self.screen, self.camera)
         self.user.display(self.screen, self.camera)
         for npc in self.npcs:
+            npc.update( None )
             npc.display(self.screen, self.camera)
         
     ## ---[ load ]------------------------------------------------------------
