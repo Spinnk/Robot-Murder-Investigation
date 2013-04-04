@@ -167,8 +167,6 @@ class Inventory:
             if keystates[keybinding[KB_ENTER]]:
                 self.mode = 0
                 return self.removeitem()
-#            elif keystates[keybinding[KB_ESCAPE]]:
-#                self.mode = 0
             self.option %= len(INVENTORY_BUTTONS)
 
         return NO_PROBLEM
@@ -182,10 +180,10 @@ class Inventory:
         screen.blit(self.background, (0, 0))
         # display items
         font = pygame.font.Font(FONT_DIR, FONT_SIZE_SMALL)
-        dy = ITEM_SMALL_HEIGHT - font.size("A")[1]
+        dy = ITEM_SMALL_HEIGHT - font.size("")[1]
         for i in xrange(INVENTORY_Y):
             for j in xrange(INVENTORY_X):
-                if self.items[i][j] != [255, 255]:
+                if self.items[i][j][0] != 255:
                     clip = pygame.Rect(ITEM_SMALL_WIDTH * self.items[i][j][0], 0, ITEM_SMALL_WIDTH, ITEM_SMALL_HEIGHT)
                     show = pygame.Rect((ITEM_SMALL_WIDTH + 1) * j + 1, (ITEM_SMALL_HEIGHT + 1) * i + 37, ITEM_SMALL_WIDTH, ITEM_SMALL_HEIGHT)
                     screen.blit(self.small, show, clip)
@@ -201,11 +199,10 @@ class Inventory:
         if self.mode == 1:
             screen.blit(self.option_box, INVENTORY_BUTTONS[self.option])
 
-        if self.items[self.y][self.x] != [255, 255]:
+        if self.items[self.y][self.x][0] != 255:
             # display selected item
             clip = pygame.Rect(ITEM_LARGE_WIDTH * self.y, ITEM_LARGE_HEIGHT * self.x, ITEM_LARGE_WIDTH, ITEM_LARGE_HEIGHT)
             screen.blit(self.large, ITEM_IMAGE_BOX, clip)
-
             font = pygame.font.Font(FONT_DIR, FONT_SIZE_LARGE)
             text_image = font.render(ITEMS[self.items[self.y][self.x][0]][0], FONT_ANTIALIAS, FONT_COLOR)
             screen.blit(text_image, ITEM_NAME_BOX)
