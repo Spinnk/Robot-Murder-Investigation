@@ -53,9 +53,9 @@ class GameState:
     # Updates the GameState, returns the (new) game state
     def update(self, event):
         pass
-    
+
     ## ---[ display ]----------------------------------------------------------
-    #  
+    #
     # Prints the game state's current image to the screen
     def display(self):
         pass
@@ -106,7 +106,7 @@ class LoadGameState (GameState):
             self.menu.add_buttons( [(f[:-5], load_state, None, True)])
             load_state += 1
             self.num_saves += 1
-            
+
     ## ---[ update ]------------------------------------------------------------
     def update(self, event):
         state = self.state_id
@@ -129,9 +129,9 @@ class LoadGameState (GameState):
 
         # remove all "saved game" buttons
         self.menu.remove_end( self.num_saves )
-        
+
         load_state = 201                # The first save_state
-        
+
         # Iterate through the save directory and add a menu button for each
         #  saved game
         d = os.listdir( SAVE_DIR )
@@ -140,7 +140,7 @@ class LoadGameState (GameState):
             load_state += 1
 
         self.num_saves = new_num_saves
-        
+
 
     ## ---[ load ]------------------------------------------------------------
     #  @param   self            The class itself, Python standard
@@ -163,15 +163,13 @@ class LoadGameState (GameState):
         s_len = int(binascii.hexlify(data[:2]), 16); data = data[2:]
         s = ShipLayout(TILE_SHEET_DIR, ITEM_SHEET_SMALL_DIR); s.load(data[:s_len]); data = data[s_len:]
         npc_count = int(binascii.hexlify(data[:2]), 16); data = data[2:]
-
         ns = []
         for x in xrange(npc_count):
             n_len = int(binascii.hexlify(data[:2]), 16); data = data[2:]
-            n = NPC(); n.load(data[:n_len]); data = data[n_len:]
+            n = NPC(); n.load(data[:n_len]); ns += [n]; data = data[n_len:]
         if len(data):
             return INCORRECT_DATA_LENGTH, None, None, None
         return c, i, s, ns
-
 
 
 #-------------------------------------------------------------------------------
@@ -191,7 +189,7 @@ class SaveGameState (GameState):
         self.num_saves = 0              # The current number of saves
         save_state = 100                # state associated with a given save
                                         # 100 represents "New Save" option
-                                        
+
         # self.menu is a menu allowing a user to resume the game, write a new
         #  save, or overwrite an existing save (if one exists)
         self.menu = cMenu( 50, 50, 20, 5, 'vertical', 15, screen,
@@ -214,7 +212,7 @@ class SaveGameState (GameState):
         state = self.state_id
         if event.type == pygame.KEYDOWN or event.type == EVENT_CHANGE_STATE:
             rectList, state = self.menu.update(event, self.state_id)
-            
+
         # If the new state is at least 100 then a save was requested
         if state >= 100:
             if self.num_saves >= 9:
@@ -232,7 +230,7 @@ class SaveGameState (GameState):
     ## ---[ display ]----------------------------------------------------------
     def display(self):
         self.menu.draw_buttons()
-        
+
     ## ---[ save ]----------------------------------------------------------
     #  @param   self            The class itself, Python standard
     #  @param   character       The current character status
@@ -276,8 +274,8 @@ class IMJState (GameState):
         changed_state = self.checkstatechange(event)
         if changed_state in self.state_changes:
             return changed_state
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-            self.removeitem()
+#        if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+#            self.removeitem()
         return IMJ_STATE
 
 
@@ -303,7 +301,7 @@ class IMJState (GameState):
         dropped_list = self.dropped_items
         self.dropped_items = []
         return dropped_list
-            
+
     ## ---[ setinventory ]-----------------------------------------------------
     #  @param   self        The class itself, Python standard
     #  @param   inventory   The current game inventory
@@ -339,7 +337,7 @@ class MainMenuState (GameState):
         if event.type == pygame.KEYDOWN or event.type == EVENT_CHANGE_STATE:
             rectList, state = self.menu.update(event, MAIN_MENU_STATE)
         return state
-    
+
     ## ---[ display ]----------------------------------------------------------
     def display(self):
         self.menu.draw_buttons()
@@ -384,14 +382,16 @@ class InGameState (GameState):
         self.inventory = Inventory(INVENTORY_BACKGROUND_SHEET_DIR, ITEM_SHEET_SMALL_DIR, ITEM_SHEET_LARGE_DIR, ITEM_BOX_DIR, INVENTORY_BUTTONS_DIR)
         self.ship = ShipLayout(TILE_SHEET_DIR, ITEM_SHEET_SMALL_DIR)
         self.ship.loadmap(MAP_DEFAULT_DIR)
+
+        # temporary test NPC
         self.npcs = [NPC()]
         self.npcs[0].settype(0)
-        self.npcs[0].spawn([5,5])
+        self.npcs[0].spawn(5,5)
 
         # temporary test items
         self.ship.additem([1,1], 1)
         self.ship.additem([1,4], 2)
-        self.ship.additem([3,3], 0)
+        self.ship.additem([3,3], 3)
 
         self.camera = pygame.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT) # tile index, not pixel
 
@@ -427,7 +427,7 @@ class InGameState (GameState):
         for npc in self.npcs:
             npc.update( None )
             npc.display(self.screen, self.camera)
-        
+
     ## ---[ load ]------------------------------------------------------------
     # Sets the user, inventory, ship, and npcs according to the input
     def load(self, character, inventory, ship_layout, npcs):
@@ -435,7 +435,7 @@ class InGameState (GameState):
         self.inventory = inventory
         self.ship.setitems(ship_layout.getitems())
         self.npcs = npcs
-        
+
     ## ---[ save ]------------------------------------------------------------
     # Returns a copy of the current user, inventory, ship, and npcs status
     def save(self):
@@ -468,7 +468,7 @@ class InGameState (GameState):
     # get a copy of the inventory
     def getinventory(self):
         return self.inventory
-    
+
     def getship(self):
         return self.ship
 

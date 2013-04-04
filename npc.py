@@ -76,17 +76,14 @@ class NPC:
         return self.y
 
     # set an initial NPC location
-    def spawn(self, location = None):
-        if not location:
-            self.x = random.randint(0, MAP_WIDTH - 1)
-            self.y = random.randint(0, MAP_HEIGHT - 1)
-        else:
-            self.x = location[0]
-            self.y = location[1]
+    def spawn(self, x, y):
+        self.x = x
+        self.y = y
 
     # load from save string
     def load(self, data):
         self.type = ord(data[0])
+        self.settype(self.type)
         name_len = int(binascii.hexlify(data[1:3]), 16)
         data = data[3:]
         self.name = data[:name_len]
@@ -122,7 +119,7 @@ class NPC:
             self.count = 0
         if self.count != 0:
             return
-        
+
         direction = random.randint(0, 3)
         if direction == 0:
             self.x += 1

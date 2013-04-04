@@ -102,7 +102,8 @@ ITEM_SMALL_HEIGHT = 80                      # pixels
 # Item Index = Type, Tile on sheet
 # Item Name = first value
 # item Descirption = second value; store in multiple strings to display nicely
-ITEMS = [   ["Item 1", ["Item 1 Description", "Line 2", "Line 3"]],
+ITEMS = [   ["", ""], # Item 0 is Null Item
+            ["Item 1", ["Item 1 Description", "Line 2", "Line 3"]],
             ["Item 2", ["Item 2 Description"]],
         	["Item 3", ["Item 3 Description", "Line 2"]]
         ]
