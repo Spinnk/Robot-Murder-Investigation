@@ -47,6 +47,8 @@ class Game:
     #
     def __init__(self, screen, keybindings):
         # Bool to determine if the "load game" option should be available
+        if not os.path.isdir(SAVE_DIR):
+            os.mkdir(SAVE_DIR)
         self.num_saves = len([name for name in os.listdir(SAVE_DIR)])
         
         # Create instances of each child of GameState:
