@@ -289,6 +289,8 @@ class IMJState (GameState):
             print "Error: Inventory not set."
             exit(1)
 
+    ## ---[ removeitem ]-------------------------------------------------------
+    # remove the currently selected item from inventory
     def removeitem(self):
         item = self.inventory.removeitem()
         if item != None:
@@ -455,6 +457,7 @@ class InGameState (GameState):
     def setitemsonfloor(self, itemsonfloor):
         self.items = itemsonfloor
 
+    # remove all floor items
     def removeitemsonfloor(self):
         self.items = []
 
@@ -462,6 +465,7 @@ class InGameState (GameState):
     def getitemsonfloor(self):
         return self.items
 
+    # get a copy of the inventory
     def getinventory(self):
         return self.inventory
     
