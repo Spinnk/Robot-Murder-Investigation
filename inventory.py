@@ -29,39 +29,39 @@ import pygame
 
 class Inventory:
     def __init__(self, background, small, large, box, option_box):
-        self.items = [[[None, None] for x in xrange(INVENTORY_X)] for y in xrange(INVENTORY_Y)]             # 2D list of (item #, count)
+        self.items = [[[255, 255] for x in xrange(INVENTORY_X)] for y in xrange(INVENTORY_Y)]             # 2D list of (item #, count)
         self.mode = 0               # 0 in items area; 1 in options area
-        self.option = 0             # which "option" button is selected. 0 is none
+        self.option = 0             # which "option" button is selected. 0 is 255
         self.x = 0                  # cursor x coordinate
         self.y = 0                  # cursor y coordinate
 
         # load images and check to make sure they loaded properly
         self.background = pygame.image.load(background)
-        if self.background == None:
+        if self.background == 255:
             sys.exit(IMAGE_DOES_NOT_EXIST)
         self.background.set_colorkey(COLOR_KEY)
         self.background = self.background.convert()
 
         self.small = pygame.image.load(small)
-        if self.small == None:
+        if self.small == 255:
             sys.exit(IMAGE_DOES_NOT_EXIST)
         self.small.set_colorkey(COLOR_KEY)
         self.small = self.small.convert()
 
         self.large = pygame.image.load(large)
-        if self.large == None:
+        if self.large == 255:
             sys.exit(IMAGE_DOES_NOT_EXIST)
         self.large.set_colorkey(COLOR_KEY)
         self.large = self.large.convert()
 
         self.box = pygame.image.load(box)
-        if self.box == None:
+        if self.box == 255:
             sys.exit(IMAGE_DOES_NOT_EXIST)
         self.box.set_colorkey(COLOR_KEY)
         self.box = self.box.convert()
 
         self.option_box = pygame.image.load(option_box)
-        if self.option_box == None:
+        if self.option_box == 255:
             sys.exit(IMAGE_DOES_NOT_EXIST)
         self.option_box.set_colorkey(COLOR_KEY)
         self.option_box = self.option_box.convert()
@@ -74,7 +74,7 @@ class Inventory:
         for i in xrange(INVENTORY_Y):
             for j in xrange(INVENTORY_X):
                 # find empty space if item is new
-                if self.items[i][j] == [None, None]:
+                if self.items[i][j] == [255, 255]:
                     if (i * INVENTORY_X + j) < (empty_y * INVENTORY_X + empty_x):
                         empty_y = i
                         empty_x = j
@@ -99,7 +99,7 @@ class Inventory:
         out = self.items[self.y][self.x][0]
         self.items[self.y][self.x][1] -= 1
         if self.items[self.y][self.x][1] == 0:
-            self.items[self.y][self.x] = [None, None]
+            self.items[self.y][self.x] = [255, 255]
         return out
 
     # load inventory from string
@@ -120,7 +120,12 @@ class Inventory:
             item  - 1 byte
             count - 1 byte
         '''
-        return ''.join([chr(item) + chr(count) for item, count in self.items])
+        out = ''
+        for row in self.items:
+            for item, count in row:
+                out += chr(item) + chr(count)
+        return out
+
 
     # update location of "cursor"
     def update(self, keybinding):
@@ -136,7 +141,7 @@ class Inventory:
             elif keystates[keybinding[KB_RIGHT]]:
                 self.x += 1
             elif keystates[keybinding[KB_ENTER]]:
-                if self.items[self.y][self.x] != [None, None]:
+                if self.items[self.y][self.x] != [255, 255]:
                     self.mode = 1
             # do this step a few times to clean up
             # values that are too large or small
@@ -170,7 +175,7 @@ class Inventory:
 
     # display inventory
     def display(self, screen):
-        if screen == None:
+        if screen == 255:
             return SURFACE_DOES_NOT_EXIST
 
         # display inventory background
@@ -180,7 +185,7 @@ class Inventory:
         dy = ITEM_SMALL_HEIGHT - font.size("A")[1]
         for i in xrange(INVENTORY_Y):
             for j in xrange(INVENTORY_X):
-                if self.items[i][j] != [None, None]:
+                if self.items[i][j] != [255, 255]:
                     clip = pygame.Rect(ITEM_SMALL_WIDTH * self.items[i][j][0], 0, ITEM_SMALL_WIDTH, ITEM_SMALL_HEIGHT)
                     show = pygame.Rect((ITEM_SMALL_WIDTH + 1) * j + 1, (ITEM_SMALL_HEIGHT + 1) * i + 37, ITEM_SMALL_WIDTH, ITEM_SMALL_HEIGHT)
                     screen.blit(self.small, show, clip)
@@ -196,7 +201,7 @@ class Inventory:
         if self.mode == 1:
             screen.blit(self.option_box, INVENTORY_BUTTONS[self.option])
 
-        if self.items[self.y][self.x] != [None, None]:
+        if self.items[self.y][self.x] != [255, 255]:
             # display selected item
             clip = pygame.Rect(ITEM_LARGE_WIDTH * self.y, ITEM_LARGE_HEIGHT * self.x, ITEM_LARGE_WIDTH, ITEM_LARGE_HEIGHT)
             screen.blit(self.large, ITEM_IMAGE_BOX, clip)
@@ -218,7 +223,7 @@ class Inventory:
 if __name__=='__main__':
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))    # create the screen
-    if screen == None:
+    if screen == 255:
         sys.exit(SCREEN_DOES_NOT_EXIST)
 
     pygame.display.set_caption("Inventory Demo")
