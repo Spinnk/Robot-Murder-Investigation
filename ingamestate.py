@@ -21,15 +21,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Sentience in Space.  If not, see <http://www.gnu.org/licenses/>.
 
-import os, sys, pygame, hashlib
-
-from consts import *
-from menu import *
-from character import *
-from npc import *
-from shiplayout import *
-from inventory import *
-from keybinding import *
 from gamestate import *
 
 #-------------------------------------------------------------------------------

@@ -30,6 +30,8 @@ import sys, pygame
 from consts import *
 from gamestate import *
 from ingamestate import *
+from savegamestate import *
+from imjstate import *
 
 #-------------------------------------------------------------------------------
 #---[ Game Class ]--------------------------------------------------------------
