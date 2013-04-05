@@ -98,7 +98,7 @@ class Inventory:
     def removeitem(self):
         out = self.items[self.y][self.x][0]
         self.items[self.y][self.x][1] -= 1
-        if self.items[self.y][self.x][1] == 0:
+        if self.items[self.y][self.x][1] <= 0:
             self.items[self.y][self.x] = [0, 0]
         return out
 
