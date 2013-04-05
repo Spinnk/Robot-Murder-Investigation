@@ -4,7 +4,7 @@
 #
 # The GameState class provides the foundation for the possible game states.
 # Included in this file are the LoadGameState, SaveGameState, IMJState (for
-# displaying the inventory/map/journal), MainMenuState, InGameState and
+# displaying the inventory/map/journal), MainMenuState and
 # OptionsMenuState.
 #
 # These states each recieve input through an update() function and print to the
@@ -274,8 +274,8 @@ class IMJState (GameState):
         changed_state = self.checkstatechange(event)
         if changed_state in self.state_changes:
             return changed_state
-#        if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-#            self.removeitem()
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+            self.removeitem()
         return IMJ_STATE
 
 
@@ -341,139 +341,6 @@ class MainMenuState (GameState):
     ## ---[ display ]----------------------------------------------------------
     def display(self):
         self.menu.draw_buttons()
-
-#-------------------------------------------------------------------------------
-#---[ InGameState Class ]-------------------------------------------------------
-#-------------------------------------------------------------------------------
-## This class handles the functionality for in-game actions and display
-#
-class InGameState (GameState):
-    # initialize with only map
-    def __init__(self, screen, keybindings, state_id):
-        self.state_id = state_id
-
-        # load images, check if they exist, and apply colorkey
-        self.character_sprite_sheet = pygame.image.load(CHARACTER_SPRITE_SHEET_DIR)
-        if self.character_sprite_sheet == None:
-            sys.exit(IMAGE_DOES_NOT_EXIST)
-        # don't do set_colorkey and convert on character image due to background already being transparent
-
-        self.tile_sheet = pygame.image.load(TILE_SHEET_DIR)
-        if self.tile_sheet == None:
-            sys.exit(IMAGE_DOES_NOT_EXIST)
-        self.tile_sheet.set_colorkey(COLOR_KEY)
-        self.tile_sheet = self.tile_sheet.convert()
-
-        self.npc_sheets = [pygame.image.load(npc_file) for npc_file in NPC_SHEETS_DIR]
-        for sheet in self.npc_sheets:
-            if sheet == None:
-                sys.exit(IMAGE_DOES_NOT_EXIST)
-        for sheet in self.npc_sheets:
-            sheet.set_colorkey(COLOR_KEY)
-        for i in xrange(len(self.npc_sheets)):
-            self.npc_sheets[i] = self.npc_sheets[i].convert()
-
-        # set system stuff
-        self.screen = screen
-        self.keybindings = keybindings
-
-        # create default objects
-        self.user = Character(CHARACTER_SPRITE_SHEET_DIR)
-        self.inventory = Inventory(INVENTORY_BACKGROUND_SHEET_DIR, ITEM_SHEET_SMALL_DIR, ITEM_SHEET_LARGE_DIR, ITEM_BOX_DIR, INVENTORY_BUTTONS_DIR)
-        self.ship = ShipLayout(TILE_SHEET_DIR, ITEM_SHEET_SMALL_DIR)
-        self.ship.loadmap(MAP_DEFAULT_DIR)
-
-        # temporary test NPC
-        self.npcs = [NPC()]
-        self.npcs[0].settype(0)
-        self.npcs[0].spawn(5,5)
-
-        # temporary test items
-        self.ship.additem([1,1], 1)
-        self.ship.additem([1,4], 2)
-        self.ship.additem([3,3], 3)
-
-        self.camera = pygame.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT) # tile index, not pixel
-
-        # The possible states that this state may change to
-        self.state_changes = [IMJ_STATE, OPTIONS_MENU_STATE]
-
-    ## ---[ update ]------------------------------------------------------------
-    def update(self, event):
-        if self.checkstatechange(event) in self.state_changes:
-            return self.checkstatechange(event)
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-            self.removeitem()
-        self.user.update(self.keybindings)
-        return IN_GAME_STATE
-
-    ## ---[ display ]----------------------------------------------------------
-    def display(self):
-        # reposition camera to center around character
-        # limit camera to edge of map so character will be
-        # not center for those cases
-        self.camera.x = self.user.getx() - TILE_SHOW_W / 2
-        if self.camera.x < 0:
-            self.camera.x = 0
-        if (self.camera.x + TILE_SHOW_W) > MAP_WIDTH:
-            self.camera.x = MAP_WIDTH - TILE_SHOW_W
-        self.camera.y = self.user.gety() - TILE_SHOW_H / 2 + 1
-        if self.camera.y < 0:
-            self.camera.y = 0
-        if (self.camera.y + TILE_SHOW_H + 1) > MAP_HEIGHT:
-            self.camera.y = MAP_HEIGHT - TILE_SHOW_H - 1
-        self.ship.display(self.screen, self.camera)
-        self.user.display(self.screen, self.camera)
-        for npc in self.npcs:
-            npc.update( None )
-            npc.display(self.screen, self.camera)
-
-    ## ---[ load ]------------------------------------------------------------
-    # Sets the user, inventory, ship, and npcs according to the input
-    def load(self, character, inventory, ship_layout, npcs):
-        self.user = character
-        self.inventory = inventory
-        self.ship.setitems(ship_layout.getitems())
-        self.npcs = npcs
-
-    ## ---[ save ]------------------------------------------------------------
-    # Returns a copy of the current user, inventory, ship, and npcs status
-    def save(self):
-        return self.user, self.inventory, self.ship, self.npcs
-
-    # modify items on floor
-    # add items to character location
-    def additems(self, items):
-        for item in items:
-            self.ship.additem([self.user.getx(), self.user.gety() + 1], item)
-
-    # remove single item from character location and add to inventory
-    def removeitem(self):
-        item = self.ship.removeitem([self.user.getx(), self.user.gety() + 1])
-        if item != None:
-            self.inventory.additem(item)
-
-    # set all floor items
-    def setitemsonfloor(self, itemsonfloor):
-        self.items = itemsonfloor
-
-    # remove all floor items
-    def removeitemsonfloor(self):
-        self.items = []
-
-    # get copy of items on floor
-    def getitemsonfloor(self):
-        return self.items
-
-    # get a copy of the inventory
-    def getinventory(self):
-        return self.inventory
-
-    def getship(self):
-        return self.ship
-
-    def setship(self, ship):
-        self.ship = ship
 
 
 #-------------------------------------------------------------------------------

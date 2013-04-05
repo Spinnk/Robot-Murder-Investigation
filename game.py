@@ -29,6 +29,7 @@ import sys, pygame
 
 from consts import *
 from gamestate import *
+from ingamestate import *
 
 #-------------------------------------------------------------------------------
 #---[ Game Class ]--------------------------------------------------------------
