@@ -100,6 +100,8 @@ class Inventory:
         self.items[self.y][self.x][1] -= 1
         if self.items[self.y][self.x][1] <= 0:
             self.items[self.y][self.x] = [0, 0]
+        if out == 0:
+            return None
         return out
 
     # load inventory from string

@@ -173,3 +173,7 @@ SAVE_FONT_SIZE_LARGE = 32
 SAVE_DISPLAY_BOX = pygame.Rect(150, 100, 100, 100)
 SAVE_FONT_SIZE = 24
 SAVE_INPUT_BOX = pygame.Rect(200, 300, 100, 100)
+
+# Journal Info
+JOURNAL_LIST_BOX = pygame.Rect(0, 0, 0, 0)
+JOURNAL_SHOW_BOX = pygame.Rect(0, 0, 0, 0)
