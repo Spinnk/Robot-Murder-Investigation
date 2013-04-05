@@ -72,55 +72,61 @@ class Game:
 
     ## ---[ setstate ]-------------------------------------------------------
     # Set the current_state to match the current_state_id
-    def setstate(self):
-        if self.current_state_id == MAIN_MENU_STATE:
+    def setstate(self, new_state_id):
+        if new_state_id == MAIN_MENU_STATE:
             self.current_state = self.main_menu_state
 
-        elif self.current_state_id == IN_GAME_STATE:
-            #self.in_game_state.setship( self.imj_state.getship() )
+        elif new_state_id == IN_GAME_STATE:
             self.in_game_state.additems(self.imj_state.getdroppeditems())
             self.current_state = self.in_game_state
 
-        elif self.current_state_id == LOAD_STATE:
+        elif new_state_id == LOAD_STATE:
+            self.load_game_state.calledfrom( self.current_state_id )
             pygame.event.post(pygame.event.Event(EVENT_CHANGE_STATE, key = 0))
             self.load_game_state.updatemenu( self.num_saves )
             self.current_state = self.load_game_state
             self.current_state_id = LOAD_STATE
 
-        elif self.current_state_id == SAVE_STATE:
+        elif new_state_id == SAVE_STATE:
             pygame.event.post(pygame.event.Event(EVENT_CHANGE_STATE, key = 0))
             self.current_state = self.save_game_state
 
-        elif self.current_state_id == EXIT_STATE:
+        elif new_state_id == EXIT_STATE:
             pygame.event.post(pygame.event.Event(pygame.QUIT, key = 0))
 
-        elif self.current_state_id == SETTINGS_STATE:
+        elif new_state_id == SETTINGS_STATE:
             pass
 
-        elif self.current_state_id == IMJ_STATE:
+        elif new_state_id == IMJ_STATE:
             self.imj_state.setinventory( self.in_game_state.getinventory() )
             self.current_state = self.imj_state
             
-        elif self.current_state_id == PUZZLE_STATE:
+        elif new_state_id == PUZZLE_STATE:
             pass
         
-        elif self.current_state_id == OPTIONS_MENU_STATE:
+        elif new_state_id == OPTIONS_MENU_STATE:
             pygame.event.post(pygame.event.Event(EVENT_CHANGE_STATE, key = 0))
             self.current_state = self.options_menu_state
 
-        elif self.current_state_id > 200:
-            save_location = os.path.join(SAVE_DIR, "Save " + str(self.current_state_id - 200) + ".rmis")
-            c, i, s, ns = self.load_game_state.load( save_location )
-            self.in_game_state.load(c, i, s, ns)
-            self.current_state = self.in_game_state
-            self.current_state_id = IN_GAME_STATE
+        elif new_state_id > 200:
+            save_name = "Save " + str(new_state_id - 200) + ".rmis"
+            try:
+                c, i, s, ns = self.load_game_state.load( save_name )
+                self.in_game_state.load(c, i, s, ns)
+                self.current_state = self.in_game_state
+                self.current_state_id = IN_GAME_STATE
+            except TypeError:
+                pass
 
-        elif self.current_state_id >= 100:
+        elif new_state_id >= 100:
             c, i, s, ns = self.in_game_state.save()
             old_num_saves = self.num_saves
             self.num_saves = self.save_game_state.save( c, i, s, ns)
             if old_num_saves == 0 and self.num_saves > 0:
                 self.options_menu_state.loadable()
+
+
+        self.current_state_id = new_state_id
 
 
 
@@ -132,10 +138,12 @@ class Game:
     #   the update returns a state id different from current_state_id
     #
     def update(self, event):
-        newStateID = self.current_state.update(event)
-        if newStateID != self.current_state_id:
-            self.current_state_id = newStateID
-            self.setstate()
+        new_state_id = self.current_state.update(event)
+        if new_state_id != self.current_state_id:
+           # if self.current_state_id == MAIN_MENU_STATE and newStateID == LOAD_STATE:
+            #    self.load_game_state.calledfrom( MAIN_MENU_STATE )
+            #self.current_state_id = newStateID
+            self.setstate(new_state_id)
 
     ## ---[ display ]-------------------------------------------------------
     #  Calls the display function on the current_state

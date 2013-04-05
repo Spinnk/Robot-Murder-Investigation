@@ -745,5 +745,10 @@ class cMenu:
             self.menu_items.pop()
       self.update_buttons = True
 
+   def set_state(self, name, state):
+      for button in self.menu_items:
+         if button['text'] == name:
+            button['state'] = state
+
 
 #---[ END OF FILE ]-------------------------------------------------------------

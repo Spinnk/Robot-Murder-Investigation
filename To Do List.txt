@@ -1,6 +1,2 @@
 To Do:
--- saveability
--- assimilate code to naming conventions
--- consider other coding standards
--- resume game from load state after main menu
--- bugzilla
+-- Create PuzzleState class

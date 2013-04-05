@@ -41,7 +41,7 @@ class SaveGameState (GameState):
         # self.menu is a menu allowing a user to resume the game, write a new
         #  save, or overwrite an existing save (if one exists)
         self.menu = cMenu( 50, 50, 20, 5, 'vertical', 15, screen,
-                           [('Resume Game', IN_GAME_STATE, None, True),
+                           [('Back', OPTIONS_MENU_STATE, None, True),
                             ('', IN_GAME_STATE, None, False),
                             ('New Save', save_state, None, True)])
         self.menu.set_center(True, True)
@@ -114,7 +114,7 @@ class LoadGameState (GameState):
 
         # self.menu provides the interface for loading a game
         self.menu = cMenu( 50, 50, 20, 5, 'vertical', 15, self.screen,
-                           [('Resume Game', IN_GAME_STATE, None, True),
+                           [('Back', MAIN_MENU_STATE, None, True),
                             ('', IN_GAME_STATE, None, False)])
         self.menu.set_center(True, True)
         self.menu.set_alignment('center', 'center')
@@ -126,6 +126,14 @@ class LoadGameState (GameState):
             self.menu.add_buttons( [(f[:-5], load_state, None, True)])
             load_state += 1
             self.num_saves += 1
+    ## ---[ update ]-----------------------------------------------------------
+    # Inputs the state where "Load Game" was called and sets "Back" to go to
+    # that state
+    def calledfrom(self, state):
+        # only allow "Back" to return to a menu state
+        if state in [MAIN_MENU_STATE, OPTIONS_MENU_STATE]:
+            self.menu.set_state( 'Back', state )
+        
 
     ## ---[ update ]------------------------------------------------------------
     def update(self, event):
@@ -167,11 +175,15 @@ class LoadGameState (GameState):
     #  @param   save_location   A string representing the save location
     #
     # loads the game from a given save location
-    def load(self, save_location):
-        print "Loaded from " + save_location
-        f = open(save_location, 'rb')
-        data = f.read()
-        f.close()
+    def load(self, save_name):
+        save_location = os.path.join(SAVE_DIR, save_name)
+        try:
+            f = open(save_location, 'rb')
+            data = f.read()
+            f.close()
+        except IOError:
+            print "Error opening file: " + save_name
+            return
         checksum = data[-64:]
         data = data[:-64]
         if hashlib.sha512(data).digest() != checksum:
@@ -189,4 +201,6 @@ class LoadGameState (GameState):
             n = NPC(); n.load(data[:n_len]); ns += [n]; data = data[n_len:]
         if len(data):
             return INCORRECT_DATA_LENGTH, None, None, None
+        
+        print "Loaded from " + save_name
         return c, i, s, ns
