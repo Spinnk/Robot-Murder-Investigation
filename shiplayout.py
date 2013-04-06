@@ -20,7 +20,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Sentience in Space.  If not, see <http://www.gnu.org/licenses/>.
 
-
 import sys
 
 import pygame
@@ -28,17 +27,17 @@ import pygame
 from consts import *
 
 class ShipLayout:
-    def __init__(self, floor_tiles, small_items):
+    def __init__(self):
         self.data = []  # 2D array
         self.items = [] # [[x, y], item]
 
-        self.floor_tiles = pygame.image.load(floor_tiles)
+        self.floor_tiles = pygame.image.load(TILE_SHEET_DIR)
         if self.floor_tiles == None:
             sys.exit(IMAGE_DOES_NOT_EXIST)
         self.floor_tiles.set_colorkey(COLOR_KEY)
         self.floor_tiles = self.floor_tiles.convert()
 
-        self.item_tiles = pygame.image.load(small_items)
+        self.item_tiles = pygame.image.load(ITEM_SHEET_SMALL_DIR)
         if self.item_tiles == None:
             sys.exit(IMAGE_DOES_NOT_EXIST)
         self.item_tiles.set_colorkey(COLOR_KEY)
@@ -153,7 +152,7 @@ class ShipLayout:
 if __name__ == '__main__':
     pygame.init()
     pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    test = ShipLayout(TILE_SHEET_DIR, ITEM_SHEET_SMALL_DIR)
+    test = ShipLayout()
     test.generaterandommap()
     test.savemap(os.path.join(CWD, "map.txt"))
     pygame.quit()

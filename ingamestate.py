@@ -59,9 +59,10 @@ class InGameState (GameState):
         self.keybindings = keybindings
 
         # create default objects
-        self.user = Character(CHARACTER_SPRITE_SHEET_DIR)
-        self.inventory = Inventory(INVENTORY_BACKGROUND_SHEET_DIR, ITEM_SHEET_SMALL_DIR, ITEM_SHEET_LARGE_DIR, ITEM_BOX_DIR, INVENTORY_BUTTONS_DIR)
-        self.ship = ShipLayout(TILE_SHEET_DIR, ITEM_SHEET_SMALL_DIR)
+        self.user = Character()
+        self.inventory = Inventory()
+        self.journal = Journal()
+        self.ship = ShipLayout()
         self.ship.loadmap(MAP_DEFAULT_DIR)
 
         # temporary test NPC
@@ -120,7 +121,7 @@ class InGameState (GameState):
     ## ---[ save ]------------------------------------------------------------
     # Returns a copy of the current user, inventory, ship, and npcs status
     def save(self):
-        return self.user, self.inventory, self.ship, self.npcs
+        return self.user, self.inventory, self.journal, self.ship, self.npcs
 
     # modify items on floor
     # add items to character location

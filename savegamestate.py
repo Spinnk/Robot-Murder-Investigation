@@ -87,12 +87,13 @@ class SaveGameState (GameState):
     #  @param   npc             The current npc sheet status
     #
     # saves the game status to self.save_location
-    def save(self, character, inventory, ship, npcs):
+    def save(self, character, inventory, journal, ship, npcs):
         c = character.save()
         i = inventory.save()
+        j = journal.save()
         s = ship.save()
         ns = [npc.save() for npc in npcs]
-        out = binascii.unhexlify(makehex(len(c), 4)) + c + binascii.unhexlify(makehex(len(i), 4)) + i + binascii.unhexlify(makehex(len(s), 4)) + s + binascii.unhexlify(makehex(len(ns), 4)) + ''.join([binascii.unhexlify(makehex(len(n), 4)) + n for n in ns])
+        out = binascii.unhexlify(makehex(len(c), 4)) + c + binascii.unhexlify(makehex(len(i), 4)) + i + binascii.unhexlify(makehex(len(j), 4)) + j + binascii.unhexlify(makehex(len(s), 4)) + s + binascii.unhexlify(makehex(len(ns), 4)) + ''.join([binascii.unhexlify(makehex(len(n), 4)) + n for n in ns])
         out += hashlib.sha512(out).digest()
         f = open(self.save_location, 'wb')
         f.write(out)
@@ -133,7 +134,7 @@ class LoadGameState (GameState):
         # only allow "Back" to return to a menu state
         if state in [MAIN_MENU_STATE, OPTIONS_MENU_STATE]:
             self.menu.set_state( 'Back', state )
-        
+
 
     ## ---[ update ]------------------------------------------------------------
     def update(self, event):
@@ -189,11 +190,13 @@ class LoadGameState (GameState):
         if hashlib.sha512(data).digest() != checksum:
             return CHECKSUMS_DO_NOT_MATCH, None, None, None
         c_len = int(binascii.hexlify(data[:2]), 16); data = data[2:]
-        c = Character(CHARACTER_SPRITE_SHEET_DIR); c.load(data[:c_len]); data = data[c_len:]
+        c = Character(); c.load(data[:c_len]); data = data[c_len:]
         i_len = int(binascii.hexlify(data[:2]), 16); data = data[2:]
-        i = Inventory(INVENTORY_BACKGROUND_SHEET_DIR, ITEM_SHEET_SMALL_DIR, ITEM_SHEET_LARGE_DIR, ITEM_BOX_DIR, INVENTORY_BUTTONS_DIR); i.load(data[:i_len]); data = data[i_len:]
+        i = Inventory(); i.load(data[:i_len]); data = data[i_len:]
+        j_len = int(binascii.hexlify(data[:2]), 16); data = data[2:]
+        j = Journal(); j.load(data[:j_len]); data = data[j_len:]
         s_len = int(binascii.hexlify(data[:2]), 16); data = data[2:]
-        s = ShipLayout(TILE_SHEET_DIR, ITEM_SHEET_SMALL_DIR); s.load(data[:s_len]); data = data[s_len:]
+        s = ShipLayout(); s.load(data[:s_len]); data = data[s_len:]
         npc_count = int(binascii.hexlify(data[:2]), 16); data = data[2:]
         ns = []
         for x in xrange(npc_count):
@@ -201,6 +204,6 @@ class LoadGameState (GameState):
             n = NPC(); n.load(data[:n_len]); ns += [n]; data = data[n_len:]
         if len(data):
             return INCORRECT_DATA_LENGTH, None, None, None
-        
+
         print "Loaded from " + save_name
-        return c, i, s, ns
+        return c, i, j, s, ns

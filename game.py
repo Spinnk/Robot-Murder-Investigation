@@ -25,7 +25,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Sentience in Space.  If not, see <http://www.gnu.org/licenses/>.
 
-import sys, pygame
+import pygame
 
 from consts import *
 from gamestate import *
@@ -53,7 +53,7 @@ class Game:
         if not os.path.isdir(SAVE_DIR):
             os.mkdir(SAVE_DIR)
         self.num_saves = len([name for name in os.listdir(SAVE_DIR)])
-        
+
         # Create instances of each child of GameState:
         self.main_menu_state = MainMenuState( screen, self.num_saves, MAIN_MENU_STATE )
         self.options_menu_state = OptionsMenuState( screen, self.num_saves, OPTIONS_MENU_STATE )
@@ -100,10 +100,10 @@ class Game:
         elif new_state_id == IMJ_STATE:
             self.imj_state.setinventory( self.in_game_state.getinventory() )
             self.current_state = self.imj_state
-            
+
         elif new_state_id == PUZZLE_STATE:
             pass
-        
+
         elif new_state_id == OPTIONS_MENU_STATE:
             pygame.event.post(pygame.event.Event(EVENT_CHANGE_STATE, key = 0))
             self.current_state = self.options_menu_state
@@ -111,17 +111,17 @@ class Game:
         elif new_state_id > 200:
             save_name = "Save " + str(new_state_id - 200) + ".rmis"
             try:
-                c, i, s, ns = self.load_game_state.load( save_name )
-                self.in_game_state.load(c, i, s, ns)
+                c, i, j, s, ns = self.load_game_state.load( save_name )
+                self.in_game_state.load(c, i, j, s, ns)
                 self.current_state = self.in_game_state
                 self.current_state_id = IN_GAME_STATE
             except TypeError:
                 pass
 
         elif new_state_id >= 100:
-            c, i, s, ns = self.in_game_state.save()
+            c, i, j, s, ns = self.in_game_state.save()
             old_num_saves = self.num_saves
-            self.num_saves = self.save_game_state.save( c, i, s, ns)
+            self.num_saves = self.save_game_state.save( c, i, j, s, ns)
             if old_num_saves == 0 and self.num_saves > 0:
                 self.options_menu_state.loadable()
 

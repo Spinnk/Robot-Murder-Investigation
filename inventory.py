@@ -21,6 +21,7 @@
 # along with Sentience in Space.  If not, see <http://www.gnu.org/licenses/>.
 
 import copy
+import sys
 
 from consts import *
 from keybinding import *
@@ -28,43 +29,48 @@ from keybinding import *
 import pygame
 
 class Inventory:
-    def __init__(self, background, small, large, box, option_box):
+    def __init__(self):
         self.items = [[[0, 0] for x in xrange(INVENTORY_X)] for y in xrange(INVENTORY_Y)]             # 2D list of (item #, count)
         self.mode = 0               # 0 in items area; 1 in options area
         self.option = 0             # which "option" button is selected. 0 is 0
         self.x = 0                  # cursor x coordinate
         self.y = 0                  # cursor y coordinate
 
+
         # load images and check to make sure they loaded properly
-        self.background = pygame.image.load(background)
+        self.background = pygame.image.load(INVENTORY_BACKGROUND_SHEET_DIR)
         if self.background == 0:
             sys.exit(IMAGE_DOES_NOT_EXIST)
         self.background.set_colorkey(COLOR_KEY)
         self.background = self.background.convert()
 
-        self.small = pygame.image.load(small)
+        self.small = pygame.image.load(ITEM_SHEET_SMALL_DIR)
         if self.small == 0:
             sys.exit(IMAGE_DOES_NOT_EXIST)
         self.small.set_colorkey(COLOR_KEY)
         self.small = self.small.convert()
 
-        self.large = pygame.image.load(large)
+        self.large = pygame.image.load(ITEM_SHEET_LARGE_DIR)
         if self.large == 0:
             sys.exit(IMAGE_DOES_NOT_EXIST)
         self.large.set_colorkey(COLOR_KEY)
         self.large = self.large.convert()
 
-        self.box = pygame.image.load(box)
+        self.box = pygame.image.load(ITEM_BOX_DIR)
         if self.box == 0:
             sys.exit(IMAGE_DOES_NOT_EXIST)
         self.box.set_colorkey(COLOR_KEY)
         self.box = self.box.convert()
 
-        self.option_box = pygame.image.load(option_box)
+        self.option_box = pygame.image.load(INVENTORY_BUTTONS_DIR)
         if self.option_box == 0:
             sys.exit(IMAGE_DOES_NOT_EXIST)
         self.option_box.set_colorkey(COLOR_KEY)
         self.option_box = self.option_box.convert()
+
+        self.font_description = pygame.font.Font(ITEM_FONT_DIR, ITEM_FONT_DESCRIPTION)
+        self.font_count = pygame.font.Font(ITEM_FONT_DIR, ITEM_FONT_COUNT)
+        self.font_name = pygame.font.Font(ITEM_FONT_DIR, ITEM_FONT_NAME)
 
     # add item to inventory
     def additem(self, item):# item is an integer
@@ -183,8 +189,7 @@ class Inventory:
         # display inventory background
         screen.blit(self.background, (0, 0))
         # display items
-        font = pygame.font.Font(FONT_DIR, FONT_SIZE_SMALL)
-        dy = ITEM_SMALL_HEIGHT - font.size("")[1]
+        dy = ITEM_SMALL_HEIGHT - self.font_count.size("")[1]
         for i in xrange(INVENTORY_Y):
             for j in xrange(INVENTORY_X):
                 if self.items[i][j] != [0, 0]:
@@ -192,7 +197,8 @@ class Inventory:
                     show = pygame.Rect((ITEM_SMALL_WIDTH + 1) * j + 1, (ITEM_SMALL_HEIGHT + 1) * i + 37, ITEM_SMALL_WIDTH, ITEM_SMALL_HEIGHT)
                     screen.blit(self.small, show, clip)
                     show.y += dy
-                    text_image = font.render(str(self.items[i][j][1]), FONT_ANTIALIAS, FONT_COLOR)
+                    show.x += 5
+                    text_image = self.font_count.render(str(self.items[i][j][1]), ITEM_FONT_ANTIALIAS, ITEM_FONT_COLOR)
                     screen.blit(text_image, show)
 
         # display highlight
@@ -207,15 +213,13 @@ class Inventory:
             # display selected item
             clip = pygame.Rect(ITEM_LARGE_WIDTH * self.items[self.y][self.x][0], 0, ITEM_LARGE_WIDTH, ITEM_LARGE_HEIGHT)
             screen.blit(self.large, ITEM_IMAGE_BOX, clip)
-            font = pygame.font.Font(FONT_DIR, FONT_SIZE_LARGE)
-            text_image = font.render(ITEMS[self.items[self.y][self.x][0]][0], FONT_ANTIALIAS, FONT_COLOR)
+            text_image = self.font_name.render(ITEMS[self.items[self.y][self.x][0]][0], ITEM_FONT_ANTIALIAS, ITEM_FONT_COLOR)
             screen.blit(text_image, ITEM_NAME_BOX)
 
             show = copy.deepcopy(ITEM_DESCRIPTION_BOX)
-            font = pygame.font.Font(FONT_DIR, FONT_SIZE_SMALL)
-            dy = font.size("")[1]
+            dy = self.font_description.size("")[1]
             for desc in ITEMS[self.items[self.y][self.x][0]][1]:
-                text_image = font.render(desc, FONT_ANTIALIAS, FONT_COLOR)
+                text_image = self.font_description.render(desc, ITEM_FONT_ANTIALIAS, ITEM_FONT_COLOR)
                 screen.blit(text_image, show)
                 show.y += dy
 
@@ -232,7 +236,7 @@ if __name__=='__main__':
 
     keybindings = default_keybindings()
 
-    test = Inventory(INVENTORY_BACKGROUND_SHEET_DIR, ITEM_SHEET_SMALL_DIR, ITEM_SHEET_LARGE_DIR, ITEM_BOX_DIR, INVENTORY_BUTTONS_DIR)
+    test = Inventory()
 
     # adda a bunch of items
     test.additem(1); test.additem(1); test.additem(1); test.additem(1)

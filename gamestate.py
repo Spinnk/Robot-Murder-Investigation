@@ -27,12 +27,13 @@
 import os, sys, pygame, hashlib
 
 from consts import *
+from keybinding import *
 from menu import *
 from character import *
+from inventory import *
+from journal import *
 from npc import *
 from shiplayout import *
-from inventory import *
-from keybinding import *
 
 #-------------------------------------------------------------------------------
 #---[ GameState Class ]---------------------------------------------------------

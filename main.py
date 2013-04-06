@@ -20,14 +20,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
-import random
-
 import pygame
 
 from consts import *
-from game import *
 from keybinding import *
+from game import *
 
 def main():
     # Set up screen #######

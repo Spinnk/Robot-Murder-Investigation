@@ -32,7 +32,7 @@ from keybinding import *
 
 class Character:
     # or instead of using file name, open all images in main, and clip with display()
-    def __init__(self, sprite_sheet):   # taking in string to save memory + faster since surfaces are passed by value, not reference
+    def __init__(self):   # taking in string to save memory + faster since surfaces are passed by value, not reference
         # remember sprite will be standing on tile x+1
         self.x = 0                                   # tile position on map
         self.y = 0                                   # tile position on map
@@ -40,7 +40,7 @@ class Character:
         self.frame = 0                               # use for animations
         self.moved = False
 
-        self.sprite = pygame.image.load(sprite_sheet)
+        self.sprite = pygame.image.load(CHARACTER_SPRITE_SHEET_DIR)
         if self.sprite == None:
             sys.exit(IMAGE_DOES_NOT_EXIST)
 
@@ -143,7 +143,7 @@ if __name__=='__main__':
     pygame.key.set_repeat(100, 100)
     keybindings = default_keybindings()
 
-    test = Character(CHARACTER_SPRITE_SHEET_DIR)
+    test = Character()
     test.spawn()
 
     quit = False
