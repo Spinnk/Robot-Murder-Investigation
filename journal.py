@@ -122,18 +122,20 @@ class Journal:
             screen.blit(text, show)
             show.y += dy
 
-        # display title
-        show = copy.deepcopy(JOURNAL_SHOW_BOX)
-        text = self.font_large.render(JOURNAL[self.entries[self.cursor]][0], JOURNAL_FONT_ANTIALIAS, JOURNAL_FONT_COLOR)
-        screen.blit(text, JOURNAL_SHOW_BOX)
+        # if there is something to show
+        if len(self.entries):
+            # display title
+            show = copy.deepcopy(JOURNAL_SHOW_BOX)
+            text = self.font_large.render(JOURNAL[self.entries[self.cursor]][0], JOURNAL_FONT_ANTIALIAS, JOURNAL_FONT_COLOR)
+            screen.blit(text, JOURNAL_SHOW_BOX)
 
-        # display data
-        dy = self.font_small.size("")[1]
-        show.y += dy; show.y += dy
-        for line in JOURNAL[self.entries[self.cursor]][1][self.line: min(len(JOURNAL[self.cursor][1]), self.line + JOURNAL_MAX_LINES)]:
-            text = self.font_small.render(line, JOURNAL_FONT_ANTIALIAS, JOURNAL_FONT_COLOR)
-            screen.blit(text, show)
-            show.y += dy
+            # display data
+            dy = self.font_small.size("")[1]
+            show.y += dy; show.y += dy
+            for line in JOURNAL[self.entries[self.cursor]][1][self.line: min(len(JOURNAL[self.cursor][1]), self.line + JOURNAL_MAX_LINES)]:
+                text = self.font_small.render(line, JOURNAL_FONT_ANTIALIAS, JOURNAL_FONT_COLOR)
+                screen.blit(text, show)
+                show.y += dy
 
         return NO_PROBLEM
 
