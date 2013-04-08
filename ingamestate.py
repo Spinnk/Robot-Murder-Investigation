@@ -151,6 +151,9 @@ class InGameState (GameState):
     def getinventory(self):
         return self.inventory
 
+    def getjournal(self):
+        return self.journal
+
     def getship(self):
         return self.ship
 

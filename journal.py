@@ -88,7 +88,7 @@ class Journal:
             if self.cursor - self.start > 0:
                 self.start += 1
             if self.start < 0:
-                aelf.start = 0
+                self.start = 0
             if (self.start + JOURNAL_MAX_SHOW) > len(self.entries):
                 self.start = len(self.entries) - JOURNAL_MAX_SHOW
             if self.start < 0:

@@ -99,6 +99,7 @@ class Game:
 
         elif new_state_id == IMJ_STATE:
             self.imj_state.setinventory( self.in_game_state.getinventory() )
+            self.imj_state.setjournal( self.in_game_state.getjournal() )
             self.current_state = self.imj_state
 
         elif new_state_id == PUZZLE_STATE:

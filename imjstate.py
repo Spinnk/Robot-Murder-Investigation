@@ -29,31 +29,45 @@ class IMJState (GameState):
     def __init__(self, screen, keybindings, state_id):
         self.state_id = state_id
         self.inventory = None
+        self.journal = None
         self.screen = screen
         self.keybindings = keybindings
         self.dropped_items = []
+        self.substate_id = INVENTORY_SUBSTATE
 
         # The possible states that this state may change to
         self.state_changes = [IMJ_STATE, OPTIONS_MENU_STATE, IN_GAME_STATE]
 
     ## ---[ update ]------------------------------------------------------------
     def update(self, event):
-        self.inventory.update(self.keybindings)
         changed_state = self.checkstatechange(event)
         if changed_state in self.state_changes:
             return changed_state
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-            self.removeitem()
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_TAB:
+            self.switchsubstate()
+        if self.substate_id == INVENTORY_SUBSTATE:
+            self.inventory.update(self.keybindings)
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                self.removeitem()
+        if self.substate_id == JOURNAL_SUBSTATE:
+            self.journal.update(self.keybindings)
         return IMJ_STATE
-
 
     ## ---[ display ]----------------------------------------------------------
     def display(self):
-        try:
-            self.inventory.display(self.screen)
-        except AttributeError:
-            print "Error: Inventory not set."
-            exit(1)
+        if self.substate_id == INVENTORY_SUBSTATE:
+            try:
+                self.inventory.display(self.screen)
+            except AttributeError:
+                print "Error: Inventory not set."
+                exit(1)
+        else:
+            self.journal.display(self.screen)
+
+    def switchsubstate(self):
+        if self.substate_id == INVENTORY_SUBSTATE:
+            self.substate_id = JOURNAL_SUBSTATE
+
 
     ## ---[ removeitem ]-------------------------------------------------------
     # remove the currently selected item from inventory
@@ -77,4 +91,13 @@ class IMJState (GameState):
     #  Sets the inventory to match the given inventory
     def setinventory(self, inventory):
         self.inventory = inventory
+
+    ## ---[ setinventory ]-----------------------------------------------------
+    #  @param   self        The class itself, Python standard
+    #  @param   journal     The current game journal
+    #
+    #  Sets the journal to match the given journal
+    def setjournal(self, journal):
+        self.journal = journal
+
 
