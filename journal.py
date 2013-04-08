@@ -75,8 +75,9 @@ class Journal:
             elif keystates[keybinding[KB_DOWN]]:
                 self.cursor += 1
             elif keystates[keybinding[KB_RIGHT]]:
-                self.mode = 1
-                self.line = 0
+                if len(self.entries):
+                    self.mode = 1
+                    self.line = 0
             # make sure cursor is within bound
             if self.cursor < 0:
                 self.cursor = 0
@@ -132,7 +133,7 @@ class Journal:
             # display data
             dy = self.font_small.size("")[1]
             show.y += dy; show.y += dy
-            for line in JOURNAL[self.entries[self.cursor]][1][self.line: min(len(JOURNAL[self.cursor][1]), self.line + JOURNAL_MAX_LINES)]:
+            for line in JOURNAL[self.entries[self.cursor]][1][self.line: min(len(JOURNAL[self.entries[self.cursor]][1]), self.line + JOURNAL_MAX_LINES)]:
                 text = self.font_small.render(line, JOURNAL_FONT_ANTIALIAS, JOURNAL_FONT_COLOR)
                 screen.blit(text, show)
                 show.y += dy
