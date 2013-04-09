@@ -126,6 +126,11 @@ NPC_HEIGHT = 80                             # pixels
 NPC_MAX_VALUE = 3
 NPC_COUNT = 4
 
+# Puzzle Info
+PUZZLE_BACKGROUND_DIR = os.path.join(ART_DIR, "puzzle.png")
+PUZZLE_ITEM_DIR = os.path.join(ART_DIR, "puzzle items.png")
+PUZZLE_SELECTED_DIR = PUZZLE_ITEM_DIR = os.path.join(ART_DIR, "puzzle selected.png")
+
 # Inventory Info
 INVENTORY_BACKGROUND_SHEET_DIR = os.path.join(ART_DIR, "inventory.png")
 INVENTORY_X = 8                             # spaces across
