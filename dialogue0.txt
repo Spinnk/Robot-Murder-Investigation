@@ -1,0 +1,6 @@
+Mission1:
+inventory(ID)=0 & alternate=0:"Hmm, his ID must be around here somewhere", alternate=1
+inventory(ID)=0 & alternate=1: "I need to find his ID if it's around", alternate=0
+inventory(ID)=1 & location=engineroomID & spoken=0: "Well, I give up. Maybe it’ll turn up later. Guess I’ll head on up to the bridge", spoken = 1
+inventory(ID)=1 & location=engineroomID & spoken=1: "I’ll just look one more time..."
+inventory(ID)=1: "Go back to your duties, robot."
