@@ -1,3 +1,5 @@
+#this is the text for Captain Presley, NPC0
+
 Mission1:
 inventory(ID)=0 & alternate=0:"Hmm, his ID must be around here somewhere", alternate=1
 inventory(ID)=0 & alternate=1: "I need to find his ID if it's around", alternate=0
