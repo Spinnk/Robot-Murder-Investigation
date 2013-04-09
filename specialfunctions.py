@@ -2,6 +2,9 @@
 
 # Special Functions
 
+# This file contains functions that
+# do not belong in classes
+
 # specialfunctions.py is part of Sentience in Space.
 #
 # Sentience in Space is free software: you can redistribute it and/or modify
@@ -44,3 +47,6 @@ def parsejournal(file_name):
             else:
                 data += [entry]
     return out
+
+def parsedialogue(file_name):
+    return None

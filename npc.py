@@ -23,6 +23,7 @@
 # along with Sentience in Space.  If not, see <http://www.gnu.org/licenses/>.
 
 import binascii
+import copy
 import random
 
 import pygame
@@ -36,12 +37,14 @@ class NPC:
         self.name = ""
         self.x = 0
         self.y = 0
-        self.clip = 0                                # which image to clip from sprite sheet; also which direction player is facing
-        self.frame = 0                               # which frame to show
+        self.clip = 0           # which image to clip from sprite sheet; also which direction player is facing
+        self.frame = 0          # which frame to show
         self.moved = False
 
         self.count = 0          # Count the number of times update was called
                                 # to limit updates per second
+        self.say = 0            # dialogue index; 0 = nothing
+        self.font = pygame.font.Font(NPC_FONT_DIR, NPC_FONT_SIZE)
 
     # Accessors and Modifiers
 
@@ -79,6 +82,10 @@ class NPC:
     def spawn(self, x, y):
         self.x = x
         self.y = y
+
+    # index of dialogue
+    def setdialogue(d):
+        self.say = d
 
     # load from save string
     def load(self, data):
@@ -150,6 +157,16 @@ class NPC:
 #        clip = pygame.Rect(self.frame * CHARACTER_WIDTH, self.clip * CHARACTER_HEIGHT, CHARACTER_WIDTH, CHARACTER_HEIGHT)
         clip = pygame.Rect(self.clip, 0, NPC_WIDTH, NPC_HEIGHT)
         screen.blit(self.sprite, show, clip)
+
+        if say:
+            show = copy.deepcopy(NPC_TEXT_BOX)
+            show.y += 10
+            dy = self.font.size("")[1]
+            screen.fill(WHITE, show)
+            for line in DIALOGUE[self.say]:
+                text = self.font.render(line, NPC_FONT_ANTIALIAS, NPC_FONT_COLOR)
+                screen.blit(text, show)
+                show.y += dy
         return NO_PROBLEM
 
 if __name__=='__main__':

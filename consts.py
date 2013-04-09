@@ -112,6 +112,11 @@ NPC_WIDTH = 80                              # pixels
 NPC_HEIGHT = 80                             # pixels
 NPC_MAX_VALUE = 3
 NPC_COUNT = 4
+NPC_FONT_DIR = os.path.join(CWD, "comic.ttf")
+NPC_FONT_SIZE = 24
+NPC_FONT_COLOR = BLACK
+NPC_FONT_ANTIALIAS = True
+NPC_TEXT_BOX = pygame.Rect(0, 500, 880, 40)
 
 # Puzzle Info
 PUZZLE_BACKGROUND_DIR = os.path.join(ART_DIR, "puzzle.png")
@@ -130,14 +135,6 @@ INVENTORY_BUTTONS_DIR = os.path.join(ART_DIR, "option box.png")
 INVENTORY_BUTTONS = [pygame.Rect(735, 566, 68, 38)] # location of buttons
 
 # Items Info
-ITEM_BOX_DIR = os.path.join(ART_DIR, "box.png")
-ITEM_FONT_DIR = os.path.join(CWD, "comic.ttf")
-ITEM_FONT_DESCRIPTION = 12
-ITEM_FONT_COUNT = 12
-ITEM_FONT_NAME = 24
-ITEM_FONT_COLOR = BLACK
-ITEM_FONT_ANTIALIAS = True
-
 ITEM_SHEET_LARGE_DIR = os.path.join(ART_DIR, "large items.png")
 ITEM_LARGE_WIDTH = 200                      # pixels
 ITEM_LARGE_HEIGHT = 200                     # pixels
@@ -145,6 +142,8 @@ ITEM_LARGE_HEIGHT = 200                     # pixels
 ITEM_SHEET_SMALL_DIR = os.path.join(ART_DIR, "small items.png")
 ITEM_SMALL_WIDTH = 80                       # pixels
 ITEM_SMALL_HEIGHT = 80                      # pixels
+
+ITEM_BOX_DIR = os.path.join(ART_DIR, "box.png")        # box for highlighting selected item
 
 # Items List
 # Item Index = Type, Tile on sheet
@@ -159,8 +158,12 @@ ITEMS = [   ["", ""], # Item 0 is Null Item
 ITEM_IMAGE_BOX = pygame.Rect(666, 37, 100, 100)        # location of items when displayed on screen; change as necessary
 ITEM_NAME_BOX = pygame.Rect(665, 250, 100, 100)        # location of name when item is displayed
 ITEM_DESCRIPTION_BOX = pygame.Rect(665, 300, 100, 100) # location of first line of descriptions
-
-ITEMS_ON_MAP = 5
+ITEM_FONT_DIR = os.path.join(CWD, "comic.ttf")
+ITEM_FONT_DESCRIPTION = 12
+ITEM_FONT_COUNT = 12
+ITEM_FONT_NAME = 24
+ITEM_FONT_COLOR = BLACK
+ITEM_FONT_ANTIALIAS = True
 
 # Music Info
 MUSIC_FILES = []                                # list of music file names
@@ -178,9 +181,11 @@ JOURNAL_FONT_LARGE_SIZE = 24
 JOURNAL_FONT_COLOR = BLACK
 JOURNAL_FONT_BACKGROUND_COLORS = [YELLOW, CYAN]
 JOURNAL_FONT_ANTIALIAS = True
-
 JOURNAL = parsejournal(os.path.join(CWD, "journal entries.txt"))
 
-# In Game Map info
+# In Game Map Info
 INGAMEMAP_CHARACTER_MARKER_DIR = os.path.join(ART_DIR, "robot marker.png")
 INGAMEMAP_MISSION_MARKER_DIR = os.path.join(ART_DIR, "mission marker.png")
+
+# Dialogue Info
+DIALOGUE = parsedialogue('')
