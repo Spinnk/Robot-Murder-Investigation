@@ -23,9 +23,10 @@ A save file will consist of concatenations of save data in the following order:
         item  - 1 byte
         count - 1 byte
 
-    Journal Format (1 Byte * count)
-        entry
-        entry - 1 byte
+    Journal Format (2 bytes * count)
+        has_read | entry | has_read | entry | ...
+        has_read  - 1 byte
+        entry     - 1 byte
 
     Ship Format (3 bytes * MAP_X * MAP_Y):
         item_x | item_y
