@@ -129,7 +129,10 @@ NPC_COUNT = 4
 # Puzzle Info
 PUZZLE_BACKGROUND_DIR = os.path.join(ART_DIR, "puzzle.png")
 PUZZLE_ITEM_DIR = os.path.join(ART_DIR, "puzzle items.png")
-PUZZLE_SELECTED_DIR = PUZZLE_ITEM_DIR = os.path.join(ART_DIR, "puzzle selected.png")
+PUZZLE_SELECTED_DIR = os.path.join(ART_DIR, "puzzle selected.png")
+PUZZLE_FAIL = 0
+PUZZLE_WORKING = 1
+PUZZLE_SUCCESS = 2
 
 # Inventory Info
 INVENTORY_BACKGROUND_SHEET_DIR = os.path.join(ART_DIR, "inventory.png")
