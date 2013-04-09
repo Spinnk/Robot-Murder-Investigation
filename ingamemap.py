@@ -22,9 +22,6 @@ from consts import *
 
 import pygame
 
-INGAMEMAP_CHARACTER_MARKER_DIR = os.path.join(ART_DIR, "robot marker.png")
-INGAMEMAP_MISSION_MARKER_DIR = os.path.join(ART_DIR, "mission marker.png")
-
 class InGameMap:
     def __init__(self):
         self.image = pygame.Surface((TILE_WIDTH * MAP_WIDTH, TILE_HEIGHT * MAP_HEIGHT))

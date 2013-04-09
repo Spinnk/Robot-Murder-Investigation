@@ -1,0 +1,70 @@
+-----ENTRY BEGIN-----
+Farewell to the Old Guard
+Soldiers of my Old Guard:
+
+I bid you farewell. For twenty years I have constantly
+accompanied you on the road to honor and glory. In these
+latter times, as in the days of our prosperity, you have
+invariably been models of courage and fidelity. With men
+such as you our cause could not be lost; but the war
+would have been interminable; it would have been civil
+war, and that would have entailed deeper misfortunes on
+France.
+I have sacrificed all of my interests to those of the
+country.
+I go, but you, my friends, will continue to serve France.
+Her happiness was my only thought. It will still be the
+object of my wishes. Do not regret my fate; if I have
+consented to survive, it is to serve your glory. I intend
+to write the history of the great achievements we have
+performed together. Adieu, my friends. Would I could press
+you all to my heart.
+
+April 20, 1814.
+-----ENTRY END-----
+-----ENTRY BEGIN-----
+Title 2
+Line 1
+Line 2
+-----ENTRY END-----
+-----ENTRY BEGIN-----
+Title3
+Line 1
+Line 2
+Line 3
+Line 4
+-----ENTRY END-----
+-----ENTRY BEGIN-----
+The Gettysburg Address
+Four score and seven years ago our fathers brought
+forth on this continent, a new nation, conceived in
+Liberty, and dedicated to the proposition that all
+men are created equal.
+
+Now we are engaged in a great civil war, testing
+whether that nation, or any nation so conceived and
+so dedicated, can long endure. We are met on a great
+battle-field of that war. We have come to dedicate a
+portion of that field, as a final resting place for
+those who here gave their lives that that nation
+might live. It is altogether fitting and proper that
+we should do this.
+
+But, in a larger sense, we can not dedicate -- we
+can not consecrate -- we can not hallow -- this
+ground. The brave men, living and dead, who
+struggled here, have consecrated it, far above our
+poor power to add or detract. The world will little
+note, nor long remember what we say here, but it can
+never forget what they did here. It is for us the
+living, rather, to be dedicated here to the unfinished
+work which they who fought here have thus far so nobly
+advanced. It is rather for us to be here dedicated to
+the great task remaining before us -- that from these honored
+dead we take increased devotion to that cause for which they
+gave the last full measure of devotion -- that we here
+highly resolve that these dead shall not have died in vain
+-- that this nation, under God, shall have a new birth of
+freedom -- and that government of the people, by the people,
+for the people, shall not perish from the earth.
+-----ENTRY END-----
