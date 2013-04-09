@@ -31,7 +31,7 @@ class Journal:
         self.cursor = 0     # which entry cursor is at
         self.start = 0      # camera for side bar
         self.line = 0       # camera for data
-        self.entries = []   # array of entries; just integers
+        self.entries = []   # array of entries; [bool, integer]
         self.font_list = pygame.font.Font(JOURNAL_FONT_DIR, JOURNAL_FONT_LIST_SIZE)
         self.font_small = pygame.font.Font(JOURNAL_FONT_DIR, JOURNAL_FONT_SMALL_SIZE)
         self.font_large = pygame.font.Font(JOURNAL_FONT_DIR, JOURNAL_FONT_LARGE_SIZE)
@@ -45,7 +45,7 @@ class Journal:
 
     def addentry(self, new_entry):
         if new_entry not in self.entries:
-            self.entries += [new_entry]
+            self.entries += [[False, new_entry]]
         return NO_PROBLEM
 
     # shouldnt need this
@@ -56,16 +56,19 @@ class Journal:
         return NOT_FOUND
 
     def load(self, data):
-        self.entries = [ord(x) for x in data]
+        self.entries = []
+        while len(data):
+            self.entries += [[ord(data[0]), ord(data[1])]]
         return NO_PROBLEM
 
     def save(self):
         '''
         Format:
-            entry | entry | ...
-            entry - 1 byte
+            has_read | entry | has_read | entry | ...
+            has_read  - 1 byte
+            entry     - 1 byte
         '''
-        return ''.join([chr(entry) for entry in self.entries])
+        return ''.join([chr(has_read) + chr(entry) for has_read, entry in self.entries])
 
     def update(self, keybinding):
         keystates = pygame.key.get_pressed()
@@ -95,6 +98,10 @@ class Journal:
             if self.start < 0:
                 self.start = 0
         elif self.mode == 1: # reading entry
+            # set "has read" to true
+            if not self.entries[self.cursor][0]:
+                self.entries[self.cursor][0] = True
+
             if keystates[keybinding[KB_UP]]:
                 self.line -= 1
             elif keystates[keybinding[KB_DOWN]]:
@@ -102,8 +109,8 @@ class Journal:
             if keystates[keybinding[KB_LEFT]]:
                 self.mode = 0
             # make sure camera is within bound
-            if (self.line + JOURNAL_MAX_LINES) > len(JOURNAL[self.entries[self.cursor]][1]):
-                self.line = len(JOURNAL[self.entries[self.cursor]][1]) - JOURNAL_MAX_LINES
+            if (self.line + JOURNAL_MAX_LINES) > len(JOURNAL[self.entries[self.cursor][1]][1]):
+                self.line = len(JOURNAL[self.entries[self.cursor][1]][1]) - JOURNAL_MAX_LINES
             if self.line < 0:
                 self.line = 0
 
@@ -116,10 +123,13 @@ class Journal:
         show = copy.deepcopy(JOURNAL_LIST_BOX)
         dy = self.font_list.size("")[1]
         for i in xrange(self.start, min(len(self.entries), self.start + JOURNAL_MAX_SHOW)):
+            title = JOURNAL[self.entries[i][1]][0]
+            if not self.entries[i][0]:
+                title += ' - new'
             if i == self.cursor:
-                text = self.font_list.render(JOURNAL[self.entries[i]][0], JOURNAL_FONT_ANTIALIAS, JOURNAL_FONT_COLOR, JOURNAL_FONT_BACKGROUND_COLORS[self.mode])
+                text = self.font_list.render(title, JOURNAL_FONT_ANTIALIAS, JOURNAL_FONT_COLOR, JOURNAL_FONT_BACKGROUND_COLORS[self.mode])
             else:
-                text = self.font_list.render(JOURNAL[self.entries[i]][0], JOURNAL_FONT_ANTIALIAS, JOURNAL_FONT_COLOR)
+                text = self.font_list.render(title, JOURNAL_FONT_ANTIALIAS, JOURNAL_FONT_COLOR)
             screen.blit(text, show)
             show.y += dy
 
@@ -127,13 +137,13 @@ class Journal:
         if len(self.entries):
             # display title
             show = copy.deepcopy(JOURNAL_SHOW_BOX)
-            text = self.font_large.render(JOURNAL[self.entries[self.cursor]][0], JOURNAL_FONT_ANTIALIAS, JOURNAL_FONT_COLOR)
+            text = self.font_large.render(JOURNAL[self.entries[self.cursor][1]][0], JOURNAL_FONT_ANTIALIAS, JOURNAL_FONT_COLOR)
             screen.blit(text, JOURNAL_SHOW_BOX)
 
             # display data
             dy = self.font_small.size("")[1]
             show.y += dy; show.y += dy
-            for line in JOURNAL[self.entries[self.cursor]][1][self.line: min(len(JOURNAL[self.entries[self.cursor]][1]), self.line + JOURNAL_MAX_LINES)]:
+            for line in JOURNAL[self.entries[self.cursor][1]][1][self.line: min(len(JOURNAL[self.entries[self.cursor][1]][1]), self.line + JOURNAL_MAX_LINES)]:
                 text = self.font_small.render(line, JOURNAL_FONT_ANTIALIAS, JOURNAL_FONT_COLOR)
                 screen.blit(text, show)
                 show.y += dy
@@ -162,7 +172,7 @@ if __name__=='__main__':
         for event in pygame.event.get():
             if event.type == pygame.QUIT: # exit when close window "X" is pressed
                 quit = True
-        test.update(keybindings)
+            test.update(keybindings)
         test.display(screen)
         pygame.display.flip()
 
