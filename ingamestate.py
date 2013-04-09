@@ -78,7 +78,7 @@ class InGameState (GameState):
         self.camera = pygame.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT) # tile index, not pixel
 
         # The possible states that this state may change to
-        self.state_changes = [IMJ_STATE, OPTIONS_MENU_STATE]
+        self.state_changes = [INVENTORY_STATE, JOURNAL_STATE, OPTIONS_MENU_STATE]
 
     ## ---[ update ]------------------------------------------------------------
     def update(self, event):

@@ -59,7 +59,8 @@ class Game:
         self.main_menu_state = MainMenuState( screen, self.num_saves, MAIN_MENU_STATE )
         self.options_menu_state = OptionsMenuState( screen, self.num_saves, OPTIONS_MENU_STATE )
         self.in_game_state = InGameState(screen, keybindings, IN_GAME_STATE)
-        self.imj_state = IMJState(screen, keybindings, IMJ_STATE)
+        self.inventory_state = InventoryState(screen, keybindings, INVENTORY_STATE)
+        self.journal_state = JournalState(screen, keybindings, JOURNAL_STATE)
         self.save_game_state = SaveGameState(screen, SAVE_STATE)
         self.load_game_state = LoadGameState(screen, LOAD_STATE)
 
@@ -79,7 +80,7 @@ class Game:
             self.current_state = self.main_menu_state
 
         elif new_state_id == IN_GAME_STATE:
-            self.in_game_state.additems(self.imj_state.getdroppeditems())
+            self.in_game_state.additems(self.inventory_state.getdroppeditems())
             self.current_state = self.in_game_state
 
         elif new_state_id == LOAD_STATE:
@@ -99,10 +100,15 @@ class Game:
         elif new_state_id == SETTINGS_STATE:
             pass
 
-        elif new_state_id == IMJ_STATE:
-            self.imj_state.setinventory( self.in_game_state.getinventory() )
-            self.imj_state.setjournal( self.in_game_state.getjournal() )
-            self.current_state = self.imj_state
+        elif new_state_id == INVENTORY_STATE:
+            self.inventory_state.setinventory( self.in_game_state.getinventory() )
+            self.current_state = self.inventory_state
+
+        elif new_state_id == JOURNAL_STATE:
+            self.journal_state.setjournal( self.in_game_state.getjournal() )
+            self.current_state = self.journal_state
+
+
 
         elif new_state_id == PUZZLE_STATE:
             pass
@@ -124,7 +130,7 @@ class Game:
             except TypeError:
                 print "Error loading game"
 
-        # State ids over 200 represent individual game save options
+        # State ids over 100 represent individual game save options
         elif new_state_id >= 100:
             c, i, j, s, ns = self.in_game_state.save()
             old_num_saves = self.num_saves
@@ -150,9 +156,6 @@ class Game:
     def update(self, event):
         new_state_id = self.current_state.update(event)
         if new_state_id != self.current_state_id:
-           # if self.current_state_id == MAIN_MENU_STATE and newStateID == LOAD_STATE:
-            #    self.load_game_state.calledfrom( MAIN_MENU_STATE )
-            #self.current_state_id = newStateID
             self.setstate(new_state_id)
 
     ## ---[ display ]-------------------------------------------------------

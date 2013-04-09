@@ -45,8 +45,8 @@ SETTINGS_STATE = 5
 IMJ_STATE = 6
 PUZZLE_STATE = 7
 OPTIONS_MENU_STATE = 8
-INVENTORY_SUBSTATE = 9
-JOURNAL_SUBSTATE = 10
+INVENTORY_STATE = 9
+JOURNAL_STATE = 10
 
 #-------------------------------------------------------------------------------
 #---[ GameState Class ]---------------------------------------------------------
@@ -82,16 +82,14 @@ class GameState:
         if event.type == pygame.KEYDOWN:
             # If Inventory key is pressed:
             if event.key == self.keybindings[KB_INVENTORY]:
-                if self.state_id == IMJ_STATE:
+                if self.state_id == INVENTORY_STATE:
                     return IN_GAME_STATE
-                self.substate = INVENTORY_SUBSTATE
-                return IMJ_STATE
+                return INVENTORY_STATE
             # If journal key is pressed
             elif event.key == self.keybindings[KB_JOURNAL]:
-                if self.state_id == IMJ_STATE:
+                if self.state_id == JOURNAL_STATE:
                     return IN_GAME_STATE
-                self.substate = JOURNAL_SUBSTATE
-                return IMJ_STATE
+                return JOURNAL_STATE
             # If Escape is pressed
             elif event.key == pygame.K_ESCAPE:
                 if self.state_id == OPTIONS_MENU_STATE:
