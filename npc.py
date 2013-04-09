@@ -158,7 +158,7 @@ class NPC:
         clip = pygame.Rect(self.clip, 0, NPC_WIDTH, NPC_HEIGHT)
         screen.blit(self.sprite, show, clip)
 
-        if say:
+        if self.say:
             show = copy.deepcopy(NPC_TEXT_BOX)
             show.y += 10
             dy = self.font.size("")[1]
