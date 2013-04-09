@@ -1,4 +1,36 @@
------ENTRY BEGIN-----
+# Journal Entrie
+
+# journal entries.txt is part of Sentience in Space.
+#
+# Sentience in Space is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Sentience in Space is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Sentience in Space.  If not, see <http://www.gnu.org/licenses/>.
+
+# Format:
+#
+# -----BEGIN ENTRY-----
+# TITLE LINE
+# TEXT LINE 1
+# TEXT LINE 2
+# -----END ENTRY-----
+#
+# Note:
+# Comments can be placed ONLY between entries.
+# Otherwise, they will be read as part of the
+# entry. The newlines between entries are
+# considered comments, and do not need to be
+# there.
+
+-----BEGIN ENTRY-----
 Farewell to the Old Guard
 Soldiers of my Old Guard:
 
@@ -21,20 +53,22 @@ performed together. Adieu, my friends. Would I could press
 you all to my heart.
 
 April 20, 1814.
------ENTRY END-----
------ENTRY BEGIN-----
+-----END ENTRY-----
+
+-----BEGIN ENTRY-----
 Title 2
 Line 1
 Line 2
------ENTRY END-----
------ENTRY BEGIN-----
+-----END ENTRY-----
+-----BEGIN ENTRY-----
 Title3
 Line 1
 Line 2
 Line 3
 Line 4
------ENTRY END-----
------ENTRY BEGIN-----
+-----END ENTRY-----
+
+-----BEGIN ENTRY-----
 The Gettysburg Address
 Four score and seven years ago our fathers brought
 forth on this continent, a new nation, conceived in
@@ -67,4 +101,4 @@ highly resolve that these dead shall not have died in vain
 -- that this nation, under God, shall have a new birth of
 freedom -- and that government of the people, by the people,
 for the people, shall not perish from the earth.
------ENTRY END-----
+-----END ENTRY-----

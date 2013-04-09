@@ -20,19 +20,27 @@
 # Turn an integer into a big endian hex string
 makehex = lambda value, size = 1: eval(('"%.' + str(size)) + 'x"%' + str(value))
 
+# parse a "journal entry" formatted file
 def parsejournal(file_name):
     f = open(file_name, 'r')
     j = f.read()
     f.close()
 
-    j = j.split('-----ENTRY BEGIN-----')
-    while '' in j:
-        j.remove('')
+    j = j.split('\n')
 
-    out = []
+    out = []# returned data
+    data = []# temporary storage
+    store = False
     for entry in j:
-        data = entry.split('\n')
-        while '' in data:
-            data.remove('')
-        out += [[data[0], data[1:]]]
+        if not store:
+            if entry == '-----BEGIN ENTRY-----':
+                store = True
+                data = []
+        else:
+            if entry == '-----END ENTRY-----':
+                store = False
+                out += [[data[0], data[1:]]]
+                data = []
+            else:
+                data += [entry]
     return out
