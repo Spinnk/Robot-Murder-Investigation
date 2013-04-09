@@ -206,4 +206,5 @@ class LoadGameState (GameState):
             return INCORRECT_DATA_LENGTH, None, None, None
 
         print "Loaded from " + save_name
+        print j
         return c, i, j, s, ns

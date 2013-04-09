@@ -70,6 +70,7 @@ class Game:
         # See description above for keybindings
         self.keybindings = keybindings
 
+
     ## ---[ setstate ]-------------------------------------------------------
     # Set the current_state to match the current_state_id
     def setstate(self, new_state_id):
@@ -109,6 +110,7 @@ class Game:
             pygame.event.post(pygame.event.Event(EVENT_CHANGE_STATE, key = 0))
             self.current_state = self.options_menu_state
 
+        # State ids over 200 represent individual game load options
         elif new_state_id > 200:
             save_name = "Save " + str(new_state_id - 200) + ".rmis"
             try:
@@ -116,15 +118,20 @@ class Game:
                 self.in_game_state.load(c, i, j, s, ns)
                 self.current_state = self.in_game_state
                 self.current_state_id = IN_GAME_STATE
+                return
             except TypeError:
-                pass
+                print "Error loading game"
 
+        # State ids over 200 represent individual game save options
         elif new_state_id >= 100:
             c, i, j, s, ns = self.in_game_state.save()
             old_num_saves = self.num_saves
             self.num_saves = self.save_game_state.save( c, i, j, s, ns)
             if old_num_saves == 0 and self.num_saves > 0:
                 self.options_menu_state.loadable()
+            self.current_state = self.in_game_state
+            self.current_state_id = IN_GAME_STATE
+            return
 
 
         self.current_state_id = new_state_id
