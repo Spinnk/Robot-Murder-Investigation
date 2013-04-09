@@ -42,7 +42,7 @@ LOAD_STATE = 2
 SAVE_STATE = 3
 EXIT_STATE = 4
 SETTINGS_STATE = 5
-IMJ_STATE = 6
+# IMJ_STATE = 6 OLD FUNCTIONALITY
 PUZZLE_STATE = 7
 OPTIONS_MENU_STATE = 8
 INVENTORY_STATE = 9
@@ -90,6 +90,8 @@ class GameState:
                 if self.state_id == JOURNAL_STATE:
                     return IN_GAME_STATE
                 return JOURNAL_STATE
+            elif event.key == pygame.K_p:
+                return PUZZLE_STATE
             # If Escape is pressed
             elif event.key == pygame.K_ESCAPE:
                 if self.state_id == OPTIONS_MENU_STATE:

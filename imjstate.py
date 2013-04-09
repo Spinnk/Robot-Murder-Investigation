@@ -1,7 +1,6 @@
 #! /usr/bin/python
 
-# The IMJState class is inherited from the GameState class. It is responsible
-# for the inventory/map/journal states
+# This file is responsible the inventory/map/journal states
 #
 # imjstate.py is part of Sentience in Space.
 #
@@ -21,9 +20,9 @@
 from gamestate import *
 
 #-------------------------------------------------------------------------------
-#---[ IMJState Class ]----------------------------------------------------------
+#---[ InventoryState Class ]----------------------------------------------------------
 #-------------------------------------------------------------------------------
-## This class is used to handle the Inventory/Map/Journal State
+## This class is used to handle the Inventory State
 #
 class InventoryState(GameState):
     def __init__(self, screen, keybindings, state_id):
@@ -38,12 +37,19 @@ class InventoryState(GameState):
 
     ## ---[ update ]----------------------------------------------------------
     def update(self, event):
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_TAB:
-            return JOURNAL_STATE
+        #self.inventory.update(self.keybindings)
+        
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_TAB:
+                return JOURNAL_STATE
+            if event.key == pygame.K_SPACE:
+                self.removeitem()
         
         changed_state = self.checkstatechange(event)
         if changed_state in self.state_changes:
             return changed_state
+
+        return self.state_id
 
     ## ---[ display ]----------------------------------------------------------
     def display(self):
@@ -79,6 +85,11 @@ class InventoryState(GameState):
 
 
 
+#-------------------------------------------------------------------------------
+#---[ JournalState Class ]----------------------------------------------------------
+#-------------------------------------------------------------------------------
+## This class is used to handle the Journal State
+#
 class JournalState(GameState):
     def __init__(self, screen, keybindings, state_id):
         self.state_id = state_id
@@ -91,12 +102,16 @@ class JournalState(GameState):
 
     ## ---[ update ]----------------------------------------------------------
     def update(self, event):
+        self.journal.update(self.keybindings)
+        
         if event.type == pygame.KEYDOWN and event.key == pygame.K_TAB:
             return INVENTORY_STATE
 
         changed_state = self.checkstatechange(event)
         if changed_state in self.state_changes:
             return changed_state
+
+        return self.state_id
 
     ## ---[ display ]----------------------------------------------------------
     def display(self):
@@ -113,4 +128,7 @@ class JournalState(GameState):
     #  Sets the journal to match the given journal
     def setjournal(self, journal):
         self.journal = journal
+
+
+
 

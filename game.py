@@ -32,6 +32,7 @@ from gamestate import *
 from ingamestate import *
 from savegamestate import *
 from imjstate import *
+from puzzlestate import *
 
 
 #-------------------------------------------------------------------------------
@@ -63,6 +64,7 @@ class Game:
         self.journal_state = JournalState(screen, keybindings, JOURNAL_STATE)
         self.save_game_state = SaveGameState(screen, SAVE_STATE)
         self.load_game_state = LoadGameState(screen, LOAD_STATE)
+        self.puzzle_state = PuzzleState(screen, keybindings, PUZZLE_STATE)
 
         # Set current_state to reference main_menu_state
         self.current_state = self.main_menu_state
@@ -108,10 +110,9 @@ class Game:
             self.journal_state.setjournal( self.in_game_state.getjournal() )
             self.current_state = self.journal_state
 
-
-
         elif new_state_id == PUZZLE_STATE:
-            pass
+            print "Puzzle State!"
+            self.current_state = self.puzzle_state
 
         elif new_state_id == OPTIONS_MENU_STATE:
             pygame.event.post(pygame.event.Event(EVENT_CHANGE_STATE, key = 0))
@@ -123,7 +124,7 @@ class Game:
             c, i, j, s, ns = self.load_game_state.load( save_name )
             try:
                 self.in_game_state.load(c, i, s, ns)
-                self.imj_state.setjournal(j)
+                self.journal_state.setjournal(j)
                 self.current_state = self.in_game_state
                 self.current_state_id = IN_GAME_STATE
                 return

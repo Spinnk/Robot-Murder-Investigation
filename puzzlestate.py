@@ -23,8 +23,11 @@
 from gamestate import *
 from puzzle import *
 
+# Puzzle options
+CIRCUIT_PUZZLE = 0
+
 #-------------------------------------------------------------------------------
-#---[ Puzzle Class ]------------------------------------------------------------
+#---[ PuzzleState Class ]------------------------------------------------------------
 #-------------------------------------------------------------------------------
 ## This class handles the functionality for puzzle actions and display
 #
@@ -32,19 +35,30 @@ class PuzzleState (GameState):
     def __init__(self, screen, keybindings, state_id):
         self.state_id = state_id
         self.current_puzzle = None
-
+        self.screen = screen
+        self.setpuzzle(CIRCUIT_PUZZLE)
 
     ## ---[ update ]------------------------------------------------------------
     def update(self, event):
-        self.current_puzzle.update(event)
-
+        try:
+            self.current_puzzle.update(event)
+        except AttributeError:
+            print "Update Error: Puzzle not set."
+            return IN_GAME_STATE
+            
+        return self.state_id
 
     ## ---[ display ]----------------------------------------------------------
     def display(self):
-        pass
+        try:
+            self.current_puzzle.display(self.screen)
+        except AttributeError:
+            print "Display Error: Puzzle not set."
+            exit(1)
 
     def setpuzzle(self, puzzle_type):
-        pass
+        if puzzle_type == CIRCUIT_PUZZLE:
+            self.current_puzzle = CircuitPuzzle()
 
 
 
