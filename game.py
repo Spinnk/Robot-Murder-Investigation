@@ -33,6 +33,7 @@ from ingamestate import *
 from savegamestate import *
 from imjstate import *
 
+
 #-------------------------------------------------------------------------------
 #---[ Game Class ]--------------------------------------------------------------
 #-------------------------------------------------------------------------------
@@ -113,9 +114,10 @@ class Game:
         # State ids over 200 represent individual game load options
         elif new_state_id > 200:
             save_name = "Save " + str(new_state_id - 200) + ".rmis"
+            c, i, j, s, ns = self.load_game_state.load( save_name )
             try:
-                c, i, j, s, ns = self.load_game_state.load( save_name )
-                self.in_game_state.load(c, i, j, s, ns)
+                self.in_game_state.load(c, i, s, ns)
+                self.imj_state.setjournal(j)
                 self.current_state = self.in_game_state
                 self.current_state_id = IN_GAME_STATE
                 return

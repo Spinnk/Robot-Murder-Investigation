@@ -6,7 +6,7 @@
 # in-game input and display
 #
 #
-# InGameState.py is part of Sentience in Space.
+# ingamestate.py is part of Sentience in Space.
 #
 # Sentience in Space is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

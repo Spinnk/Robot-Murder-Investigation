@@ -35,6 +35,19 @@ from journal import *
 from npc import *
 from shiplayout import *
 
+# States
+MAIN_MENU_STATE = 0
+IN_GAME_STATE = 1
+LOAD_STATE = 2
+SAVE_STATE = 3
+EXIT_STATE = 4
+SETTINGS_STATE = 5
+IMJ_STATE = 6
+PUZZLE_STATE = 7
+OPTIONS_MENU_STATE = 8
+INVENTORY_SUBSTATE = 9
+JOURNAL_SUBSTATE = 10
+
 #-------------------------------------------------------------------------------
 #---[ GameState Class ]---------------------------------------------------------
 #-------------------------------------------------------------------------------
@@ -66,15 +79,23 @@ class GameState:
     # Checks if the event indicates that the state should change and returns the
     # state associated with the given event
     def checkstatechange(self, event):
-        if event.type == pygame.KEYDOWN and event.key == self.keybindings[KB_INVENTORY]:
-            if self.state_id == IMJ_STATE:
-                return IN_GAME_STATE
-            else:
+        if event.type == pygame.KEYDOWN:
+            # If Inventory key is pressed:
+            if event.key == self.keybindings[KB_INVENTORY]:
+                if self.state_id == IMJ_STATE:
+                    return IN_GAME_STATE
+                self.substate = INVENTORY_SUBSTATE
                 return IMJ_STATE
-        elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-            if self.state_id == OPTIONS_MENU_STATE:
-                return IN_GAME_STATE
-            else:
+            # If journal key is pressed
+            elif event.key == self.keybindings[KB_JOURNAL]:
+                if self.state_id == IMJ_STATE:
+                    return IN_GAME_STATE
+                self.substate = JOURNAL_SUBSTATE
+                return IMJ_STATE
+            # If Escape is pressed
+            elif event.key == pygame.K_ESCAPE:
+                if self.state_id == OPTIONS_MENU_STATE:
+                    return IN_GAME_STATE
                 return OPTIONS_MENU_STATE
 
 
