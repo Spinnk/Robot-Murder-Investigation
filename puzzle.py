@@ -13,7 +13,7 @@ class CircuitPuzzle:
     def __init__(self):
 	self.x = 0
 	self.y = 0
-	self.selected = 0
+	self.selected = False
 	self.item = []
 	self.item_table = []
 	
@@ -41,28 +41,67 @@ class CircuitPuzzle:
     def load(self, f_path):
 	item_w, item_h = self.puzzle_item.get_size()
 	for item_x in range(0, item_w/TILE_WIDTH):
-	    temp = []
-            self.item_table.append(temp)
-            for item_y in range(0, item_h/TILE_HEIGHT):
-            	rect = (item_x * TILE_WIDTH, item_y * TILE_HEIGHT, TILE_WIDTH,TILE_HEIGHT)
-		temp.append(self.puzzle_item.subsurface(rect))
+	    rect = (item_x * TILE_WIDTH, 0, TILE_WIDTH,TILE_HEIGHT)
+	    self.item_table.append(self.puzzle_item.subsurface(rect))
 
         # open the file
 	fd = open(f_path, "r")
-	file_t = fd.read()
-	
+	file_t = fd.readlines()
+
 	for line_t in file_t:
             temp1 = []
             self.item.append(temp1)
             digits = string.split(line_t)
             for x in digits:
-                num = string.atoi(x)
-                temp1.append(num)
-
-	fd.close()
+                num = int(x)
+                temp1.append(num)			
+        fd.close()
 	
-    def update(self, keybinding):
-	return PUZZLE_FAIL
+    def update(self, event):
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_l:
+                if self.selected:
+                    self.selected = False
+                else:
+                    self.selected = True
+            elif event.key == pygame.K_a:
+                self.x -= 1
+                if (self.x < 0):
+                    self.x = 0
+                elif self.selected:
+                    swap = self.item[self.x+1][self.y]
+                    self.item[self.x+1][self.y] = self.item[self.x][self.y]
+                    self.item[self.x][self.y] = swap
+            elif event.key == pygame.K_s:
+                self.y += 1
+                if(self.y > 7):
+                    self.y = 7
+                elif self.selected:
+                    swap = self.item[self.x][self.y-1]
+                    self.item[self.x][self.y-1] = self.item[self.x][self.y]
+                    self.item[self.x][self.y] = swap
+            elif event.key == pygame.K_d:
+                self.x += 1
+                if(self.x > 7):
+                    self.x = 7
+                elif self.selected:
+                    swap = self.item[self.x-1][self.y]
+                    self.item[self.x-1][self.y] = self.item[self.x][self.y]
+                    self.item[self.x][self.y] = swap
+            elif event.key == pygame.K_w:
+                self.y -= 1
+                if(self.y < 0):
+                    self.y = 0
+                elif self.selected:
+                    swap = self.item[self.x][self.y+1]
+                    self.item[self.x][self.y+1] = self.item[self.x][self.y]
+                    self.item[self.x][self.y] = swap
+
+        for row in self.item:
+            if sum(row) == 8:
+                return PUZZLE_SUCCESS
+        
+	return PUZZLE_WORKING
 
     def display(self, screen):
         if screen == 0:
@@ -70,11 +109,11 @@ class CircuitPuzzle:
         screen.blit(self.background, (0, 0))
 
         # print puzzle items to screen
-        for x, row in enumerate(self.item_table):
-            for y, item in enumerate(row):
-                screen.blit(item, (x*TILE_WIDTH, y*TILE_HEIGHT))
-    
-        screen.blit(self.cursor, (0,0))
+        for x in xrange(len(self.item)):
+            for y in xrange(len(self.item[x])):
+                screen.blit(self.item_table[self.item[x][y]], (x*TILE_WIDTH, y*TILE_HEIGHT))
+                       
+        screen.blit(self.cursor, (self.x*TILE_WIDTH, self.y*TILE_HEIGHT))
 
         return NO_PROBLEM
 
@@ -96,6 +135,8 @@ if __name__=='__main__':
         for event in pygame.event.get():
             if event.type == pygame.QUIT: # exit when close window "X" is pressed
                 quit = True
+            if test.update(event) == PUZZLE_SUCCESS:
+                print "WIN!!!!!!!!!"
         test.display(screen)
         pygame.display.flip()
 
