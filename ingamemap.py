@@ -25,6 +25,7 @@ import pygame
 class InGameMap:
     def __init__(self):
         self.image = pygame.Surface((TILE_WIDTH * MAP_WIDTH, TILE_HEIGHT * MAP_HEIGHT))
+        self.update()
 
         # open files that will not change
         self.background = pygame.image.load(BACKGROUND_IMAGE_DIR)
@@ -58,14 +59,8 @@ class InGameMap:
             self.ship += [[ord(y) for y in data[:MAP_WIDTH]]]
             data = data[MAP_WIDTH:]
 
-    # call before displaying, or else the screen will be blank
-    def update(self, character_x = None, character_y = None, mission_x = None, mission_y = None):
-        if (character_x == None) and (character_y == None) and (mission_x == None) and (mission_y == None):
-            return NO_PROBLEM
+        # draw entire map
         self.image.blit(self.background, (0, 0))
-        # blit all tiles to surface
-        # really shouldnt have to do this
-        # should be able to position markers after scaling
         show = pygame.Rect(0, 0, TILE_WIDTH, TILE_HEIGHT)
         clip = pygame.Rect(0, 0, TILE_WIDTH, TILE_HEIGHT)
         for x in xrange(MAP_HEIGHT):
@@ -75,15 +70,24 @@ class InGameMap:
                 show.y += TILE_WIDTH
             show.y = 0
             show.x += TILE_HEIGHT
-        self.image.blit(self.character_marker, (character_x * TILE_WIDTH, character_y * TILE_HEIGHT))
-        self.image.blit(self.mission_marker, (mission_x * TILE_WIDTH, mission_y * TILE_HEIGHT))
-        self.image = pygame.transform.scale(self.image, (SCREEN_WIDTH, SCREEN_HEIGHT))
+
+    # call before displaying, or screen will not contain markers
+    def update(self, character_x = None, character_y = None, mission_x = None, mission_y = None):
+        self.character_x = character_x
+        self.character_y = character_y
+        self.mission_x = mission_x
+        self.mission_y = mission_y
         return NO_PROBLEM
 
     def display(self, screen):
         if screen == None:
             return SURFACE_DOES_NOT_EXIST
-        screen.blit(self.image, (0, 0))
+        ship = self.image
+        if (self.character_x is not None) and (self.character_y is not None) and (self.mission_x is not None) and (self.mission_y is not None):
+            ship.blit(self.character_marker, (self.character_x * TILE_WIDTH, self.character_y * TILE_HEIGHT))
+            ship.blit(self.mission_marker, (self.mission_x * TILE_WIDTH, self.mission_y * TILE_HEIGHT))
+        ship = pygame.transform.scale(ship, (SCREEN_WIDTH, SCREEN_HEIGHT))
+        screen.blit(ship, (0, 0))
         return NO_PROBLEM
 
 if __name__=='__main__':
