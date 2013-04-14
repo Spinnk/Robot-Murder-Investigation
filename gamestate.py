@@ -47,6 +47,7 @@ PUZZLE_STATE = 7
 OPTIONS_MENU_STATE = 8
 INVENTORY_STATE = 9
 JOURNAL_STATE = 10
+MAP_STATE = 11
 
 #-------------------------------------------------------------------------------
 #---[ GameState Class ]---------------------------------------------------------
@@ -90,6 +91,11 @@ class GameState:
                 if self.state_id == JOURNAL_STATE:
                     return IN_GAME_STATE
                 return JOURNAL_STATE
+            # If map key is pressed
+            elif event.key == pygame.K_m:
+                if self.state_id == MAP_STATE:
+                    return IN_GAME_STATE
+                return MAP_STATE
             elif event.key == pygame.K_p:
                 return PUZZLE_STATE
             # If Escape is pressed

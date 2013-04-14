@@ -79,6 +79,7 @@ class InGameState (GameState):
 
         # The possible states that this state may change to
         self.state_changes = [INVENTORY_STATE,
+                              MAP_STATE,
                               JOURNAL_STATE,
                               OPTIONS_MENU_STATE,
                               PUZZLE_STATE]
@@ -162,4 +163,8 @@ class InGameState (GameState):
 
     def setship(self, ship):
         self.ship = ship
+
+    def getcharacterposition(self):
+        return self.user.getx(), self.user.gety()
+
 

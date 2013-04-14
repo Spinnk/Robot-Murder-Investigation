@@ -18,6 +18,7 @@
 # along with Sentience in Space.  If not, see <http://www.gnu.org/licenses/>.
 
 from gamestate import *
+from ingamemap import *
 
 #-------------------------------------------------------------------------------
 #---[ InventoryState Class ]----------------------------------------------------------
@@ -33,11 +34,14 @@ class InventoryState(GameState):
         self.dropped_items = []
         
         # The possible states that this state may change to
-        self.state_changes = [JOURNAL_STATE, OPTIONS_MENU_STATE, IN_GAME_STATE]
+        self.state_changes = [JOURNAL_STATE,
+                              MAP_STATE,
+                              OPTIONS_MENU_STATE,
+                              IN_GAME_STATE]
 
     ## ---[ update ]----------------------------------------------------------
     def update(self, event):
-        #self.inventory.update(self.keybindings)
+        self.inventory.update(self.keybindings)
         
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_TAB:
@@ -98,14 +102,17 @@ class JournalState(GameState):
         self.keybindings = keybindings
         
         # The possible states that this state may change to
-        self.state_changes = [INVENTORY_STATE, OPTIONS_MENU_STATE, IN_GAME_STATE]
+        self.state_changes = [INVENTORY_STATE,
+                              MAP_STATE,
+                              OPTIONS_MENU_STATE,
+                              IN_GAME_STATE]
 
     ## ---[ update ]----------------------------------------------------------
     def update(self, event):
         self.journal.update(self.keybindings)
         
         if event.type == pygame.KEYDOWN and event.key == pygame.K_TAB:
-            return INVENTORY_STATE
+            return MAP_STATE
 
         changed_state = self.checkstatechange(event)
         if changed_state in self.state_changes:
@@ -131,4 +138,48 @@ class JournalState(GameState):
 
 
 
+#-------------------------------------------------------------------------------
+#---[ MapState Class ]----------------------------------------------------------
+#-------------------------------------------------------------------------------
+## This class is used to handle the in-game map display
+#
+class MapState(GameState):
+    def __init__(self, screen, keybindings, state_id):
+        self.state_id = state_id
+        self.in_game_map = InGameMap()
+        self.screen = screen
+        self.keybindings = keybindings
+        
+        # The possible states that this state may change to
+        self.state_changes = [INVENTORY_STATE,
+                              JOURNAL_STATE,
+                              OPTIONS_MENU_STATE,
+                              IN_GAME_STATE]
 
+    ## ---[ update ]----------------------------------------------------------
+    def update(self, event):        
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_TAB:
+                return INVENTORY_STATE
+
+        changed_state = self.checkstatechange(event)
+        if changed_state in self.state_changes:
+            return changed_state
+        
+        return self.state_id
+
+    ## ---[ display ]----------------------------------------------------------
+    def display(self):
+        try:
+            self.in_game_map.display(self.screen)
+        except AttributeError:
+            print "Error: In-Game Map not set."
+            exit(1)
+
+
+    def setmarkers(self, character_x, character_y):
+        self.in_game_map.update(character_x, character_y, 10, 6)
+
+
+
+            

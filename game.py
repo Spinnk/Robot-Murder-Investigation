@@ -62,6 +62,7 @@ class Game:
         self.in_game_state = InGameState(screen, keybindings, IN_GAME_STATE)
         self.inventory_state = InventoryState(screen, keybindings, INVENTORY_STATE)
         self.journal_state = JournalState(screen, keybindings, JOURNAL_STATE)
+        self.map_state = MapState(screen, keybindings, MAP_STATE)
         self.save_game_state = SaveGameState(screen, SAVE_STATE)
         self.load_game_state = LoadGameState(screen, LOAD_STATE)
         self.puzzle_state = PuzzleState(screen, keybindings, PUZZLE_STATE)
@@ -109,6 +110,11 @@ class Game:
         elif new_state_id == JOURNAL_STATE:
             self.journal_state.setjournal( self.in_game_state.getjournal() )
             self.current_state = self.journal_state
+
+        elif new_state_id == MAP_STATE:
+            x, y = self.in_game_state.getcharacterposition()
+            self.map_state.setmarkers(x, y)
+            self.current_state = self.map_state        
 
         elif new_state_id == PUZZLE_STATE:
             print "Puzzle State!"
