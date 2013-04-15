@@ -17,6 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Sentience in Space.  If not, see <http://www.gnu.org/licenses/>.
 
+import copy
 
 from consts import *
 
@@ -24,7 +25,6 @@ import pygame
 
 class InGameMap:
     def __init__(self):
-        self.image = pygame.Surface((TILE_WIDTH * MAP_WIDTH, TILE_HEIGHT * MAP_HEIGHT))
         self.update()
 
         # open files that will not change
@@ -50,7 +50,7 @@ class InGameMap:
         self.mission_marker.set_colorkey(COLOR_KEY)
         self.mission_marker = self.mission_marker.convert()
 
-        # read in map
+        # read in map from file
         f = open(MAP_DEFAULT_DIR, 'rb')
         data = f.read()
         f.close()
@@ -58,18 +58,6 @@ class InGameMap:
         for x in xrange(MAP_HEIGHT):
             self.ship += [[ord(y) for y in data[:MAP_WIDTH]]]
             data = data[MAP_WIDTH:]
-
-        # draw entire map
-        self.image.blit(self.background, (0, 0))
-        show = pygame.Rect(0, 0, TILE_WIDTH, TILE_HEIGHT)
-        clip = pygame.Rect(0, 0, TILE_WIDTH, TILE_HEIGHT)
-        for x in xrange(MAP_HEIGHT):
-            for y in xrange(MAP_WIDTH):
-                clip.x = TILE_WIDTH * self.ship[x][y]
-                self.image.blit(self.tiles, show, clip)
-                show.y += TILE_WIDTH
-            show.y = 0
-            show.x += TILE_HEIGHT
 
     # call before displaying, or screen will not contain markers
     def update(self, character_x = None, character_y = None, mission_x = None, mission_y = None):
@@ -82,12 +70,27 @@ class InGameMap:
     def display(self, screen):
         if screen == None:
             return SURFACE_DOES_NOT_EXIST
-        ship = self.image
+        image = pygame.Surface((TILE_WIDTH * MAP_WIDTH, TILE_HEIGHT * MAP_HEIGHT))
+        if image == None:
+            return SURFACE_DOES_NOT_EXIST
+
+        # draw entire map
+        image.blit(self.background, (0, 0))
+        show = pygame.Rect(0, 0, TILE_WIDTH, TILE_HEIGHT)
+        clip = pygame.Rect(0, 0, TILE_WIDTH, TILE_HEIGHT)
+        for x in xrange(MAP_HEIGHT):
+            for y in xrange(MAP_WIDTH):
+                clip.x = TILE_WIDTH * self.ship[x][y]
+                image.blit(self.tiles, show, clip)
+                show.y += TILE_WIDTH
+            show.y = 0
+            show.x += TILE_HEIGHT
+
         if (self.character_x is not None) and (self.character_y is not None) and (self.mission_x is not None) and (self.mission_y is not None):
-            ship.blit(self.character_marker, (self.character_x * TILE_WIDTH, self.character_y * TILE_HEIGHT))
-            ship.blit(self.mission_marker, (self.mission_x * TILE_WIDTH, self.mission_y * TILE_HEIGHT))
-        ship = pygame.transform.scale(ship, (SCREEN_WIDTH, SCREEN_HEIGHT))
-        screen.blit(ship, (0, 0))
+            image.blit(self.character_marker, (self.character_x * TILE_WIDTH, self.character_y * TILE_HEIGHT))
+            image.blit(self.mission_marker, (self.mission_x * TILE_WIDTH, self.mission_y * TILE_HEIGHT))
+        image = pygame.transform.scale(image, (SCREEN_WIDTH, SCREEN_HEIGHT))
+        screen.blit(image, (0, 0))
         return NO_PROBLEM
 
 if __name__=='__main__':
@@ -101,6 +104,8 @@ if __name__=='__main__':
 
     test = InGameMap()
     test.update(0, 1, 10, 6)
+    test.display(screen)
+    pygame.display.flip()
 
     quit = False
     while not(quit):
@@ -108,7 +113,5 @@ if __name__=='__main__':
         for event in pygame.event.get():
             if event.type == pygame.QUIT: # exit when close window "X" is pressed
                 quit = True
-        test.display(screen)
-        pygame.display.flip()
 
     pygame.quit()
