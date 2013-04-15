@@ -32,7 +32,7 @@ class InventoryState(GameState):
         self.screen = screen
         self.keybindings = keybindings
         self.dropped_items = []
-        
+
         # The possible states that this state may change to
         self.state_changes = [JOURNAL_STATE,
                               MAP_STATE,
@@ -42,13 +42,13 @@ class InventoryState(GameState):
     ## ---[ update ]----------------------------------------------------------
     def update(self, event):
         self.inventory.update(self.keybindings)
-        
+
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_TAB:
                 return JOURNAL_STATE
             if event.key == pygame.K_SPACE:
                 self.removeitem()
-        
+
         changed_state = self.checkstatechange(event)
         if changed_state in self.state_changes:
             return changed_state
@@ -100,7 +100,7 @@ class JournalState(GameState):
         self.journal = None
         self.screen = screen
         self.keybindings = keybindings
-        
+
         # The possible states that this state may change to
         self.state_changes = [INVENTORY_STATE,
                               MAP_STATE,
@@ -110,7 +110,7 @@ class JournalState(GameState):
     ## ---[ update ]----------------------------------------------------------
     def update(self, event):
         self.journal.update(self.keybindings)
-        
+
         if event.type == pygame.KEYDOWN and event.key == pygame.K_TAB:
             return MAP_STATE
 
@@ -149,7 +149,7 @@ class MapState(GameState):
         self.in_game_map = InGameMap()
         self.screen = screen
         self.keybindings = keybindings
-        
+
         # The possible states that this state may change to
         self.state_changes = [INVENTORY_STATE,
                               JOURNAL_STATE,
@@ -157,7 +157,7 @@ class MapState(GameState):
                               IN_GAME_STATE]
 
     ## ---[ update ]----------------------------------------------------------
-    def update(self, event):        
+    def update(self, event):
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_TAB:
                 return INVENTORY_STATE
@@ -165,7 +165,7 @@ class MapState(GameState):
         changed_state = self.checkstatechange(event)
         if changed_state in self.state_changes:
             return changed_state
-        
+
         return self.state_id
 
     ## ---[ display ]----------------------------------------------------------
@@ -178,8 +178,8 @@ class MapState(GameState):
 
 
     def setmarkers(self, character_x, character_y):
-        self.in_game_map.update(character_x, character_y, 10, 6)
+        self.in_game_map.setmarkers(character_x, character_y, 10, 6)
 
 
 
-            
+

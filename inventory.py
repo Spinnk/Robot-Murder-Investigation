@@ -31,11 +31,11 @@ import pygame
 class Inventory:
     def __init__(self):
         self.items = [[[0, 0] for x in xrange(INVENTORY_X)] for y in xrange(INVENTORY_Y)]             # 2D list of (item #, count)
-        self.mode = 0               # 0 in items area; 1 in options area
-        self.option = 0             # which "option" button is selected. 0 is 0
         self.x = 0                  # cursor x coordinate
         self.y = 0                  # cursor y coordinate
 
+        self.mode = 0               # 0 in items area; 1 in options area
+        self.option = 0             # which "option" button is selected. 0 is use
 
         # load images and check to make sure they loaded properly
         self.background = pygame.image.load(INVENTORY_BACKGROUND_SHEET_DIR)
@@ -62,12 +62,7 @@ class Inventory:
         self.box.set_colorkey(COLOR_KEY)
         self.box = self.box.convert()
 
-        self.option_box = pygame.image.load(INVENTORY_BUTTONS_DIR)
-        if self.option_box == 0:
-            sys.exit(IMAGE_DOES_NOT_EXIST)
-        self.option_box.set_colorkey(COLOR_KEY)
-        self.option_box = self.option_box.convert()
-
+        self.font_options = pygame.font.Font(INVENTORY_FONT_DIR, INVENTORY_FONT_SIZE)
         self.font_description = pygame.font.Font(ITEM_FONT_DIR, ITEM_FONT_DESCRIPTION)
         self.font_count = pygame.font.Font(ITEM_FONT_DIR, ITEM_FONT_COUNT)
         self.font_name = pygame.font.Font(ITEM_FONT_DIR, ITEM_FONT_NAME)
@@ -152,6 +147,7 @@ class Inventory:
                 self.x += 1
             elif keystates[keybinding[KB_ENTER]]:
                 if self.items[self.y][self.x][0] != 0:
+                    self.option = 0
                     self.mode = 1
             # do this step a few times to clean up
             # values that are too large or small
@@ -170,14 +166,19 @@ class Inventory:
                     self.y = 6
         # cursor in buttons area
         elif self.mode == 1:
-            if keystates[keybinding[KB_LEFT]]:
+            if keystates[keybinding[KB_UP]]:
                 self.option -= 1
-            elif keystates[keybinding[KB_RIGHT]]:
+            elif keystates[keybinding[KB_DOWN]]:
                 self.option += 1
+            self.option %= len(INVENTORY_BUTTONS)
             if keystates[keybinding[KB_ENTER]]:
                 self.mode = 0
-                return self.removeitem()
-            self.option %= len(INVENTORY_BUTTONS)
+                # Use
+                if self.option == 0:
+                    return self.removeitem()
+                # Cancel
+                if self.option == 1:
+                    return None
 
         return NO_PROBLEM
 
@@ -205,12 +206,19 @@ class Inventory:
         show = pygame.Rect((ITEM_SMALL_WIDTH + 1)  * self.x + 1, (ITEM_SMALL_HEIGHT + 1) * self.y + 37, ITEM_SMALL_WIDTH, ITEM_SMALL_HEIGHT)
         screen.blit(self.box, show)
 
-        # if an item is selected for usage
-        if self.mode == 1:
-            screen.blit(self.option_box, INVENTORY_BUTTONS[self.option])
+        # display text
+        text_image = None
+        for i in xrange(len(INVENTORY_BUTTONS)):
+            # if an item is selected for usage
+            if (self.mode == 1) and (self.option == i):
+                text_image = self.font_options.render(INVENTORY_BUTTONS[i][1], INVENTORY_FONT_ANTIALIAS, INVENTORY_FONT_COLOR, INVENTORY_BACKGROUND_COLOR)
+            else:
+                text_image = self.font_options.render(INVENTORY_BUTTONS[i][1], INVENTORY_FONT_ANTIALIAS, INVENTORY_FONT_COLOR)
+            screen.blit(text_image, INVENTORY_BUTTONS[i][0])
 
+        # if there is an item
         if self.items[self.y][self.x] != [0, 0]:
-            # display selected item
+            # display larger version of selected item
             clip = pygame.Rect(ITEM_LARGE_WIDTH * self.items[self.y][self.x][0], 0, ITEM_LARGE_WIDTH, ITEM_LARGE_HEIGHT)
             screen.blit(self.large, ITEM_IMAGE_BOX, clip)
             text_image = self.font_name.render(ITEMS[self.items[self.y][self.x][0]][0], ITEM_FONT_ANTIALIAS, ITEM_FONT_COLOR)

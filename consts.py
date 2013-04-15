@@ -44,11 +44,12 @@ os.chdir(CWD)
 FPS = 60
 
 # Useful RGB Values
-WHITE = pygame.Color(0xff, 0xff, 0xff, 0xff)
-BLACK = pygame.Color(0x00, 0x00, 0x00, 0xff)
+WHITE =   pygame.Color(0xff, 0xff, 0xff, 0xff)
+BLACK =   pygame.Color(0x00, 0x00, 0x00, 0xff)
 HOTPINK = pygame.Color(0xff, 0x69, 0xb4, 0xff)
-YELLOW = pygame.Color(0xff, 0xff, 0x00, 0xff)
-CYAN = pygame.Color(0x00, 0xff, 0xff, 0xff)
+YELLOW =  pygame.Color(0xff, 0xff, 0x00, 0xff)
+CYAN =    pygame.Color(0x00, 0xff, 0xff, 0xff)
+BLUE =    pygame.Color(0x00, 0x00, 0xff, 0xff)
 
 COLOR_KEY = HOTPINK
 
@@ -131,8 +132,12 @@ PUZZLE_SUCCESS = 2
 INVENTORY_BACKGROUND_SHEET_DIR = os.path.join(ART_DIR, "inventory.png")
 INVENTORY_X = 8                             # spaces across
 INVENTORY_Y = 7                             # spaces down
-INVENTORY_BUTTONS_DIR = os.path.join(ART_DIR, "option box.png")
-INVENTORY_BUTTONS = [pygame.Rect(735, 566, 68, 38)] # location of buttons
+INVENTORY_BUTTONS = [(pygame.Rect(700, 500, 68, 38), "USE"), (pygame.Rect(700, 540, 68, 38), "CANCEL")] # location and text of buttons
+INVENTORY_FONT_DIR = os.path.join(CWD, "comic.ttf")
+INVENTORY_FONT_SIZE = 18
+INVENTORY_FONT_COLOR = BLACK
+INVENTORY_FONT_ANTIALIAS = True
+INVENTORY_BACKGROUND_COLOR = YELLOW
 
 # Items Info
 ITEM_SHEET_LARGE_DIR = os.path.join(ART_DIR, "large items.png")
