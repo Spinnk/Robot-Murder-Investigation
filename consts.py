@@ -32,9 +32,10 @@ GAME_NAME = "Sentience In Space"
 # Non-Image Directories
 CWD = os.path.split(os.path.abspath(__file__))[0]
 ART_DIR = os.path.join( CWD, "art" )
-KEYBINDINGS_DIR = os.path.join(CWD, "settings.config")
 SAVE_DIR = os.path.join(CWD, "saves")
-MUSIC_DIR = os.path.join(CWD, "music")
+SOUND_DIR = os.path.join(CWD, "sound")
+
+KEYBINDINGS_DIR = os.path.join(CWD, "settings.config")
 
 # Some quick scripting
 os.environ['SDL_VIDEO_CENTERED'] = '1'
@@ -171,7 +172,10 @@ ITEM_FONT_COLOR = BLACK
 ITEM_FONT_ANTIALIAS = True
 
 # Music Info
-MUSIC_FILES = []                                # list of music file names
+MUSIC_DIR = [os.path.join(SOUND_DIR, "tetris1.mid"),                                # list of music file names
+
+            ]
+MUSIC_VOLUME = 1.0
 
 # Journal Info
 JOURNAL_BACKGROUND_DIR = os.path.join(ART_DIR, "journal.png")
