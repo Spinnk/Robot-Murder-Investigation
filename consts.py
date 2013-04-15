@@ -143,7 +143,7 @@ ITEM_SHEET_SMALL_DIR = os.path.join(ART_DIR, "small items.png")
 ITEM_SMALL_WIDTH = 80                       # pixels
 ITEM_SMALL_HEIGHT = 80                      # pixels
 
-ITEM_BOX_DIR = os.path.join(ART_DIR, "box.png")        # box for highlighting selected item
+ITEM_BOX_DIR = os.path.join(ART_DIR, "item selected.png")        # box for highlighting selected item
 
 # Items List
 # Item Index = Type, Tile on sheet
