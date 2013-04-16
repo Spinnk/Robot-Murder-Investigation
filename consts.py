@@ -76,6 +76,8 @@ INCORRECT_DATA_FORMAT = 6
 INCORRECT_DATA_LENGTH = 7
 NO_SPACE_IN_INEVENTORY = 8
 NOT_FOUND = 9
+DIALOGUE_NOT_INITIALIZED = 10
+
 
 # Screen Stuff
 BACKGROUND_IMAGE_DIR = os.path.join( ART_DIR, "background 1.png" )
@@ -107,7 +109,7 @@ CHARACTER_SPRITE_SHEET_DIR = os.path.join( ART_DIR, "robot.png")
 CHARACTER_WIDTH = 80                        # pixels
 CHARACTER_HEIGHT = 160                      # pixels
 CHARACTER_FRAMES = 5
-CHARACTER_WALK_TIME = 550                   # milliseconds to cross 1 tile
+CHARACTER_WALK_TIME = 400                   # milliseconds to cross 1 tile
 CHARACTER_TPF = CHARACTER_WALK_TIME / CHARACTER_FRAMES
 
 # NPC Info
