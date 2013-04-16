@@ -1,2 +1,5 @@
-To Do:
--- Create PuzzleState class
+Meeting Topics:
+1) NPC Dialogue
+2) Testing Documents
+3) Useable Items
+4) INTERACTIVE MAP

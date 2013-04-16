@@ -166,6 +166,8 @@ class MapState(GameState):
         if changed_state in self.state_changes:
             return changed_state
 
+        #self.in_game_map.update()
+
         return self.state_id
 
     ## ---[ display ]----------------------------------------------------------
@@ -179,6 +181,7 @@ class MapState(GameState):
 
     def setmarkers(self, character_x, character_y):
         self.in_game_map.setmarkers(character_x, character_y, 10, 6)
+        self.in_game_map.update()
 
 
 
