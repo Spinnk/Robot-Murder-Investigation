@@ -108,6 +108,7 @@ CHARACTER_WIDTH = 80                        # pixels
 CHARACTER_HEIGHT = 160                      # pixels
 CHARACTER_FRAMES = 5
 CHARACTER_WALK_TIME = 750                   # milliseconds to cross 1 tile
+CHARACTER_TPF = CHARACTER_WALK_TIME / CHARACTER_FRAMES
 
 # NPC Info
 NPCS = ["puppy", "panda", "koala", "spock"]
