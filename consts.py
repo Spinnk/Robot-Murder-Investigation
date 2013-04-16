@@ -39,7 +39,7 @@ KEYBINDINGS_DIR = os.path.join(CWD, "settings.config")
 
 # Some quick scripting
 os.environ['SDL_VIDEO_CENTERED'] = '1'
-os.chdir(CWD)
+os.chdir(CWD)           # unnecessary
 
 # Framerate
 FPS = 60
@@ -107,7 +107,7 @@ CHARACTER_SPRITE_SHEET_DIR = os.path.join( ART_DIR, "robot.png")
 CHARACTER_WIDTH = 80                        # pixels
 CHARACTER_HEIGHT = 160                      # pixels
 CHARACTER_FRAMES = 5
-CHARACTER_WALK_TIME = 750                   # milliseconds to cross 1 tile
+CHARACTER_WALK_TIME = 550                   # milliseconds to cross 1 tile
 CHARACTER_TPF = CHARACTER_WALK_TIME / CHARACTER_FRAMES
 
 # NPC Info

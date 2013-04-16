@@ -36,7 +36,6 @@ class Character:
         # remember sprite will be standing on tile y+1
         self.spawn()
 
-        self.frame = 0
         self.time = pygame.time.get_ticks()
 
         self.sprite = pygame.image.load(CHARACTER_SPRITE_SHEET_DIR)
@@ -61,7 +60,8 @@ class Character:
         self.x = 0                                   # tile position on map
         self.y = 0                                   # tile position on map
         self.clip = 0                                # which image to clip from sprite sheet; also which direction player is facing
-        self.moved = False
+        self.frame = 0
+        self.moving = False
 
 #    def interact(self):
 #        pass
@@ -73,7 +73,7 @@ class Character:
         self.x = ord(data[0])
         self.y = ord(data[1])
         self.clip = ord(data[2])
-        self.moved = False
+        self.moving = False
         return NO_PROBLEM
 
     # save character to a string of specified format
@@ -90,32 +90,32 @@ class Character:
     # check for movement
     def update(self, keybindings): # add argument for collision detection?
         # if not already moving
-        if not self.moved:
+        if not self.moving:
             keystates = pygame.key.get_pressed()
             if keystates[keybindings[KB_DOWN]]:
                 self.clip = 0
-                self.moved = True
+                self.moving = True
                 if ((self.y + 3) >= MAP_HEIGHT):
                     self.y = MAP_HEIGHT - 3
-                    self.moved = False
+                    self.moving = False
             elif keystates[keybindings[KB_RIGHT]]:
                 self.clip = 1
-                self.moved = True
+                self.moving = True
                 if ((self.x + 1) >= MAP_WIDTH):
                     self.x = MAP_WIDTH - 1
-                    self.moved = False
+                    self.moving = False
             elif keystates[keybindings[KB_UP]]:
                 self.clip = 2
-                self.moved = True
+                self.moving = True
                 if ((self.y - 1) < 0):
                     self.y = 0
-                    self.moved = False
+                    self.moving = False
             elif keystates[keybindings[KB_LEFT]]:
                 self.clip = 3
-                self.moved = True
+                self.moving = True
                 if ((self.x - 1) < 0):
                     self.x = 0
-                    self.moved = False
+                    self.moving = False
 
     # display character
     def display(self, screen, camera):
@@ -123,7 +123,7 @@ class Character:
             return SURFACE_DOES_NOT_EXIST
 
         # if moving
-        if self.moved:
+        if self.moving:
             # calculate and display stuff
             dx = TILE_WIDTH / CHARACTER_FRAMES
             dy = TILE_HEIGHT / CHARACTER_FRAMES
@@ -150,7 +150,7 @@ class Character:
 
                 self.frame += 1
                 if self.frame == CHARACTER_FRAMES:
-                    self.moved = False
+                    self.moving = False
                     if self.clip == 0: # down
                         self.y += 1
                     if self.clip == 1: # right
@@ -163,7 +163,7 @@ class Character:
 
             screen.blit(self.sprite, show, clip)
 
-        if not self.moved:
+        if not self.moving:
             show = pygame.Rect((self.x - camera.x) * TILE_WIDTH, (self.y - camera.y) * TILE_HEIGHT, 0, 0)
             clip = pygame.Rect(0, self.clip * CHARACTER_HEIGHT, CHARACTER_WIDTH, CHARACTER_HEIGHT)
             screen.blit(self.sprite, show, clip)
