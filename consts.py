@@ -106,6 +106,8 @@ TILE_INFO = [0,                             # index = tile type, clip; value is 
 CHARACTER_SPRITE_SHEET_DIR = os.path.join( ART_DIR, "robot.png")
 CHARACTER_WIDTH = 80                        # pixels
 CHARACTER_HEIGHT = 160                      # pixels
+CHARACTER_FRAMES = 5
+CHARACTER_WALK_TIME = 750                   # milliseconds to cross 1 tile
 
 # NPC Info
 NPCS = ["puppy", "panda", "koala", "spock"]

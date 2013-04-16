@@ -33,12 +33,8 @@ from keybinding import *
 class Character:
     # or instead of using file name, open all images in main, and clip with display()
     def __init__(self):   # taking in string to save memory + faster since surfaces are passed by value, not reference
-        # remember sprite will be standing on tile x+1
-        self.x = 0                                   # tile position on map
-        self.y = 0                                   # tile position on map
-        self.clip = 0                                # which image to clip from sprite sheet; also which direction player is facing
-        self.frame = 0                               # use for animations
-        self.moved = False
+        # remember sprite will be standing on tile y+1
+        self.spawn()
 
         self.sprite = pygame.image.load(CHARACTER_SPRITE_SHEET_DIR)
         if self.sprite == None:
@@ -57,25 +53,23 @@ class Character:
     def gety(self):
         return self.y
 
-    def save(self):
-        pass
-
     # set an initial character location
     def spawn(self):
-        self.x = 0
-        self.y = 0
+        self.x = 0                                   # tile position on map
+        self.y = 0                                   # tile position on map
+        self.clip = 0                                # which image to clip from sprite sheet; also which direction player is facing
+        self.moved = False
 
 #    def interact(self):
 #        pass
 
     # load from save string
     def load(self, data):
-        if len(data) != 4:
+        if len(data) != 3:
             return INCORRECT_DATA_LENGTH
         self.x = ord(data[0])
         self.y = ord(data[1])
         self.clip = ord(data[2])
-        self.frame = ord(data[3])
         self.moved = False
         return NO_PROBLEM
 
@@ -83,54 +77,84 @@ class Character:
     def save(self):
         '''
         Format:
-            x | y | clip | frame
+            x | y | clip
             x     - 1 byte
             y     - 1 byte
             clip  - 1 byte
-            frame - 1 byte
         '''
-        return chr(self.x) + chr(self.y) + chr(self.clip) + chr(self.frame)
+        return chr(self.x) + chr(self.y) + chr(self.clip)
 
     # check for movement
     def update(self, keybindings): # add argument for collision detection?
         keystates = pygame.key.get_pressed()
-        self.moved = False
-        if keystates[keybindings[KB_UP]]:
-            self.y -= 1
-            if (self.y < 0):
-                self.y = 0
-            self.moved = True
-            self.clip = 2
-        elif keystates[keybindings[KB_LEFT]]:
-            self.x -= 1
-            if (self.x < 0):
-                self.x = 0
-            self.moved = True
-            self.clip = 3
-        elif keystates[keybindings[KB_DOWN]]:
-            self.y += 1
-            if (self.y + 2 >= MAP_HEIGHT):
-                self.y = MAP_HEIGHT - 3
-            self.moved = True
+        if keystates[keybindings[KB_DOWN]]:
             self.clip = 0
-        elif keystates[keybindings[KB_RIGHT]]:
-            self.x += 1
-            if (self.x >= MAP_WIDTH):
-                self.x = MAP_WIDTH - 1
             self.moved = True
+            if ((self.y + 3) >= MAP_HEIGHT):
+                self.y = MAP_HEIGHT - 3
+                self.moved = False
+        elif keystates[keybindings[KB_RIGHT]]:
             self.clip = 1
+            self.moved = True
+            if ((self.x + 1) >= MAP_WIDTH):
+                self.x = MAP_WIDTH - 1
+                self.moved = False
+        elif keystates[keybindings[KB_UP]]:
+            self.clip = 2
+            self.moved = True
+            if ((self.y - 1) < 0):
+                self.y = 0
+                self.moved = False
+        elif keystates[keybindings[KB_LEFT]]:
+            self.clip = 3
+            self.moved = True
+            if ((self.x - 1) < 0):
+                self.x = 0
+                self.moved = False
 
     # display character
     def display(self, screen, camera):
         if screen == None:
             return SURFACE_DOES_NOT_EXIST
-        show = pygame.Rect((self.x - camera.x) * TILE_WIDTH, (self.y - camera.y) * TILE_HEIGHT, 0, 0)
+
+        # if moved
         if self.moved:
             self.moved = False
-            self.frame += 1
-            self.frame %= 5
-        clip = pygame.Rect(self.frame * CHARACTER_WIDTH, self.clip * CHARACTER_HEIGHT, CHARACTER_WIDTH, CHARACTER_HEIGHT)
+            original = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+            original.blit(screen, (0, 0))
+            dx = TILE_WIDTH / CHARACTER_FRAMES
+            dy = TILE_HEIGHT / CHARACTER_FRAMES
+            show = pygame.Rect((self.x - camera.x) * TILE_WIDTH, (self.y - camera.y) * TILE_HEIGHT, 0, 0)
+            clip = pygame.Rect(0, self.clip * CHARACTER_HEIGHT, CHARACTER_WIDTH, CHARACTER_HEIGHT)
+            for frame in xrange(CHARACTER_FRAMES):
+                if self.clip == 0: # down
+                    show.y += dy
+                if self.clip == 1: # right
+                    show.x += dx
+                if self.clip == 2: # up
+                    show.y -= dy
+                if self.clip == 3: # left
+                    show.x -= dx
+                clip.x += CHARACTER_WIDTH
+                screen.blit(original, (0, 0))
+                screen.blit(self.sprite, show, clip)
+                pygame.time.delay(CHARACTER_WALK_TIME / CHARACTER_FRAMES)
+                pygame.display.flip()
+
+            if self.clip == 0: # down
+                self.y += 1
+            if self.clip == 1: # right
+                self.x += 1
+            if self.clip == 2: # up
+                self.y -= 1
+            if self.clip == 3: # left
+                self.x -= 1
+
+        # display at destination
+        show = pygame.Rect((self.x - camera.x) * TILE_WIDTH, (self.y - camera.y) * TILE_HEIGHT, 0, 0)
+        clip = pygame.Rect(0, self.clip * CHARACTER_HEIGHT, CHARACTER_WIDTH, CHARACTER_HEIGHT)
         screen.blit(self.sprite, show, clip)
+
         return NO_PROBLEM
 
 if __name__=='__main__':
@@ -152,8 +176,8 @@ if __name__=='__main__':
         for event in pygame.event.get():
             if event.type == pygame.QUIT: # exit when close window "X" is pressed
                 quit = True
+            test.update(keybindings)
         screen.fill(WHITE)
-        test.update(keybindings)
         test.display(screen, pygame.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT))
         pygame.display.flip()
 

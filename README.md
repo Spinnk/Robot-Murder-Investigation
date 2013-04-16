@@ -11,12 +11,11 @@ A save file will consist of concatenations of save data in the following order:
 
     NPC_count will be a 2 byte big-endian representation of how many NPCs are in the save
 
-    Character Format (4 bytes):
-        x | y | clip | frame
+    Character Format (3 bytes):
+        x | y | clip
         x     - 1 byte
         y     - 1 byte
         clip  - 1 byte
-        frame - 1 byte
 
     Inventory Format (2 bytes * INVENTORY_X * INVENTORY_Y):
         item | count
