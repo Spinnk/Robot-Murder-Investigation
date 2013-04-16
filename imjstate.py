@@ -166,8 +166,6 @@ class MapState(GameState):
         if changed_state in self.state_changes:
             return changed_state
 
-        #self.in_game_map.update()
-
         return self.state_id
 
     ## ---[ display ]----------------------------------------------------------

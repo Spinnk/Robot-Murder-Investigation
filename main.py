@@ -53,8 +53,11 @@ def main():
 
     # #####################
 
-    # set key repeat to 100 ms
+    # Set key repeat to 100 ms
     pygame.key.set_repeat(100, 100)
+
+    # Turn off mouse events to reduce overhead
+    pygame.event.set_blocked(pygame.MOUSEMOTION)
 
     while not(quit):
         # single key presses
