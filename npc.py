@@ -38,12 +38,12 @@ class NPC:
         self.x = 0
         self.y = 0
         self.clip = 0           # which image to clip from sprite sheet; also which direction player is facing
-        self.frame = 0          # which frame to show
-        self.moved = False
 
         self.count = 0          # Count the number of times update was called
                                 # to limit updates per second
-        self.say = 0            # dialogue index; 0 = nothing
+        self.mode = 0           # 0 = not interacting, 1 =
+        self.say = 0            # dialogue index;
+        self.sayindex = -1
         self.font = pygame.font.Font(NPC_FONT_DIR, NPC_FONT_SIZE)
 
     # Accessors and Modifiers
@@ -83,9 +83,10 @@ class NPC:
         self.x = x
         self.y = y
 
-    # index of dialogue
-    def setdialogue(d):
+    # start dialogue
+    def setdialogue(self, inventory, d):
         self.say = d
+        self.sayindex = 0
 
     # load from save string
     def load(self, data):
@@ -120,41 +121,16 @@ class NPC:
     # it will need to be changed if some NPCs can only
     # be in certain areas
     def update(self, grid):
-        # Limit updates to once every 15 calls
-        self.count += 1
-        if self.count == 15:
-            self.count = 0
-        if self.count != 0:
-            return
+        pass
+        # if talking
+#        if self.say:
 
-        direction = random.randint(0, 3)
-        if direction == 0:
-            self.x += 1
-        if direction == 1:
-            self.x -= 1
-        if direction == 2:
-            self.y += 1
-        if direction == 3:
-            self.y -= 1
-        if self.x < 0:
-            self.x = 0
-        if self.x >= MAP_WIDTH:
-            self.x = MAP_WIDTH - 1
-        if self.y < 0:
-            self.y = 0
-        if self.y >= MAP_HEIGHT:
-            self.y = MAP_HEIGHT - 1
 
     # display NPC
     def display(self, screen, camera):
         if screen == None:
             return SURFACE_DOES_NOT_EXIST
         show = pygame.Rect((self.x - camera.x) * TILE_WIDTH, (self.y - camera.y) * TILE_HEIGHT, 0, 0)
-#        if self.moved:
-#            self.moved = False
-#            self.frame += 1
-#            self.frame %= 5
-#        clip = pygame.Rect(self.frame * CHARACTER_WIDTH, self.clip * CHARACTER_HEIGHT, CHARACTER_WIDTH, CHARACTER_HEIGHT)
         clip = pygame.Rect(self.clip, 0, NPC_WIDTH, NPC_HEIGHT)
         screen.blit(self.sprite, show, clip)
 
@@ -179,9 +155,12 @@ if __name__=='__main__':
     keybindings = default_keybindings()
     camera = pygame.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
 
-    test = [NPC() for x in xrange(4)]
-    test[0].settype(0); test[1].settype(1)
-    test[2].settype(2); test[3].settype(3)
+    test = [NPC() for x in xrange(1)]
+    test[0].settype(0); #test[1].settype(1)
+    #test[2].settype(2); test[3].settype(3)
+
+    for x in xrange(len(test)):
+        test[x].setdialogue(1)
 
     quit = False
     while not(quit):
@@ -210,7 +189,7 @@ if __name__=='__main__':
 
         screen.fill(WHITE)
         for npc in test:
-            npc.update(None)
+#            npc.update(None)
             npc.display(screen, camera)
 
         pygame.display.flip()
