@@ -45,15 +45,6 @@ class InGameState (GameState):
         self.tile_sheet.set_colorkey(COLOR_KEY)
         self.tile_sheet = self.tile_sheet.convert()
 
-        self.npc_sheets = [pygame.image.load(npc_file) for npc_file in NPC_SHEETS_DIR]
-        for sheet in self.npc_sheets:
-            if sheet == None:
-                sys.exit(IMAGE_DOES_NOT_EXIST)
-        for sheet in self.npc_sheets:
-            sheet.set_colorkey(COLOR_KEY)
-        for i in xrange(len(self.npc_sheets)):
-            self.npc_sheets[i] = self.npc_sheets[i].convert()
-
         # set system stuff
         self.screen = screen
         self.keybindings = keybindings
@@ -88,8 +79,13 @@ class InGameState (GameState):
     def update(self, event):
         if self.checkstatechange(event) in self.state_changes:
             return self.checkstatechange(event)
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-            self.removeitem()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                self.removeitem()
+            # Attempt to talk to a nearby NPC if "enter" key is pressed
+            elif event.key == self.keybindings[KB_ENTER]:
+                self.attempt_dialogue()
+                
         self.user.update(self.keybindings)
         return IN_GAME_STATE
 
@@ -111,7 +107,6 @@ class InGameState (GameState):
         self.ship.display(self.screen, self.camera)
         self.user.display(self.screen, self.camera)
         for npc in self.npcs:
-            npc.update( None )
             npc.display(self.screen, self.camera)
 
     ## ---[ load ]------------------------------------------------------------
@@ -167,4 +162,39 @@ class InGameState (GameState):
     def getcharacterposition(self):
         return self.user.getx(), self.user.gety()
 
+    # Find if there is a nearby NPC,
+    # if there is, attempt to talk to it
+    def attempt_dialogue(self):
+        x, y = self.user.getx(), self.user.gety()
+        for npc in self.npcs:
+            if abs(npc.getx() - x) == 1 and abs(npc.gety() - y) == 1:
+                print "You're trying to talk to NPC " + str(npc) + "! and failing!"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
 
