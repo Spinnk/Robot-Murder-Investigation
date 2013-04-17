@@ -77,7 +77,7 @@ INCORRECT_DATA_LENGTH = 7
 NO_SPACE_IN_INEVENTORY = 8
 NOT_FOUND = 9
 DIALOGUE_NOT_INITIALIZED = 10
-
+NOTHING_DONE = 11
 
 # Screen Stuff
 BACKGROUND_IMAGE_DIR = os.path.join( ART_DIR, "background 1.png" )
@@ -138,7 +138,7 @@ PUZZLE_SUCCESS = 2
 INVENTORY_BACKGROUND_SHEET_DIR = os.path.join(ART_DIR, "inventory.png")
 INVENTORY_X = 8                             # spaces across
 INVENTORY_Y = 7                             # spaces down
-INVENTORY_BUTTONS = [(pygame.Rect(700, 500, 68, 38), "USE"), (pygame.Rect(700, 540, 68, 38), "CANCEL")] # location and text of buttons
+INVENTORY_BUTTON = pygame.Rect(700, 500, 100, 100) # location and text of buttons
 INVENTORY_FONT_DIR = os.path.join(CWD, "comic.ttf")
 INVENTORY_FONT_SIZE = 18
 INVENTORY_FONT_COLOR = BLACK
@@ -156,14 +156,17 @@ ITEM_SMALL_HEIGHT = 80                      # pixels
 
 ITEM_BOX_DIR = os.path.join(ART_DIR, "item selected.png")        # box for highlighting selected item
 
+ITEM_OPTIONS = ["Cancel", "Drop", "Read", "Use"]
+
 # Items List
-# Item Index = Type, Tile on sheet
-# Item Name = first value
-# item Descirption = second value; store in multiple strings to display nicely
-ITEMS = [   ["", ""], # Item 0 is Null Item
-            ["Item 1", ["Item 1 Description", "Line 2", "Line 3"]],
-            ["Item 2", ["Item 2 Description"]],
-        	["Item 3", ["Item 3 Description", "Line 2"]]
+# Index (Item type):
+#       0 - Item Name
+#       1 - Description (store in multiple strings)
+#       2 - Inventory Buttons ("Cancel" must always be availible)
+ITEMS = [   ["", [""], []], # Item 0 is Null Item
+            ["Book", ["Read a book", "Read a book", "Read a motherfucking book"], ["Cancel", "Drop", "Read"]],
+            ["Not Book", ["Not a book"], ["Cancel", "Drop", "Use"]],
+        	["Not a book either", ["Not a book", "Still not a book"], ["Cancel", "Drop", "Use"]]
         ]
 
 ITEM_IMAGE_BOX = pygame.Rect(666, 37, 100, 100)        # location of items when displayed on screen; change as necessary

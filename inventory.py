@@ -30,8 +30,7 @@ import pygame
 
 class Inventory:
     def __init__(self):
-        self.items = [[[0, 0] for x in xrange(INVENTORY_X)] for y in xrange(INVENTORY_Y)]             # 2D list of (item #, count)
-        self.x = 0                  # cursor x coordinate
+        self.items = [[[0, 0, 0] for x in xrange(INVENTORY_X)] for y in xrange(INVENTORY_Y)]             # 2D list of [item #, count, special]; special = 0 for none; 1 for not read; 2 for read       self.x = 0                  # cursor x coordinate
         self.y = 0                  # cursor y coordinate
 
         self.mode = 0               # 0 in items area; 1 in options area
@@ -68,18 +67,17 @@ class Inventory:
         self.font_name = pygame.font.Font(ITEM_FONT_DIR, ITEM_FONT_NAME)
 
     # add item to inventory
-    def additem(self, item):# item is an integer
+    def additem(self, item, special = 0):# item is an integer
         found = False
         empty_x = INVENTORY_X
         empty_y = INVENTORY_Y
         for i in xrange(INVENTORY_Y):
             for j in xrange(INVENTORY_X):
                 # find empty space if item is new
-                if self.items[i][j] == [0, 0]:
+                if self.items[i][j][0] == 0:
                     if (i * INVENTORY_X + j) < (empty_y * INVENTORY_X + empty_x):
                         empty_y = i
                         empty_x = j
-
                 # if item is found
                 if self.items[i][j][0] == item:
                     found = True
@@ -92,7 +90,7 @@ class Inventory:
         if not found:
             if (empty_x == INVENTORY_X) and (empty_y == INVENTORY_Y):
                 return NO_SPACE_IN_INEVENTORY
-            self.items[empty_y][empty_x] = [item, 1]
+            self.items[empty_y][empty_x] = [item, 1, special]
         return NO_PROBLEM
 
     # remove item at [x, y]
@@ -100,36 +98,37 @@ class Inventory:
         out = self.items[self.y][self.x][0]
         self.items[self.y][self.x][1] -= 1
         if self.items[self.y][self.x][1] <= 0:
-            self.items[self.y][self.x] = [0, 0]
+            self.items[self.y][self.x] = [0, 0, False]
         if out == 0:
             return None
         return out
 
     # load inventory from string
     def load(self, data):
-        if len(data) & 1: # odd number of characters
+        if not (len(data) % 3): # not a multiple of three
             return INCORRECT_DATA_FORMAT
-        if len(data) != (INVENTORY_X * INVENTORY_Y * 2):
+        if len(data) != (INVENTORY_X * INVENTORY_Y * 3):
             return INCORRECT_DATA_LENGTH
 
         for i in xrange(INVENTORY_Y):
             for j in xrange(INVENTORY_X):
                 index = i * INVENTORY_X + j
-                self.items[i][j] = [ord(data[index * 2]), ord(data[index * 2 + 1])]
+                self.items[i][j] = [ord(data[index * 3]), ord(data[index * 3 + 1]), ord[data[index * 3 + 2]]]
         return NO_PROBLEM
 
     # save inventory into a string of the specified format
     def save(self):
         '''
         Format:
-            item | count | item | count | ...
+            item | count | special | item | count | special | ...
             item  - 1 byte
             count - 1 byte
+            special  - 1 byte
         '''
         out = ''
         for row in self.items:
-            for item, count in row:
-                out += chr(item) + chr(count)
+            for item, count, special in row:
+                out += chr(item) + chr(count) + chr(special)
         return out
 
     # update location of "cursor"
@@ -146,40 +145,53 @@ class Inventory:
             elif keystates[keybinding[KB_RIGHT]]:
                 self.x += 1
             elif keystates[keybinding[KB_ENTER]]:
+                # if there is an item at that spot
                 if self.items[self.y][self.x][0] != 0:
                     self.option = 0
                     self.mode = 1
             # do this step a few times to clean up
             # values that are too large or small
             for i in xrange(2):
-                if self.x > 7:
+                if self.x > (INVENTORY_X - 1):
                     self.x = 0
                     self.y += 1
                 if self.x < 0:
-                    self.x = 7
+                    self.x = INVENTORY_X - 1
                     self.y -= 1
-                if self.y > 6:
+                if self.y > (INVENTORY_Y - 1):
                     self.x += 1
                     self.y = 0
                 if self.y < 0:
                     self.x -= 1
-                    self.y = 6
+                    self.y = INVENTORY_Y - 1
         # cursor in buttons area
         elif self.mode == 1:
             if keystates[keybinding[KB_UP]]:
                 self.option -= 1
             elif keystates[keybinding[KB_DOWN]]:
                 self.option += 1
-            self.option %= len(INVENTORY_BUTTONS)
-            if keystates[keybinding[KB_ENTER]]:
+            if not len(ITEMS[self.items[self.y][self.x][0]][2]):
                 self.mode = 0
-                # Use
-                if self.option == 0:
-                    return self.removeitem()
+                return NO_PROBLEM
+            self.option %= len(ITEMS[self.items[self.y][self.x][0]][2])
+            if keystates[keybinding[KB_ENTER]]:
                 # Cancel
-                if self.option == 1:
+                if ITEMS[self.items[self.y][self.x][0]][2][self.option] == ITEM_OPTIONS[0]:
+                    self.mode = 0
                     return None
-
+                # Drop
+                elif ITEMS[self.items[self.y][self.x][0]][2][self.option] == ITEM_OPTIONS[1]:
+                    self.mode = 0
+                    return self.removeitem()
+                # Read
+                elif ITEMS[self.items[self.y][self.x][0]][2][self.option] == ITEM_OPTIONS[2]:
+                    self.items[self.y][self.x][2] = 2
+                    return NO_PROBLEM
+                # Use
+                elif ITEMS[self.items[self.y][self.x][0]][2][self.option] == ITEM_OPTIONS[3]:
+                    return self.removeitem()
+                else:
+                    return NOTHING_DONE
         return NO_PROBLEM
 
     # display inventory
@@ -193,7 +205,7 @@ class Inventory:
         dy = ITEM_SMALL_HEIGHT - self.font_count.size("")[1]
         for i in xrange(INVENTORY_Y):
             for j in xrange(INVENTORY_X):
-                if self.items[i][j] != [0, 0]:
+                if self.items[i][j][0] != 0:
                     clip = pygame.Rect(ITEM_SMALL_WIDTH * self.items[i][j][0], 0, ITEM_SMALL_WIDTH, ITEM_SMALL_HEIGHT)
                     show = pygame.Rect((ITEM_SMALL_WIDTH + 1) * j + 1, (ITEM_SMALL_HEIGHT + 1) * i + 37, ITEM_SMALL_WIDTH, ITEM_SMALL_HEIGHT)
                     screen.blit(self.small, show, clip)
@@ -206,18 +218,22 @@ class Inventory:
         show = pygame.Rect((ITEM_SMALL_WIDTH + 1)  * self.x + 1, (ITEM_SMALL_HEIGHT + 1) * self.y + 37, ITEM_SMALL_WIDTH, ITEM_SMALL_HEIGHT)
         screen.blit(self.box, show)
 
-        # display text
+        # display buttons
         text_image = None
-        for i in xrange(len(INVENTORY_BUTTONS)):
+
+        show = copy.deepcopy(INVENTORY_BUTTON)
+        dy = self.font_options.size("")[1]
+        for i in xrange(len(ITEMS[self.items[self.y][self.x][0]][2])):
             # if an item is selected for usage
             if (self.mode == 1) and (self.option == i):
-                text_image = self.font_options.render(INVENTORY_BUTTONS[i][1], INVENTORY_FONT_ANTIALIAS, INVENTORY_FONT_COLOR, INVENTORY_BACKGROUND_COLOR)
+                text_image = self.font_options.render(ITEMS[self.items[self.y][self.x][0]][2][i], INVENTORY_FONT_ANTIALIAS, INVENTORY_FONT_COLOR, INVENTORY_BACKGROUND_COLOR)
             else:
-                text_image = self.font_options.render(INVENTORY_BUTTONS[i][1], INVENTORY_FONT_ANTIALIAS, INVENTORY_FONT_COLOR)
-            screen.blit(text_image, INVENTORY_BUTTONS[i][0])
+                text_image = self.font_options.render(ITEMS[self.items[self.y][self.x][0]][2][i], INVENTORY_FONT_ANTIALIAS, INVENTORY_FONT_COLOR)
+            screen.blit(text_image, show)
+            show.y += dy
 
         # if there is an item
-        if self.items[self.y][self.x] != [0, 0]:
+        if self.items[self.y][self.x][0] != 0:
             # display larger version of selected item
             clip = pygame.Rect(ITEM_LARGE_WIDTH * self.items[self.y][self.x][0], 0, ITEM_LARGE_WIDTH, ITEM_LARGE_HEIGHT)
             screen.blit(self.large, ITEM_IMAGE_BOX, clip)
@@ -226,10 +242,11 @@ class Inventory:
 
             show = copy.deepcopy(ITEM_DESCRIPTION_BOX)
             dy = self.font_description.size("")[1]
-            for desc in ITEMS[self.items[self.y][self.x][0]][1]:
-                text_image = self.font_description.render(desc, ITEM_FONT_ANTIALIAS, ITEM_FONT_COLOR)
-                screen.blit(text_image, show)
-                show.y += dy
+            if self.items[self.y][self.x][2] != 1:
+                for desc in ITEMS[self.items[self.y][self.x][0]][1]:
+                    text_image = self.font_description.render(desc, ITEM_FONT_ANTIALIAS, ITEM_FONT_COLOR)
+                    screen.blit(text_image, show)
+                    show.y += dy
 
         return NO_PROBLEM
 
@@ -247,7 +264,7 @@ if __name__=='__main__':
     test = Inventory()
 
     # adda a bunch of items
-    test.additem(1); test.additem(1); test.additem(1); test.additem(1)
+    test.additem(1, 1)      # book
     test.additem(2)
     test.additem(3); test.additem(3); test.additem(3)
 
