@@ -29,7 +29,6 @@ import random
 import pygame
 
 from consts import *
-from keybinding import *
 
 class NPC:
     def __init__(self):
@@ -122,18 +121,21 @@ class NPC:
     # be in certain areas
     def update(self, grid):
         pass
-        # if talking
-#        if self.say:
 
 
     # display NPC
     def display(self, screen, camera):
         if screen == None:
             return SURFACE_DOES_NOT_EXIST
+        # if the NPC is out of camera focus
+        if (self.x < camera.x) or (camera.x < self.x) or (self.y < camera.y) or (camera.y < self.y):
+            return NOTHING_DONE
+
         show = pygame.Rect((self.x - camera.x) * TILE_WIDTH, (self.y - camera.y) * TILE_HEIGHT, 0, 0)
         clip = pygame.Rect(self.clip, 0, NPC_WIDTH, NPC_HEIGHT)
         screen.blit(self.sprite, show, clip)
 
+        # if the NPC is talking
         if self.say:
             show = copy.deepcopy(NPC_TEXT_BOX)
             show.y += 10
@@ -152,15 +154,16 @@ if __name__=='__main__':
         sys.exit(SCREEN_DOES_NOT_EXIST)
 
     pygame.display.set_caption("Character Demo")
-    keybindings = default_keybindings()
     camera = pygame.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
 
+    # create NPCS
     test = [NPC() for x in xrange(1)]
     test[0].settype(0); #test[1].settype(1)
     #test[2].settype(2); test[3].settype(3)
 
-    for x in xrange(len(test)):
-        test[x].setdialogue(1)
+    # set dialogue for all of them
+    #for x in xrange(len(test)):
+    #    test[x].setdialogue(1)
 
     quit = False
     while not(quit):
@@ -168,16 +171,15 @@ if __name__=='__main__':
         for event in pygame.event.get():
             if event.type == pygame.QUIT: # exit when close window "X" is pressed
                 quit = True
-
-        keystates = pygame.key.get_pressed()
-        if keystates[keybindings[KB_UP]]:
-            camera.y -= 1
-        elif keystates[keybindings[KB_LEFT]]:
-            camera.x -= 1
-        elif keystates[keybindings[KB_DOWN]]:
-            camera.y += 1
-        elif keystates[keybindings[KB_RIGHT]]:
-            camera.x += 1
+            if event.type == pygame.KEYDOWN:
+                if event.key == KEYBINDINGS[KB_UP]:
+                    camera.y -= 1
+                elif event.key == KEYBINDINGS[KB_LEFT]:
+                    camera.x -= 1
+                elif event.key == KEYBINDINGS[KB_DOWN]:
+                    camera.y += 1
+                elif event.key == KEYBINDINGS[KB_RIGHT]:
+                    camera.x += 1
         if camera.x < 0:
             camera.x = 0
         if (camera.x + TILE_SHOW_W) > MAP_WIDTH:
@@ -189,7 +191,7 @@ if __name__=='__main__':
 
         screen.fill(WHITE)
         for npc in test:
-#            npc.update(None)
+            npc.update(None)
             npc.display(screen, camera)
 
         pygame.display.flip()

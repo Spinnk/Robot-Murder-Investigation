@@ -20,6 +20,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Sentience in Space.  If not, see <http://www.gnu.org/licenses/>.
 
+import pygame
+
+from consts import *
+
 # Turn an integer into a big endian hex string
 makehex = lambda value, size = 1: eval(('"%.' + str(size)) + 'x"%' + str(value))
 

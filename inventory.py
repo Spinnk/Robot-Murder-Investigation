@@ -24,13 +24,13 @@ import copy
 import sys
 
 from consts import *
-from keybinding import *
 
 import pygame
 
 class Inventory:
     def __init__(self):
-        self.items = [[[0, 0, 0] for x in xrange(INVENTORY_X)] for y in xrange(INVENTORY_Y)]             # 2D list of [item #, count, special]; special = 0 for none; 1 for not read; 2 for read       self.x = 0                  # cursor x coordinate
+        self.items = [[[0, 0, 0] for x in xrange(INVENTORY_X)] for y in xrange(INVENTORY_Y)]             # 2D list of [item #, count, special]; special = 0 for none; 1 for not read; 2 for read
+        self.x = 0                  # cursor x coordinate
         self.y = 0                  # cursor y coordinate
 
         self.mode = 0               # 0 in items area; 1 in options area
@@ -132,19 +132,18 @@ class Inventory:
         return out
 
     # update location of "cursor"
-    def update(self, keybinding):
-        keystates = pygame.key.get_pressed()
+    def update(self, event):
         # cursor in items area
         if self.mode == 0:
-            if keystates[keybinding[KB_UP]]:
+            if event.key == KEYBINDINGS[KB_UP]:
                 self.y -= 1
-            elif keystates[keybinding[KB_DOWN]]:
+            elif event.key == KEYBINDINGS[KB_DOWN]:
                 self.y += 1
-            elif keystates[keybinding[KB_LEFT]]:
+            elif event.key == KEYBINDINGS[KB_LEFT]:
                 self.x -= 1
-            elif keystates[keybinding[KB_RIGHT]]:
+            elif event.key == KEYBINDINGS[KB_RIGHT]:
                 self.x += 1
-            elif keystates[keybinding[KB_ENTER]]:
+            elif event.key == KEYBINDINGS[KB_ENTER]:
                 # if there is an item at that spot
                 if self.items[self.y][self.x][0] != 0:
                     self.option = 0
@@ -164,17 +163,18 @@ class Inventory:
                 if self.y < 0:
                     self.x -= 1
                     self.y = INVENTORY_Y - 1
+
         # cursor in buttons area
         elif self.mode == 1:
-            if keystates[keybinding[KB_UP]]:
+            if event.key == KEYBINDINGS[KB_UP]:
                 self.option -= 1
-            elif keystates[keybinding[KB_DOWN]]:
+            elif event.key == KEYBINDINGS[KB_DOWN]:
                 self.option += 1
             if not len(ITEMS[self.items[self.y][self.x][0]][2]):
                 self.mode = 0
                 return NO_PROBLEM
             self.option %= len(ITEMS[self.items[self.y][self.x][0]][2])
-            if keystates[keybinding[KB_ENTER]]:
+            if event.key == KEYBINDINGS[KB_ENTER]:
                 # Cancel
                 if ITEMS[self.items[self.y][self.x][0]][2][self.option] == ITEM_OPTIONS[0]:
                     self.mode = 0
@@ -259,8 +259,6 @@ if __name__=='__main__':
     pygame.display.set_caption("Inventory Demo")
     pygame.key.set_repeat(100, 100)
 
-    keybindings = default_keybindings()
-
     test = Inventory()
 
     # adda a bunch of items
@@ -283,7 +281,8 @@ if __name__=='__main__':
         for event in pygame.event.get():
             if event.type == pygame.QUIT: # exit when close window "X" is pressed
                 quit = True
-            test.update(keybindings)
+            if event.type == pygame.KEYDOWN:
+                test.update(event)
         test.display(screen)
         pygame.display.flip()
 

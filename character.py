@@ -28,7 +28,6 @@ import sys
 import pygame
 
 from consts import *
-from keybinding import *
 
 class Character:
     # or instead of using file name, open all images in main, and clip with display()
@@ -88,29 +87,28 @@ class Character:
         return chr(self.x) + chr(self.y) + chr(self.clip)
 
     # check for movement
-    def update(self, keybindings): # add argument for collision detection?
+    def update(self, event): # add argument for collision detection?
         # if not already moving
         if not self.moving:
-            keystates = pygame.key.get_pressed()
-            if keystates[keybindings[KB_DOWN]]:
+            if event.key == KEYBINDINGS[KB_DOWN]:
                 self.clip = 0
                 self.moving = True
                 if ((self.y + 3) >= MAP_HEIGHT):
                     self.y = MAP_HEIGHT - 3
                     self.moving = False
-            elif keystates[keybindings[KB_RIGHT]]:
+            elif event.key == KEYBINDINGS[KB_RIGHT]:
                 self.clip = 1
                 self.moving = True
                 if ((self.x + 1) >= MAP_WIDTH):
                     self.x = MAP_WIDTH - 1
                     self.moving = False
-            elif keystates[keybindings[KB_UP]]:
+            elif event.key == KEYBINDINGS[KB_UP]:
                 self.clip = 2
                 self.moving = True
                 if ((self.y - 1) < 0):
                     self.y = 0
                     self.moving = False
-            elif keystates[keybindings[KB_LEFT]]:
+            elif event.key == KEYBINDINGS[KB_LEFT]:
                 self.clip = 3
                 self.moving = True
                 if ((self.x - 1) < 0):
@@ -178,7 +176,6 @@ if __name__=='__main__':
 
     pygame.display.set_caption("Character Demo")
     pygame.key.set_repeat(100, 100)
-    keybindings = default_keybindings()
 
     test = Character()
     test.spawn()
@@ -189,8 +186,9 @@ if __name__=='__main__':
         for event in pygame.event.get():
             if event.type == pygame.QUIT: # exit when close window "X" is pressed
                 quit = True
+            if event.type == pygame.KEYDOWN:
+                test.update(event)
         screen.fill(WHITE)
-        test.update(keybindings)
         test.display(screen, pygame.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT))
         pygame.display.flip()
 

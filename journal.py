@@ -21,7 +21,6 @@ import copy
 import sys
 
 from consts import *
-from keybinding import *
 
 import pygame
 
@@ -70,17 +69,19 @@ class Journal:
         '''
         return ''.join([chr(has_read) + chr(entry) for has_read, entry in self.entries])
 
-    def update(self, keybinding):
-        keystates = pygame.key.get_pressed()
+    def update(self, event):
         if self.mode == 0: # at side bar
-            if keystates[keybinding[KB_UP]]:
+            if event.key == KEYBINDINGS[KB_UP]:
                 self.cursor -= 1
-            elif keystates[keybinding[KB_DOWN]]:
+            elif event.key == KEYBINDINGS[KB_DOWN]:
                 self.cursor += 1
-            elif keystates[keybinding[KB_RIGHT]]:
+            elif event.key == KEYBINDINGS[KB_RIGHT]:
                 if len(self.entries):
                     self.mode = 1
                     self.line = 0
+                    # set "has read" to true
+                    self.entries[self.cursor][0] = True
+
             # make sure cursor is within bound
             if self.cursor < 0:
                 self.cursor = 0
@@ -98,15 +99,11 @@ class Journal:
             if self.start < 0:
                 self.start = 0
         elif self.mode == 1: # reading entry
-            # set "has read" to true
-            if not self.entries[self.cursor][0]:
-                self.entries[self.cursor][0] = True
-
-            if keystates[keybinding[KB_UP]]:
+            if event.key == KEYBINDINGS[KB_UP]:
                 self.line -= 1
-            elif keystates[keybinding[KB_DOWN]]:
+            elif event.key == KEYBINDINGS[KB_DOWN]:
                 self.line += 1
-            if keystates[keybinding[KB_LEFT]]:
+            if event.key == KEYBINDINGS[KB_LEFT]:
                 self.mode = 0
             # make sure camera is within bound
             if (self.line + JOURNAL_MAX_LINES) > len(JOURNAL[self.entries[self.cursor][1]][1]):
@@ -159,7 +156,6 @@ if __name__=='__main__':
     pygame.display.set_caption("Journal Demo")
     pygame.key.set_repeat(100, 100)
 
-    keybindings = default_keybindings()
     test = Journal()
     test.addentry(0)
     test.addentry(1)
@@ -172,7 +168,8 @@ if __name__=='__main__':
         for event in pygame.event.get():
             if event.type == pygame.QUIT: # exit when close window "X" is pressed
                 quit = True
-            test.update(keybindings)
+            if event.type == pygame.KEYDOWN:
+                test.update(event)
         test.display(screen)
         pygame.display.flip()
 

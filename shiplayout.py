@@ -151,8 +151,46 @@ class ShipLayout:
 
 if __name__ == '__main__':
     pygame.init()
-    pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))    # create the screen
+    if screen == None:
+        sys.exit(SCREEN_DOES_NOT_EXIST)
+
+    pygame.display.set_caption("Character Demo")
+
     test = ShipLayout()
     test.generaterandommap()
     test.savemap(os.path.join(CWD, "map.txt"))
+
+    camera = pygame.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
+
+    quit = False
+    while not(quit):
+        # single key presses
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: # exit when close window "X" is pressed
+                quit = True
+            if event.type == pygame.KEYDOWN:
+                if event.key == KEYBINDINGS[KB_UP]:
+                    camera.y -= 1
+                elif event.key == KEYBINDINGS[KB_LEFT]:
+                    camera.x -= 1
+                elif event.key == KEYBINDINGS[KB_DOWN]:
+                    camera.y += 1
+                elif event.key == KEYBINDINGS[KB_RIGHT]:
+                    camera.x += 1
+        if camera.x < 0:
+            camera.x = 0
+        if (camera.x + TILE_SHOW_W) > MAP_WIDTH:
+            camera.x = MAP_WIDTH - TILE_SHOW_W
+        if camera.y < 0:
+            camera.y = 0
+        if (camera.y + TILE_SHOW_H + 1) > MAP_HEIGHT:
+            camera.y = MAP_HEIGHT - TILE_SHOW_H - 1
+
+        screen.fill(WHITE)
+        test.display(screen, camera)
+
+        pygame.display.flip()
+        pygame.time.Clock().tick(10)
+
     pygame.quit()

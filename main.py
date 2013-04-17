@@ -23,7 +23,6 @@
 import pygame
 
 from consts import *
-from keybinding import *
 from game import *
 
 def main():
@@ -46,9 +45,7 @@ def main():
     quit = False
 
     background = pygame.image.load(BACKGROUND_IMAGE_DIR)
-    keybindings = default_keybindings()
-    keybindings = read_keybindings(KEYBINDINGS_DIR)
-    gameInstance = Game(screen, keybindings)
+    gameInstance = Game(screen, KEYBINDINGS)
     gameInstance.update( pygame.event.Event(EVENT_CHANGE_STATE, key = 0) )
 
     # #####################

@@ -1,7 +1,7 @@
 #! /usr/bin/python
 
 # consts.py
-# List of Game Constants / Global Variables
+# List of Global Variables
 
 # consts.py is part of Sentience in Space.
 #
@@ -24,6 +24,7 @@ import sys
 
 import pygame
 
+from settings import *
 from specialfunctions import *
 
 # Name of Game
@@ -35,14 +36,16 @@ ART_DIR = os.path.join( CWD, "art" )
 SAVE_DIR = os.path.join(CWD, "saves")
 SOUND_DIR = os.path.join(CWD, "sound")
 
-KEYBINDINGS_DIR = os.path.join(CWD, "settings.config")
-
 # Some quick scripting
 os.environ['SDL_VIDEO_CENTERED'] = '1'
 os.chdir(CWD)           # unnecessary
 
 # Framerate
 FPS = 60
+
+# Settings
+SETTINGS_DIR = os.path.join(CWD, "settings.config")
+KEYBINDINGS, MUSIC_VOLUME, SCREEN_BRIGHTNESS = readsettings(SETTINGS_DIR)
 
 # Useful RGB Values
 WHITE =   pygame.Color(0xff, 0xff, 0xff, 0xff)
@@ -53,17 +56,6 @@ CYAN =    pygame.Color(0x00, 0xff, 0xff, 0xff)
 BLUE =    pygame.Color(0x00, 0x00, 0xff, 0xff)
 
 COLOR_KEY = HOTPINK
-
-# Keybindings Enum
-KB_UP = 0
-KB_LEFT = 1
-KB_DOWN = 2
-KB_RIGHT = 3
-KB_USE = 4
-KB_INVENTORY = 5
-KB_JOURNAL = 6
-KB_ENTER = 7
-KB_ESCAPE = 8
 
 # Error Codes
 NO_PROBLEM = 0
@@ -138,6 +130,7 @@ PUZZLE_SUCCESS = 2
 INVENTORY_BACKGROUND_SHEET_DIR = os.path.join(ART_DIR, "inventory.png")
 INVENTORY_X = 8                             # spaces across
 INVENTORY_Y = 7                             # spaces down
+INVENTORY_SPACES = INVENTORY_X * INVENTORY_Y
 INVENTORY_BUTTON = pygame.Rect(700, 500, 100, 100) # location and text of buttons
 INVENTORY_FONT_DIR = os.path.join(CWD, "comic.ttf")
 INVENTORY_FONT_SIZE = 18
@@ -159,7 +152,8 @@ ITEM_BOX_DIR = os.path.join(ART_DIR, "item selected.png")        # box for highl
 ITEM_OPTIONS = ["Cancel", "Drop", "Read", "Use"]
 
 # Items List
-# Index (Item type):
+# Index is Item Type and Number
+#   Subarray Indexes:
 #       0 - Item Name
 #       1 - Description (store in multiple strings)
 #       2 - Inventory Buttons ("Cancel" must always be availible)
@@ -183,10 +177,10 @@ ITEM_FONT_ANTIALIAS = True
 MUSIC_DIR = [os.path.join(SOUND_DIR, "tetris1.mid"),                                # list of music file names
 
             ]
-MUSIC_VOLUME = 1.0
 
 # Journal Info
 JOURNAL_BACKGROUND_DIR = os.path.join(ART_DIR, "journal.png")
+JOURNAL_FILE_DIR = os.path.join(CWD, "journal entries.txt")
 JOURNAL_LIST_BOX = pygame.Rect(10, 0, 0, 0)      # where to start displaying titles
 JOURNAL_SHOW_BOX = pygame.Rect(350, 0, 0, 0)     # where to start displaying data
 JOURNAL_MAX_SHOW = 25                            # max number of entries to list
@@ -198,7 +192,7 @@ JOURNAL_FONT_LARGE_SIZE = 24
 JOURNAL_FONT_COLOR = BLACK
 JOURNAL_FONT_BACKGROUND_COLORS = [YELLOW, CYAN]
 JOURNAL_FONT_ANTIALIAS = True
-JOURNAL = parsejournal(os.path.join(CWD, "journal entries.txt"))
+JOURNAL = parsejournal(JOURNAL_FILE_DIR)
 
 # In Game Map Info
 INGAMEMAP_CHARACTER_MARKER_DIR = os.path.join(ART_DIR, "robot marker.png")
