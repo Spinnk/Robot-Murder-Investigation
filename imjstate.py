@@ -41,9 +41,8 @@ class InventoryState(GameState):
 
     ## ---[ update ]----------------------------------------------------------
     def update(self, event):
-        self.inventory.update(self.keybindings)
-
         if event.type == pygame.KEYDOWN:
+            self.inventory.update(event)
             if event.key == pygame.K_TAB:
                 return JOURNAL_STATE
             if event.key == pygame.K_SPACE:
@@ -109,10 +108,10 @@ class JournalState(GameState):
 
     ## ---[ update ]----------------------------------------------------------
     def update(self, event):
-        self.journal.update(self.keybindings)
-
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_TAB:
-            return MAP_STATE
+        if event.type == pygame.KEYDOWN:
+            self.journal.update(event)
+            if event.key == pygame.K_TAB:
+                return MAP_STATE
 
         changed_state = self.checkstatechange(event)
         if changed_state in self.state_changes:

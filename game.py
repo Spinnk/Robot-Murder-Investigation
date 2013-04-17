@@ -67,6 +67,9 @@ class Game:
         self.load_game_state = LoadGameState(screen, LOAD_STATE)
         self.puzzle_state = PuzzleState(screen, keybindings, PUZZLE_STATE)
 
+        # Flags
+        self.mission = 0
+
         # Set current_state to reference main_menu_state
         self.current_state = self.main_menu_state
         # An integer representation of the current state

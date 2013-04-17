@@ -86,7 +86,7 @@ class InGameState (GameState):
             elif event.key == self.keybindings[KB_ENTER]:
                 self.attempt_dialogue()
                 
-        self.user.update(self.keybindings)
+        self.user.update(event)
         return IN_GAME_STATE
 
     ## ---[ display ]----------------------------------------------------------
