@@ -19,9 +19,9 @@ A save file will consist of concatenations of save data in the following order:
 
     Inventory Format (3 bytes * INVENTORY_X * INVENTORY_Y):
         item | count | special | item | count | special | ...
-        item  - 1 byte
-        count - 1 byte
-        special  - 1 byte
+        item    - 1 byte
+        count   - 1 byte
+        special - 1 byte
 
     Journal Format (2 bytes * count)
         has_read | entry | has_read | entry | ...
