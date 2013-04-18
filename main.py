@@ -23,7 +23,27 @@
 import pygame
 
 from consts import *
-from game import *
+#from game import *
+
+# Set up environment
+def setenvi():
+    # Center window
+    os.environ['SDL_VIDEO_CENTERED'] = '1'
+
+    # Change working directory
+    #os.chdir(CWD)           # unnecessary
+
+    # Set key repeat to 100 ms
+    pygame.key.set_repeat(100, 100)
+
+    # Turn off mouse events to reduce overhead
+    pygame.event.set_blocked(pygame.MOUSEMOTION)
+
+    # Set screen brightness
+    pygame.display.set_gamma(SCREEN_BRIGHTNESS)
+
+    # Set sound volume
+    pygame.mixer.music.set_volume(SOUND_VOLUME)
 
 def main():
     # Set up screen #######
@@ -47,14 +67,7 @@ def main():
     background = pygame.image.load(BACKGROUND_IMAGE_DIR)
     gameInstance = Game(screen, KEYBINDINGS)
     gameInstance.update( pygame.event.Event(EVENT_CHANGE_STATE, key = 0) )
-
     # #####################
-
-    # Set key repeat to 100 ms
-    pygame.key.set_repeat(100, 100)
-
-    # Turn off mouse events to reduce overhead
-    pygame.event.set_blocked(pygame.MOUSEMOTION)
 
     while not(quit):
         # single key presses
@@ -90,5 +103,6 @@ def main():
 
 if __name__=='__main__':
     pygame.init()
+    setenvi()
     main()
     pygame.quit()

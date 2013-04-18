@@ -36,16 +36,13 @@ ART_DIR = os.path.join( CWD, "art" )
 SAVE_DIR = os.path.join(CWD, "saves")
 SOUND_DIR = os.path.join(CWD, "sound")
 
-# Some quick scripting
-os.environ['SDL_VIDEO_CENTERED'] = '1'
-os.chdir(CWD)           # unnecessary
-
 # Framerate
 FPS = 60
 
-# Settings
-SETTINGS_DIR = os.path.join(CWD, "settings.config")
-KEYBINDINGS, MUSIC_VOLUME, SCREEN_BRIGHTNESS = readsettings(SETTINGS_DIR)
+# Screen Stuff
+BACKGROUND_IMAGE_DIR = os.path.join( ART_DIR, "background 1.png" )
+SCREEN_WIDTH = 880                          # pixels
+SCREEN_HEIGHT = 640                         # pixels
 
 # Useful RGB Values
 WHITE =   pygame.Color(0xff, 0xff, 0xff, 0xff)
@@ -56,6 +53,38 @@ CYAN =    pygame.Color(0x00, 0xff, 0xff, 0xff)
 BLUE =    pygame.Color(0x00, 0x00, 0xff, 0xff)
 
 COLOR_KEY = HOTPINK
+
+# Settings
+SETTINGS_DIR = os.path.join(CWD, "settings.config")
+SETTINGS_SLIDER_WIDTH = 400
+SETTINGS_SLIDER_HEIGHT = 20
+SETTINGS_BOXES = [  pygame.Rect(220, 100, SETTINGS_SLIDER_WIDTH, SETTINGS_SLIDER_HEIGHT),   # KB_UP
+                    pygame.Rect(220, 130, SETTINGS_SLIDER_WIDTH, SETTINGS_SLIDER_HEIGHT),   # KB_LEFT
+                    pygame.Rect(220, 160, SETTINGS_SLIDER_WIDTH, SETTINGS_SLIDER_HEIGHT),   # KB_DOWN
+                    pygame.Rect(220, 190, SETTINGS_SLIDER_WIDTH, SETTINGS_SLIDER_HEIGHT),   # KB_RIGHT
+                    pygame.Rect(220, 220, SETTINGS_SLIDER_WIDTH, SETTINGS_SLIDER_HEIGHT),   # KB_USE
+                    pygame.Rect(220, 250, SETTINGS_SLIDER_WIDTH, SETTINGS_SLIDER_HEIGHT),   # KB_INVENTORY
+                    pygame.Rect(220, 280, SETTINGS_SLIDER_WIDTH, SETTINGS_SLIDER_HEIGHT),   # KB_JOURNAL
+                    pygame.Rect(220, 310, SETTINGS_SLIDER_WIDTH, SETTINGS_SLIDER_HEIGHT),   # KB_ENTER
+                    pygame.Rect(220, 340, SETTINGS_SLIDER_WIDTH, SETTINGS_SLIDER_HEIGHT),   # KB_ESCAPE
+                    pygame.Rect(220, 370, SETTINGS_SLIDER_WIDTH, SETTINGS_SLIDER_HEIGHT),   # KB_LIFT
+                    pygame.Rect(220, 400, SETTINGS_SLIDER_WIDTH, SETTINGS_SLIDER_HEIGHT),   # KB_MAP
+                    pygame.Rect(220, 450, SETTINGS_SLIDER_WIDTH, SETTINGS_SLIDER_HEIGHT),   # volume
+                    pygame.Rect(220, 500, SETTINGS_SLIDER_WIDTH, SETTINGS_SLIDER_HEIGHT)]   # brightness
+
+SETTINGS_BACKGROUND_COLORS = [YELLOW, CYAN]
+SETTINGS_BACKGROUND_BOX = pygame.Rect(140, 0, 600, 40)
+SETTINGS_FONT_DIR = os.path.join(CWD, "comic.ttf")
+SETTINGS_FONT_SIZE = 24
+SETTINGS_FONT_COLOR = BLACK
+SETTINGS_FONT_ANTIALIAS = True
+
+KEY_FONT_DIR = os.path.join(CWD, "comic.ttf")
+KEY_FONT_SIZE = 24
+KEY_FONT_COLOR = BLACK
+KEY_FONT_ANTIALIAS = True
+
+KEYBINDINGS, SOUND_VOLUME, SCREEN_BRIGHTNESS = readsettings(SETTINGS_DIR)
 
 # Error Codes
 NO_PROBLEM = 0
@@ -70,11 +99,6 @@ NO_SPACE_IN_INEVENTORY = 8
 NOT_FOUND = 9
 DIALOGUE_NOT_INITIALIZED = 10
 NOTHING_DONE = 11
-
-# Screen Stuff
-BACKGROUND_IMAGE_DIR = os.path.join( ART_DIR, "background 1.png" )
-SCREEN_WIDTH = 880                          # pixels
-SCREEN_HEIGHT = 640                         # pixels
 
 # Map Info
 MAP_DEFAULT_DIR = os.path.join(CWD, "map.txt")
