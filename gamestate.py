@@ -82,17 +82,17 @@ class GameState:
     def checkstatechange(self, event):
         if event.type == pygame.KEYDOWN:
             # If Inventory key is pressed:
-            if event.key == self.keybindings[KB_INVENTORY]:
+            if event.key == KEYBINDINGS[KB_INVENTORY]:
                 if self.state_id == INVENTORY_STATE:
                     return IN_GAME_STATE
                 return INVENTORY_STATE
             # If journal key is pressed
-            elif event.key == self.keybindings[KB_JOURNAL]:
+            elif event.key == KEYBINDINGS[KB_JOURNAL]:
                 if self.state_id == JOURNAL_STATE:
                     return IN_GAME_STATE
                 return JOURNAL_STATE
             # If map key is pressed
-            elif event.key == pygame.K_m:
+            elif event.key == KEYBINDINGS[KB_MAP]:
                 if self.state_id == MAP_STATE:
                     return IN_GAME_STATE
                 return MAP_STATE
@@ -171,4 +171,38 @@ class OptionsMenuState (GameState):
     ## ---[ display ]----------------------------------------------------------
     def display(self):
         self.menu.draw_buttons()
+        
+#-------------------------------------------------------------------------------
+#---[ SettingsState Class ]-----------------------------------------------------
+#-------------------------------------------------------------------------------
+## This class handles the functionality changing game settings
+
+class SettingsState (GameState):
+
+    def __init__(self, screen, state_id):
+        self.screen = screen
+        self.state_id = state_id
+        self.settings = Settings()
+        self.state_changes = [OPTIONS_MENU_STATE]
+        
+
+    ## ---[ update ]------------------------------------------------------------
+    def update(self, event):
+        changed_state = self.checkstatechange(event)
+        if changed_state in self.state_changes:
+            return changed_state
+        
+        if event.type == pygame.KEYDOWN:
+            self.settings.update(event)
+            
+        return self.state_id
+
+    ## ---[ display ]----------------------------------------------------------
+    def display(self):
+        self.settings.display(self.screen)
+
+
+
+
+
 

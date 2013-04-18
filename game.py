@@ -66,6 +66,7 @@ class Game:
         self.save_game_state = SaveGameState(screen, SAVE_STATE)
         self.load_game_state = LoadGameState(screen, LOAD_STATE)
         self.puzzle_state = PuzzleState(screen, keybindings, PUZZLE_STATE)
+        self.settings_state = SettingsState(screen, SETTINGS_STATE)
 
         # Flags
         self.mission = 0
@@ -104,7 +105,7 @@ class Game:
             pygame.event.post(pygame.event.Event(pygame.QUIT, key = 0))
 
         elif new_state_id == SETTINGS_STATE:
-            pass
+            self.current_state = self.settings_state
 
         elif new_state_id == INVENTORY_STATE:
             self.inventory_state.setinventory( self.in_game_state.getinventory() )
