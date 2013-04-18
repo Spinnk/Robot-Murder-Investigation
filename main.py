@@ -69,6 +69,13 @@ def main():
     gameInstance.update( pygame.event.Event(EVENT_CHANGE_STATE, key = 0) )
     # #####################
 
+    # Set key repeat to 100 ms
+    pygame.key.set_repeat(100, 100)
+
+    # Turn off mouse events to reduce overhead
+    pygame.event.set_blocked(pygame.MOUSEMOTION)
+
+
     while not(quit):
         # single key presses
         for event in pygame.event.get():
