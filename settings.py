@@ -144,6 +144,7 @@ def writesettings(file_name, keybindings, volume, brightness):
             '\nEnter=' + str(keybindings[KB_ENTER]) +
             '\nEscape=' + str(keybindings[KB_ESCAPE]) +
             '\nLift=' + str(keybindings[KB_LIFT]) +
+            '\nMap=' + str(keybindings[KB_MAP]) +
             '\n-----END KEYBINDINGS-----'
             '\n'
             '\n-----BEGIN MUSIC SETTINGS-----' +
@@ -294,7 +295,7 @@ class Settings:
     def display(self, screen):
         if screen == None:
             return SURFACE_DOES_NOT_EXIST
-        SETTINGS_BACKGROUND_BOX.y = SETTINGS_BOXES[self.line].y
+        SETTINGS_BACKGROUND_BOX.y = SETTINGS_BOXES[self.line].y - 5
         pygame.draw.rect(screen, SETTINGS_BACKGROUND_COLORS[self.mode], SETTINGS_BACKGROUND_BOX)
 
         for line in self.lines:
