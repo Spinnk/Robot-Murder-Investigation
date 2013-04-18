@@ -57,8 +57,8 @@ def main():
     pygame.display.set_caption(GAME_NAME)
 
     # load and play background music
-    pygame.mixer.music.load(MUSIC_DIR[0])
-    pygame.mixer.music.set_volume(MUSIC_VOLUME)
+    pygame.mixer.music.load(SOUND_DIRS[0])
+    pygame.mixer.music.set_volume(SOUND_VOLUME)
     pygame.mixer.music.play()
 
     # Set up variables ####
@@ -81,7 +81,7 @@ def main():
         # keep background music playing
         if not pygame.mixer.music.get_busy():
             pygame.mixer.music.load(MUSIC_DIR[0])
-            pygame.mixer.music.set_volume(MUSIC_VOLUME)
+            pygame.mixer.music.set_volume(SOUND_VOLUME)
             pygame.mixer.music.play()
 
         # display background
