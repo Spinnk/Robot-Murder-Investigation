@@ -23,7 +23,7 @@
 import pygame
 
 from consts import *
-#from game import *
+from game import *
 
 # Set up environment
 def setenvi():
