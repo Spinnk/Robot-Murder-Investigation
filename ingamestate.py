@@ -85,7 +85,7 @@ class InGameState (GameState):
             # Attempt to talk to a nearby NPC if "enter" key is pressed
             elif event.key == self.keybindings[KB_ENTER]:
                 self.attempt_dialogue()
-                
+
         self.user.update(event)
         return IN_GAME_STATE
 
@@ -132,7 +132,10 @@ class InGameState (GameState):
     def removeitem(self):
         item = self.ship.removeitem([self.user.getx(), self.user.gety() + 1])
         if item != None:
-            self.inventory.additem(item)
+            if item == 1:
+                self.inventory.additem(1, 1)
+            else:
+                self.inventory.additem(item)
 
     # set all floor items
     def setitemsonfloor(self, itemsonfloor):
@@ -196,5 +199,5 @@ class InGameState (GameState):
 
 
 
-            
+
 
