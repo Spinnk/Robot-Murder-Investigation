@@ -74,7 +74,7 @@
 #---[ Imports ]-----------------------------------------------------------------
 #-------------------------------------------------------------------------------
 import pygame
-from keybinding import *
+from consts import *
 
 #-------------------------------------------------------------------------------
 #---[ Defines ]-----------------------------------------------------------------
@@ -608,24 +608,23 @@ class cMenu:
       o = self.orientation
       s = self.selection
       n = self.change_number
-      keybindings = default_keybindings()
 
-      if e.key == pygame.K_DOWN or e.key == keybindings[KB_DOWN]:
+      if e.key == pygame.K_DOWN or e.key == KEYBINDINGS[KB_DOWN]:
          if (o == 'vertical') and ((s + 1) % n != 0):
             self.selection += 1
          elif o == 'horizontal':
             self.selection += n
-      elif e.key == pygame.K_UP or e.key == keybindings[KB_UP]:
+      elif e.key == pygame.K_UP or e.key == KEYBINDINGS[KB_UP]:
          if (o == 'vertical') and ((s) % n != 0):
             self.selection -= 1
          elif o == 'horizontal':
             self.selection -= n
-      elif e.key == pygame.K_RIGHT or e.key == keybindings[KB_RIGHT]:
+      elif e.key == pygame.K_RIGHT or e.key == KEYBINDINGS[KB_RIGHT]:
          if o == 'vertical':
             self.selection += n
          elif (o == 'horizontal') and ((s + 1) % n != 0):
             self.selection += 1
-      elif e.key == pygame.K_LEFT or e.key == keybindings[KB_LEFT]:
+      elif e.key == pygame.K_LEFT or e.key == KEYBINDINGS[KB_LEFT]:
          if o == 'vertical':
             self.selection -= n
          elif (o == 'horizontal') and ((s) % n != 0):
@@ -643,10 +642,10 @@ class cMenu:
          self.selection = self.selection_prev
 
       if self.menu_items[self.selection]['selectable'] == False:
-         if e.key == pygame.K_DOWN or e.key == keybindings[KB_DOWN]:
+         if e.key == pygame.K_DOWN or e.key == KEYBINDINGS[KB_DOWN]:
             if (o == 'vertical') and ((s + 1) % n != 0):
                self.selection += 1
-         elif e.key == pygame.K_UP or e.key == keybindings[KB_UP]:
+         elif e.key == pygame.K_UP or e.key == KEYBINDINGS[KB_UP]:
             if (o == 'vertical') and ((s) % n != 0):
                self.selection -= 1
 

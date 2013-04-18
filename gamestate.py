@@ -27,7 +27,7 @@
 import os, sys, pygame, hashlib
 
 from consts import *
-from keybinding import *
+from settings import *
 from menu import *
 from character import *
 from inventory import *
