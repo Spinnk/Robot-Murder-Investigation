@@ -137,7 +137,6 @@ class Settings:
         settings = f.readlines()
         f.close()
         i = 0
-        keybindings, volume, brightness = defaultsettings()
         while i < len(settings):
             if settings[i][0] == '#':
                 i += 1
@@ -150,27 +149,27 @@ class Settings:
                         continue
                     line = line[:-1]        # remove newline char
                     if line[:2] == 'Up':
-                        keybindings[KB_UP] = int(line[3:])
+                        KEYBINDINGS[KB_UP] = int(line[3:])
                     elif line[:4] == 'Left':
-                        keybindings[KB_LEFT] = int(line[5:])
+                        KEYBINDINGS[KB_LEFT] = int(line[5:])
                     elif line[:4] == 'Down':
-                        keybindings[KB_DOWN] = int(line[5:])
+                        KEYBINDINGS[KB_DOWN] = int(line[5:])
                     elif line[:5] == 'Right':
-                        keybindings[KB_RIGHT] = int(line[6:])
+                        KEYBINDINGS[KB_RIGHT] = int(line[6:])
                     elif line[:3] == 'Use':
-                        keybindings[KB_USE] = int(line[4:])
+                        KEYBINDINGS[KB_USE] = int(line[4:])
                     elif line[:9] == 'Inventory':
-                        keybindings[KB_INVENTORY] = int(line[10:])
+                        KEYBINDINGS[KB_INVENTORY] = int(line[10:])
                     elif line[:7] == "Journal":
-                        keybindings[KB_JOURNAL] = int(line[8:])
+                        KEYBINDINGS[KB_JOURNAL] = int(line[8:])
                     elif line[:5] == 'Enter':
-                        keybindings[KB_ENTER] = int(line[6:])
+                        KEYBINDINGS[KB_ENTER] = int(line[6:])
                     elif line[:6] == 'Escape':
-                        keybindings[KB_ESCAPE] = int(line[7:])
+                        KEYBINDINGS[KB_ESCAPE] = int(line[7:])
                     elif line[:4] == 'Lift':
-                        keybindings[KB_LIFT] = int(line[5:])
+                        KEYBINDINGS[KB_LIFT] = int(line[5:])
                     elif line[:3] == 'Map':
-                        keybindings[KB_LIFT] = int(line[4:])
+                        KEYBINDINGS[KB_MAP] = int(line[4:])
                     i += 1
             elif settings[i] == '-----BEGIN MUSIC SETTINGS-----\n':
                 i += 1
@@ -180,7 +179,7 @@ class Settings:
                         continue
                     line = line[:-1]        # remove newline char
                     if line[:6] == 'Volume':
-                        volume = int(line[7:])
+                        SOUND_VOLUME = float(line[7:])
                     i += 1
             elif settings[i] == '-----BEGIN SCREEN SETTINGS-----\n':
                 i += 1
@@ -190,10 +189,9 @@ class Settings:
                         continue
                     line = line[:-1]        # remove newline char
                     if line[:10] == 'Brightness':
-                        brightness = int(line[11:])
+                        SCREEN_BRIGHTNESS = float(line[11:])
                     i += 1
             i += 1
-            return keybindings, volume, brightness
 
     def asve(self, file_name):
         f = open(file_name, 'w')
@@ -266,10 +264,11 @@ if __name__=='__main__':
     if screen == None:
         sys.exit(SCREEN_DOES_NOT_EXIST)
 
-    pygame.display.set_caption("Slider Demo")
+    pygame.display.set_caption("Settings Demo")
     pygame.key.set_repeat(100, 100)
 
     test = Settings()
+    test.load(SETTINGS_DIR)
 
     quit = False
     while not(quit):
