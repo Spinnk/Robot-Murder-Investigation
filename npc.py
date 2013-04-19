@@ -91,7 +91,7 @@ class NPC:
         self.sayindex = 0
 
     # read in dialogue
-    def readdialogue(self, self.dialogue):
+    def readdialogue(self):
         f = open("dialogue%s.txt" %self.ID, 'r')    #open dialogue#.txt, where # is the ID of this NPC
         line = f.readline()
         while line != '':
@@ -99,12 +99,12 @@ class NPC:
             if len(splitline) > 4:
                 #there are response dialogues
                 i = 5
-                for i in len(splitline):
+                for i in xrange(len(splitline)):
                     #group response dialogues together
                     response = (splitline[i], splitline[i+1])
                     del splitline[5:7]
                     splitline.insert(i, response)
-
+                    
             self.dialogue.append(splitline)
             line = f.readline()
 
@@ -119,21 +119,23 @@ class NPC:
         self.x = ord(data[0])
         self.y = ord(data[1])
         self.clip = ord(data[2])
+        self.clip = ord(data[3])
         return NO_PROBLEM
 
     # save NPC to a string of specified format
     def save(self):
         '''
         Format:
-            type | name_len | name | x | y | clip
+            type | name_len | name | x | y | clip | frame
             type      - 1 byte
             name_len  - 2 bytes
             name      - name_len bytes
             x         - 1 byte
             y         - 1 byte
             clip      - 1 byte
+            frame     - 1 byte
         '''
-        return chr(self.type) + binascii.unhexlify(makehex(len(self.name), 4)) + self.name + chr(self.x) + chr(self.y) + chr(self.clip)
+        return chr(self.type) + binascii.unhexlify(makehex(len(self.name), 4)) + self.name + chr(self.x) + chr(self.y) + chr(self.clip) + chr(self.frame)
 
     # move NPC and use grid to check for collisions
     # it will need to be changed if some NPCs can only
