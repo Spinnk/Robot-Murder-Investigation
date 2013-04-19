@@ -45,6 +45,9 @@ class NPC:
         self.sayindex = -1
         self.font = pygame.font.Font(NPC_FONT_DIR, NPC_FONT_SIZE)
 
+        self.dialogue = []      # dialogue is a list, where each element is an array of
+                                # [mission, preconditions (including response flags), postconditions, dialogue, [response flag, response dialogue], [response flag, response dialogue], ...]
+
     # Accessors and Modifiers
 
     # should run this function before using NPC
@@ -86,6 +89,15 @@ class NPC:
     def setdialogue(self, inventory, d):
         self.say = d
         self.sayindex = 0
+
+    # read in dialogue
+    def readdialogue(self, dialogue):
+        f = open("dialogue%s.txt" %self.ID, 'r')    #open dialogue#.txt, where # is the ID of this NPC
+        line = f.readline()
+        while line != '':
+            splitline = string.split(line, ',')
+            dialogue.append(splitline)
+            line = f.readline()
 
     # load from save string
     def load(self, data):
