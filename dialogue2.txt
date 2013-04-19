@@ -1,6 +1,3 @@
-#this is for Engineer O'Connor, NPC2
-
-Mission1:
-spoken=0 & inventory(scotch)=0: "Hoy, laddie. Mind fetchin’ me ‘nother round o’ scotch?", spoken=1
-spoken=1 & inventory(scotch)=0: "'Nother round, laddie!"
-inventory(scotch)=1: "O’ yeah, that hits the spot! Thank ya son. Anythin’ I can do for ya?", SAM:
+spoken==0 && inventory(scotch)==0, spoken=1, "Hoy, laddie. Mind fetchin’ me ‘nother round o’ scotch?"
+spoken==1 && inventory(scotch)==0: "'Nother round, laddie!"
+inventory(scotch)==1, "O’ yeah, that hits the spot! Thank ya son. Anythin’ I can do for ya?"

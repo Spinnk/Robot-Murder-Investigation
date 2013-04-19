@@ -1,8 +1,5 @@
-#this is the text for Captain Presley, NPC0
-
-Mission1:
-inventory(ID)=0 & alternate=0:"Hmm, his ID must be around here somewhere", alternate=1
-inventory(ID)=0 & alternate=1: "I need to find his ID if it's around", alternate=0
-inventory(ID)=1 & location=engineroomID & spoken=0: "Well, I give up. Maybe it値l turn up later. Guess I値l head on up to the bridge", spoken = 1
-inventory(ID)=1 & location=engineroomID & spoken=1: "I値l just look one more time..."
-inventory(ID)=1: "Go back to your duties, robot."
+1, inventory(ID)==0 && alternate==0, alternate=1, "Hmm, his ID must be around here somewhere"
+1, inventory(ID)==0 && alternate==1, alternate=0, "I need to find his ID if it's around"
+1, inventory(ID)==1 && self.location==engineroomID && spoken==0, spoken=1, "Well, I give up. Maybe it値l turn up later. Guess I値l head on up to the bridge"
+1, inventory(ID)==1 && self.location==engineroomID && spoken==1, "I値l just look one more time..."
+1, inventory(ID)==1, "Go back to your duties, robot."
