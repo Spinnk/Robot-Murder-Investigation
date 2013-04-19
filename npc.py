@@ -98,7 +98,6 @@ class NPC:
         self.x = ord(data[0])
         self.y = ord(data[1])
         self.clip = ord(data[2])
-        self.clip = ord(data[3])
         return NO_PROBLEM
 
     # save NPC to a string of specified format
@@ -114,7 +113,7 @@ class NPC:
             clip      - 1 byte
             frame     - 1 byte
         '''
-        return chr(self.type) + binascii.unhexlify(makehex(len(self.name), 4)) + self.name + chr(self.x) + chr(self.y) + chr(self.clip) + chr(self.frame)
+        return chr(self.type) + binascii.unhexlify(makehex(len(self.name), 4)) + self.name + chr(self.x) + chr(self.y) + chr(self.clip)
 
     # move NPC and use grid to check for collisions
     # it will need to be changed if some NPCs can only

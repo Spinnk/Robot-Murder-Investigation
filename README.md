@@ -35,11 +35,10 @@ A save file will consist of concatenations of save data in the following order:
         item_type    - 1 byte
 
     NPC Format (Variable size * count):
-        type | name_len | name | x | y | clip | frame
+        type | name_len | name | x | y | clip
         type      - 1 byte
         name_len  - 2 bytes
         name      - name_len bytes
         x         - 1 byte
         y         - 1 byte
         clip      - 1 byte
-        frame     - 1 byte
