@@ -87,7 +87,7 @@ def main():
 
         # keep background music playing
         if not pygame.mixer.music.get_busy():
-            pygame.mixer.music.load(MUSIC_DIR[0])
+            pygame.mixer.music.load(SOUND_DIR[0])
             pygame.mixer.music.set_volume(SOUND_VOLUME)
             pygame.mixer.music.play()
 
