@@ -24,7 +24,6 @@ import pygame
 
 from consts import *
 
-
 class Key:
     def __init__(self, value, loc):
         self.value = value
@@ -132,6 +131,96 @@ class Settings:
             pygame.mixer.music.set_volume(new_value)
         elif self.line == 12:
             pygame.display.set_gamma(1 - new_value)
+
+    def load(self, file_name):
+        f = open(file_name, 'r')
+        settings = f.readlines()
+        f.close()
+        i = 0
+        keybindings, volume, brightness = defaultsettings()
+        while i < len(settings):
+            if settings[i][0] == '#':
+                i += 1
+                continue
+            elif settings[i] == '-----BEGIN KEYBINDINGS-----\n':
+                i += 1
+                while settings[i] != '-----END KEYBINDINGS-----\n':
+                    line = settings[i]
+                    if line[0] == '#':
+                        continue
+                    line = line[:-1]        # remove newline char
+                    if line[:2] == 'Up':
+                        keybindings[KB_UP] = int(line[3:])
+                    elif line[:4] == 'Left':
+                        keybindings[KB_LEFT] = int(line[5:])
+                    elif line[:4] == 'Down':
+                        keybindings[KB_DOWN] = int(line[5:])
+                    elif line[:5] == 'Right':
+                        keybindings[KB_RIGHT] = int(line[6:])
+                    elif line[:3] == 'Use':
+                        keybindings[KB_USE] = int(line[4:])
+                    elif line[:9] == 'Inventory':
+                        keybindings[KB_INVENTORY] = int(line[10:])
+                    elif line[:7] == "Journal":
+                        keybindings[KB_JOURNAL] = int(line[8:])
+                    elif line[:5] == 'Enter':
+                        keybindings[KB_ENTER] = int(line[6:])
+                    elif line[:6] == 'Escape':
+                        keybindings[KB_ESCAPE] = int(line[7:])
+                    elif line[:4] == 'Lift':
+                        keybindings[KB_LIFT] = int(line[5:])
+                    elif line[:3] == 'Map':
+                        keybindings[KB_LIFT] = int(line[4:])
+                    i += 1
+            elif settings[i] == '-----BEGIN MUSIC SETTINGS-----\n':
+                i += 1
+                while settings[i] != '-----END MUSIC SETTINGS-----\n':
+                    line = settings[i]
+                    if line[0] == '#':
+                        continue
+                    line = line[:-1]        # remove newline char
+                    if line[:6] == 'Volume':
+                        volume = int(line[7:])
+                    i += 1
+            elif settings[i] == '-----BEGIN SCREEN SETTINGS-----\n':
+                i += 1
+                while settings[i] != '-----END SCREEN SETTINGS-----\n':
+                    line = settings[i]
+                    if line[0] == '#':
+                        continue
+                    line = line[:-1]        # remove newline char
+                    if line[:10] == 'Brightness':
+                        brightness = int(line[11:])
+                    i += 1
+            i += 1
+            return keybindings, volume, brightness
+
+    def asve(self, file_name):
+        f = open(file_name, 'w')
+        f.write('# Sentience in Space\n' +
+                '\n-----BEGIN KEYBINDINGS-----' +
+                '\nUp=' + str(KEYBINDINGS[KB_UP]) +
+                '\nLeft=' + str(KEYBINDINGS[KB_LEFT]) +
+                '\nDown=' + str(KEYBINDINGS[KB_DOWN]) +
+                '\nRight=' + str(KEYBINDINGS[KB_RIGHT]) +
+                '\nUse=' + str(KEYBINDINGS[KB_USE]) +
+                '\nInventory=' + str(KEYBINDINGS[KB_INVENTORY]) +
+                '\nJournal=' + str(KEYBINDINGS[KB_JOURNAL]) +
+                '\nEnter=' + str(KEYBINDINGS[KB_ENTER]) +
+                '\nEscape=' + str(KEYBINDINGS[KB_ESCAPE]) +
+                '\nLift=' + str(KEYBINDINGS[KB_LIFT]) +
+                '\nMap=' + str(KEYBINDINGS[KB_MAP]) +
+                '\n-----END KEYBINDINGS-----'
+                '\n'
+                '\n-----BEGIN MUSIC SETTINGS-----' +
+                '\nVolume=' + str(SOUND_VOLUME) +
+                '\n-----END MUSIC SETTINGS-----' +
+                '\n'
+                '\n-----BEGIN SCREEN SETTINGS-----' +
+                '\nBrightness=' + str(SCREEN_BRIGHTNESS) +
+                '\n-----END SCREEN SETTINGS-----' +
+                '\n')
+        f.close()
 
     def update(self, event):
         if self.mode == 0:
