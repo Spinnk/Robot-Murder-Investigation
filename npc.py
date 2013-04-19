@@ -104,7 +104,7 @@ class NPC:
                     response = (splitline[i], splitline[i+1])
                     del splitline[5:7]
                     splitline.insert(i, response)
-                    
+
             self.dialogue.append(splitline)
             line = f.readline()
 
@@ -119,23 +119,21 @@ class NPC:
         self.x = ord(data[0])
         self.y = ord(data[1])
         self.clip = ord(data[2])
-        self.clip = ord(data[3])
         return NO_PROBLEM
 
     # save NPC to a string of specified format
     def save(self):
         '''
         Format:
-            type | name_len | name | x | y | clip | frame
+            type | name_len | name | x | y | clip
             type      - 1 byte
             name_len  - 2 bytes
             name      - name_len bytes
             x         - 1 byte
             y         - 1 byte
             clip      - 1 byte
-            frame     - 1 byte
         '''
-        return chr(self.type) + binascii.unhexlify(makehex(len(self.name), 4)) + self.name + chr(self.x) + chr(self.y) + chr(self.clip) + chr(self.frame)
+        return chr(self.type) + binascii.unhexlify(makehex(len(self.name), 4)) + self.name + chr(self.x) + chr(self.y) + chr(self.clip)
 
     # move NPC and use grid to check for collisions
     # it will need to be changed if some NPCs can only
