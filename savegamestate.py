@@ -88,16 +88,20 @@ class SaveGameState (GameState):
     #
     # saves the game status to self.save_location
     def save(self, character, inventory, journal, ship, npcs):
-        c = character.save()
-        i = inventory.save()
-        j = journal.save()
-        s = ship.save()
-        ns = [npc.save() for npc in npcs]
-        out = binascii.unhexlify(makehex(len(c), 4)) + c + binascii.unhexlify(makehex(len(i), 4)) + i + binascii.unhexlify(makehex(len(j), 4)) + j + binascii.unhexlify(makehex(len(s), 4)) + s + binascii.unhexlify(makehex(len(ns), 4)) + ''.join([binascii.unhexlify(makehex(len(n), 4)) + n for n in ns])
-        out += hashlib.sha512(out).digest()
-        f = open(self.save_location, 'wb')
-        f.write(out)
-        f.close()
+        try:
+            c = character.save()
+            i = inventory.save()
+            j = journal.save()
+            s = ship.save()
+            ns = [npc.save() for npc in npcs]
+            out = binascii.unhexlify(makehex(len(c), 4)) + c + binascii.unhexlify(makehex(len(i), 4)) + i + binascii.unhexlify(makehex(len(j), 4)) + j + binascii.unhexlify(makehex(len(s), 4)) + s + binascii.unhexlify(makehex(len(ns), 4)) + ''.join([binascii.unhexlify(makehex(len(n), 4)) + n for n in ns])
+            out += hashlib.sha512(out).digest()
+            f = open(self.save_location, 'wb')
+            f.write(out)
+            f.close()
+        except AttributeError:
+            print "Error: Could not save game"
+            return None
         return self.num_saves
 
 #-------------------------------------------------------------------------------

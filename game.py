@@ -66,7 +66,7 @@ class Game:
         self.save_game_state = SaveGameState(screen, SAVE_STATE)
         self.load_game_state = LoadGameState(screen, LOAD_STATE)
         self.puzzle_state = PuzzleState(screen, keybindings, PUZZLE_STATE)
-        self.settings_state = SettingsState(screen, SETTINGS_STATE)
+        #self.settings_state = SettingsState(screen, SETTINGS_STATE)
 
         # Flags
         self.mission = 0
@@ -146,12 +146,15 @@ class Game:
             c, i, j, s, ns = self.in_game_state.save()
             old_num_saves = self.num_saves
             self.num_saves = self.save_game_state.save( c, i, j, s, ns)
+            if self.num_saves == None:
+                self.current_state_id = SAVE_STATE
+                self.current_state = self.save_game_state
+                return
             if old_num_saves == 0 and self.num_saves > 0:
                 self.options_menu_state.loadable()
             self.current_state = self.in_game_state
-            self.current_state_id = IN_GAME_STATE
+            self.current_state_id = IN_GAME_STATE      
             return
-
 
         self.current_state_id = new_state_id
 
