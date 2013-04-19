@@ -1,2 +1,2 @@
-spoken==0, spoken=1, “Hmm, none of these other Pods seem to have anything wrong with them. None of these passengers have left their Pods, and nobody has tampered with them. Hmm...”
-spoken==1, "Not right now, robot."
+1, spoken==0, spoken=1, “Hmm, none of these other Pods seem to have anything wrong with them. None of these passengers have left their Pods, and nobody has tampered with them. Hmm...”
+1, spoken==1, , "Not right now, robot."

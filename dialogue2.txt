@@ -1,3 +1,4 @@
-spoken==0 && inventory(scotch)==0, spoken=1, "Hoy, laddie. Mind fetchin’ me ‘nother round o’ scotch?"
-spoken==1 && inventory(scotch)==0: "'Nother round, laddie!"
-inventory(scotch)==1, "O’ yeah, that hits the spot! Thank ya son. Anythin’ I can do for ya?"
+1, spoken==0 && inventory(scotch)==0, spoken=1, "Hoy, laddie. Mind fetchin’ me ‘nother round o’ scotch?"
+1, spoken==1 && inventory(scotch)==0, , "'Nother round, laddie!"
+1, inventory(scotch)==1, "O’ yeah, that hits the spot! Thank ya son. Anythin’ I can do for ya?", response0=1, "Do you know anything about Passenger #21, Harald Johannsen?"
+1, response0==1,, "Oy, that bloke? Heard somethin’ on the news about some Peace Initiative. He’s a great man, though I betcha I could drink him under the table in half an hour. That pale pile o’ bones I saw on the news before we left looked like he’d seen a ghost."
