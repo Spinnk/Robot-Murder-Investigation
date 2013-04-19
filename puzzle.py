@@ -14,7 +14,10 @@ class CircuitPuzzle:
 	self.y = 0
 	self.selected = False
 	self.item = []
+	self.rules = []
 	self.item_table = []
+	self.font_title = pygame.font.Font(PUZZLE_FONT_DIR, PUZZLE_FONT_TITLE_SIZE)
+        self.font_rules = pygame.font.Font(PUZZLE_FONT_DIR, PUZZLE_FONT_RULES_SIZE)
 
 	# load background
 	self.background = pygame.image.load(PUZZLE_BACKGROUND_DIR)
@@ -37,17 +40,15 @@ class CircuitPuzzle:
 	self.cursor.set_colorkey(COLOR_KEY)
 	self.cursor = self.cursor.convert()
 
-    def load(self, f_path):
+	# load puzzle items
 	item_w, item_h = self.puzzle_item.get_size()
 	for item_x in range(0, item_w/TILE_WIDTH):
 	    rect = (item_x * TILE_WIDTH, 0, TILE_WIDTH,TILE_HEIGHT)
 	    self.item_table.append(self.puzzle_item.subsurface(rect))
 
-        # open the file
-	fd = open(f_path, "r")
-	file_t = fd.readlines()
-
-	for line_t in file_t:
+        # load puzzle map
+	fd = open(PUZZLE_MAP, "r")
+	for line_t in fd.readlines():
             temp1 = []
             self.item.append(temp1)
             digits = string.split(line_t)
@@ -56,9 +57,15 @@ class CircuitPuzzle:
                 temp1.append(num)
         fd.close()
 
+        # load puzzle rules
+        fd = open(PUZZLE_RULES, "r")
+	for line_t in fd.readlines():
+            self.rules.append(line_t.rstrip())
+        fd.close()
+
     def update(self, event):
         if event.type == pygame.KEYDOWN:
-            if event.key == KEYBINDINGS[KB_LIFT]:
+            if event.key == KEYBINDINGS[KB_LIFT] and self.item[self.x][self.y] == 3:
                 if self.selected:
                     self.selected = False
                 else:
@@ -68,36 +75,48 @@ class CircuitPuzzle:
                 if (self.x < 0):
                     self.x = 0
                 elif self.selected:
-                    swap = self.item[self.x+1][self.y]
-                    self.item[self.x+1][self.y] = self.item[self.x][self.y]
-                    self.item[self.x][self.y] = swap
+                    if (self.item[self.x][self.y] == 2 or self.item[self.x][self.y] == 3):
+                        self.x +=1
+                    else:
+                        swap = self.item[self.x+1][self.y]
+                        self.item[self.x+1][self.y] = self.item[self.x][self.y]
+                        self.item[self.x][self.y] = swap
             elif event.key == KEYBINDINGS[KB_DOWN]:
                 self.y += 1
                 if(self.y > 7):
                     self.y = 7
                 elif self.selected:
-                    swap = self.item[self.x][self.y-1]
-                    self.item[self.x][self.y-1] = self.item[self.x][self.y]
-                    self.item[self.x][self.y] = swap
+                    if (self.item[self.x][self.y] == 2 or self.item[self.x][self.y] == 3):
+                        self.y -= 1
+                    else:
+                        swap = self.item[self.x][self.y-1]
+                        self.item[self.x][self.y-1] = self.item[self.x][self.y]
+                        self.item[self.x][self.y] = swap
             elif event.key == KEYBINDINGS[KB_RIGHT]:
                 self.x += 1
                 if(self.x > 7):
                     self.x = 7
                 elif self.selected:
-                    swap = self.item[self.x-1][self.y]
-                    self.item[self.x-1][self.y] = self.item[self.x][self.y]
-                    self.item[self.x][self.y] = swap
+                    if (self.item[self.x][self.y] == 2 or self.item[self.x][self.y] == 3):
+                        self.x -= 1
+                    else:
+                        swap = self.item[self.x-1][self.y]
+                        self.item[self.x-1][self.y] = self.item[self.x][self.y]
+                        self.item[self.x][self.y] = swap
             elif event.key == KEYBINDINGS[KB_UP]:
                 self.y -= 1
                 if(self.y < 0):
                     self.y = 0
                 elif self.selected:
-                    swap = self.item[self.x][self.y+1]
-                    self.item[self.x][self.y+1] = self.item[self.x][self.y]
-                    self.item[self.x][self.y] = swap
+                    if (self.item[self.x][self.y] == 2 or self.item[self.x][self.y] == 3):
+                        self.y += 1
+                    else:
+                        swap = self.item[self.x][self.y+1]
+                        self.item[self.x][self.y+1] = self.item[self.x][self.y]
+                        self.item[self.x][self.y] = swap
 
         for row in self.item:
-            if sum(row) == 8:
+            if sum(row) == 24:
                 return PUZZLE_SUCCESS
 
 	return PUZZLE_WORKING
@@ -111,8 +130,18 @@ class CircuitPuzzle:
         for x in xrange(len(self.item)):
             for y in xrange(len(self.item[x])):
                 screen.blit(self.item_table[self.item[x][y]], (x*TILE_WIDTH, y*TILE_HEIGHT))
-
+        
         screen.blit(self.cursor, (self.x*TILE_WIDTH, self.y*TILE_HEIGHT))
+
+        #print title and rules
+        for x in xrange(len(self.rules)):
+            box = pygame.Rect(TILE_WIDTH*len(self.item)+10, x*25, 0, 0)
+            if x == 0:
+                self.font_title.set_underline(1)
+                show = self.font_title.render(self.rules[x], PUZZLE_FONT_ANTIALIAS, PUZZLE_FONT_COLOR)
+            else:
+                show = self.font_rules.render(self.rules[x], PUZZLE_FONT_ANTIALIAS, PUZZLE_FONT_COLOR)
+            screen.blit(show, box)
 
         return NO_PROBLEM
 
@@ -126,7 +155,6 @@ if __name__=='__main__':
     pygame.key.set_repeat(100, 100)
 
     test = CircuitPuzzle()
-    test.load(PUZZLE_MAP)
 
     quit = False
     while not(quit):
