@@ -189,7 +189,7 @@ ITEM_OPTIONS = ["Cancel", "Drop", "Read", "Use"]
 #       1 - Description (store in multiple strings)
 #       2 - Inventory Buttons ("Cancel" must always be availible)
 ITEMS = [   ["", [""], []], # Item 0 is Null Item
-            ["Book", ["Read a book", "Read a book", "Read a motherfucking book"], ["Cancel", "Drop", "Read"]],
+            ["Book", ["Read a book", "Read a book", "Read an important book"], ["Cancel", "Drop", "Read"]],
             ["Not Book", ["Not a book"], ["Cancel", "Drop", "Use"]],
         	["Not a book either", ["Not a book", "Still not a book"], ["Cancel", "Drop", "Use"]]
         ]
