@@ -1,7 +1,8 @@
 Complete The Path!
 The object of this puzzle 
 is to fill in the remaining 
-stone pieces to complete the 
-walk way for SAM to cross. 
+bridge pieces to complete 
+the walk way for SAM to 
+cross. 
 
 Figure it out! 
