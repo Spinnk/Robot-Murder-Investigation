@@ -159,6 +159,7 @@ class MapState(GameState):
     ## ---[ update ]----------------------------------------------------------
     def update(self, event):
         if event.type == pygame.KEYDOWN:
+            self.in_game_map.update(event)
             if event.key == pygame.K_TAB:
                 return INVENTORY_STATE
 
@@ -171,6 +172,7 @@ class MapState(GameState):
     ## ---[ display ]----------------------------------------------------------
     def display(self):
         try:
+            self.in_game_map.draw()
             self.in_game_map.display(self.screen)
         except AttributeError:
             print "Error: In-Game Map not set."
@@ -179,7 +181,7 @@ class MapState(GameState):
 
     def setmarkers(self, character_x, character_y):
         self.in_game_map.setmarkers(character_x, character_y, 10, 6)
-        self.in_game_map.update()
+        self.in_game_map.setscale(5, 5)
 
 
 

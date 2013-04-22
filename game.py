@@ -159,7 +159,6 @@ class Game:
         self.current_state_id = new_state_id
 
 
-
     ## ---[ update ]-------------------------------------------------------
     #  @param   self    The class itself, Python standard
     #  @param   event   A pygame event

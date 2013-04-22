@@ -53,6 +53,7 @@ class InGameState (GameState):
         self.user = Character()
         self.inventory = Inventory()
         self.journal = Journal()
+        self.journal.addentry(3)
         self.ship = ShipLayout()
         self.ship.loadmap(MAP_DEFAULT_DIR)
 
