@@ -77,13 +77,13 @@ class InGameMap:
         # draw entire map
         show = pygame.Rect(0, 0, TILE_WIDTH, TILE_HEIGHT)
         clip = pygame.Rect(0, 0, TILE_WIDTH, TILE_HEIGHT)
-        for x in xrange(MAP_HEIGHT):
-            for y in xrange(MAP_WIDTH):
-                clip.x = TILE_WIDTH * self.ship[x][y]
+        for y in xrange(MAP_HEIGHT):
+            for x in xrange(MAP_WIDTH):
+                clip.x = TILE_WIDTH * self.ship[y][x]
                 self.image.blit(self.tiles, show, clip)
-                show.y += TILE_WIDTH
-            show.y = 0
-            show.x += TILE_HEIGHT
+                show.x += TILE_WIDTH
+            show.x = 0
+            show.y += TILE_HEIGHT
 
         # draw markers
         if (self.character_x is not None) and (self.character_y is not None) and (self.mission_x is not None) and (self.mission_y is not None):

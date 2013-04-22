@@ -146,7 +146,7 @@ MAP_WIDTH = 119                               # tiles
 MAP_HEIGHT = 41                               # tiles
 
 # Tile Info
-MAX_TILE_VALUE = 2
+TILE_MAX_VALUE = 23
 
 TILE_SHEET_DIR = os.path.join(ART_DIR, "tiles.png")
 TILE_WIDTH = 80                             # pixels

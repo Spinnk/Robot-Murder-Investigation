@@ -80,7 +80,7 @@ class ShipLayout:
         self.data = []
         from random import randint
         for x in xrange(MAP_HEIGHT):
-            self.data += [[randint(0, MAX_TILE_VALUE) for x in xrange(MAP_WIDTH)]]
+            self.data += [[randint(0, TILE_MAX_VALUE) for x in xrange(MAP_WIDTH)]]
         for x in xrange(3):
             self.items += [[[x, x], randint(0, len(ITEMS) - 1)]]
 
@@ -158,8 +158,9 @@ if __name__ == '__main__':
     pygame.display.set_caption("Character Demo")
 
     test = ShipLayout()
-    test.generaterandommap()
-    test.savemap(os.path.join(CWD, "map.txt"))
+    # generate a random map and save it
+    #test.generaterandommap()
+    #test.savemap(os.path.join(CWD, "map.txt"))
 
     camera = pygame.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
 
