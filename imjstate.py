@@ -42,7 +42,9 @@ class InventoryState(GameState):
     ## ---[ update ]----------------------------------------------------------
     def update(self, event):
         if event.type == pygame.KEYDOWN:
-            self.inventory.update(event)
+            item = self.inventory.update(event)
+            if item != None:
+                self.dropped_items += [item]
             if event.key == pygame.K_TAB:
                 return JOURNAL_STATE
             if event.key == pygame.K_SPACE:

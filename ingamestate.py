@@ -103,9 +103,9 @@ class InGameState (GameState):
         if (self.camera.y + TILE_SHOW_H + 1) > MAP_HEIGHT:
             self.camera.y = MAP_HEIGHT - TILE_SHOW_H - 1
         self.ship.display(self.screen, self.camera)
-        self.user.display(self.screen, self.camera)
         for npc in self.npcs:
             npc.display(self.screen, self.camera)
+        self.user.display(self.screen, self.camera)
 
     ## ---[ load ]------------------------------------------------------------
     # Sets the user, inventory, ship, and npcs according to the input
