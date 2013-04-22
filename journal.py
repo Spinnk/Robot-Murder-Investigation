@@ -58,6 +58,7 @@ class Journal:
         self.entries = []
         while len(data):
             self.entries += [[ord(data[0]), ord(data[1])]]
+            data = data[2:]
         return NO_PROBLEM
 
     def save(self):
