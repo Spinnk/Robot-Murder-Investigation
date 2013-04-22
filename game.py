@@ -66,7 +66,7 @@ class Game:
         self.save_game_state = SaveGameState(screen, SAVE_STATE)
         self.load_game_state = LoadGameState(screen, LOAD_STATE)
         self.puzzle_state = PuzzleState(screen, keybindings, PUZZLE_STATE)
-        #self.settings_state = SettingsState(screen, SETTINGS_STATE)
+        self.settings_state = SettingsState(screen, SETTINGS_STATE)
 
         # Flags
         self.mission = 0
