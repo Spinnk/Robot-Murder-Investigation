@@ -70,7 +70,7 @@ class Slider:
                 self.box.x = self.pos.x
         return float(self.box.x - self.pos.x) / self.pos.w
 
-    def display(self, screen, color = (0, 0, 0)):
+    def display(self, screen, color = (0xff, 0xff, 0xff)):
         if screen == None:
             return SURFACE_DOES_NOT_EXIST
         pygame.draw.line(screen, color, (self.pos.x, self.pos.y + self.pos.h / 2), (self.pos.x + self.pos.w + self.pos.w / self.sections - 1, self.pos.y + self.pos.h / 2))
