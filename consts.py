@@ -156,9 +156,32 @@ TILE_SHOW_H = SCREEN_HEIGHT / TILE_HEIGHT   # number of tiles down that are show
 
 TILE_SOLID = 0x01                           # mask for whether or not the tile can be walked through
 
-TILE_INFO = [0,                             # index = tile type, clip; value is properties mask
-             0,
-             0]
+TILE_INFO = [                               # index = tile type, clip; value is properties mask
+             0,                             # nothing
+             0,                             # floor 1
+             0,                             # floor 2
+             0,                             # floor 3
+             0,                             # floor 4
+             0,                             # wall 1 bottom
+             0,                             # wall 1 top
+             0,                             # blank square
+             0,                             # wall 2 bottom
+             0,                             # wall 2 top
+             0,                             # bridge wall bottom
+             0,                             # bridge wall mid
+             0,                             # bridge wall top
+             0,                             # table left
+             0,                             # table right
+             0,                             # trash can
+             0,                             # bed top
+             0,                             # bed bottom
+             0,                             # storage box
+             0,                             # puzzle tile
+             0,                             # door bottom
+             0,                             # door top
+             0,                             # side door
+             0                              # stairs
+             ]
 
 # Character Info
 CHARACTER_SPRITE_SHEET_DIR = os.path.join( ART_DIR, "robot.png")
