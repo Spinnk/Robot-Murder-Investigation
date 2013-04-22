@@ -124,7 +124,7 @@ class Settings:
         elif self.line == 8:
             KEYBINDINGS[KB_ESCAPE] = new_value
         elif self.line == 9:
-            KEYBINDINGS[EB_LIFT] = new_value
+            KEYBINDINGS[KB_LIFT] = new_value
         elif self.line == 10:
             KEYBINDINGS[KB_MAP] = new_value
         elif self.line == 11:

@@ -50,6 +50,7 @@ HOTPINK = pygame.Color(0xff, 0x69, 0xb4, 0xff)
 YELLOW =  pygame.Color(0xff, 0xff, 0x00, 0xff)
 CYAN =    pygame.Color(0x00, 0xff, 0xff, 0xff)
 BLUE =    pygame.Color(0x00, 0x00, 0xff, 0xff)
+MEDIUM_SLATE_BLUE =   pygame.Color(0x7f, 0x00, 0xff, 0xff)
 
 COLOR_KEY = HOTPINK
 
@@ -114,7 +115,7 @@ SETTINGS_BOXES = [  pygame.Rect(220, 100, SETTINGS_SLIDER_WIDTH, SETTINGS_SLIDER
                     pygame.Rect(220, 460, SETTINGS_SLIDER_WIDTH, SETTINGS_SLIDER_HEIGHT),   # volume
                     pygame.Rect(220, 500, SETTINGS_SLIDER_WIDTH, SETTINGS_SLIDER_HEIGHT)]   # brightness
 
-SETTINGS_BACKGROUND_COLORS = [YELLOW, CYAN]
+SETTINGS_BACKGROUND_COLORS = [MEDIUM_SLATE_BLUE, CYAN]
 SETTINGS_BACKGROUND_BOX = pygame.Rect(140, -5, 600, 40)
 SETTINGS_FONT_DIR = os.path.join(CWD, "comic.ttf")
 SETTINGS_FONT_SIZE = 24
