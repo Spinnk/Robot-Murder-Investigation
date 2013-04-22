@@ -1,8 +1,15 @@
 Complete The Path!
-The object of this puzzle 
-is to fill in the remaining 
-bridge pieces to complete 
-the walk way for SAM to 
-cross. 
 
-Figure it out! 
+SAM needs to cross the 
+room, but the bridge is 
+broken. You need to fix 
+the bridge so SAM may 
+cross. Move the pieces 
+to complete the path.
+
+Controls:
+W,A,S,D to move
+L to select/unselect
+
+Bridge piece:
+ 

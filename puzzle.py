@@ -20,11 +20,11 @@ class CircuitPuzzle:
         self.font_rules = pygame.font.Font(PUZZLE_FONT_DIR, PUZZLE_FONT_RULES_SIZE)
 
 	# load background
-	self.background = pygame.image.load(PUZZLE_BACKGROUND_DIR)
-	if self.background == 0:
-		sys.exit(IMAGE_DOES_NOT_EXIST)
-	self.background.set_colorkey(COLOR_KEY)
-	self.background = self.background.convert()
+        self.background = pygame.image.load(PUZZLE_BACKGROUND_DIR)
+        if self.background == 0:
+            sys.exit(IMAGE_DOES_NOT_EXIST)
+        self.background.set_colorkey(COLOR_KEY)
+        self.background = self.background.convert()
 
 	# load puzzle tiles
 	self.puzzle_item = pygame.image.load(PUZZLE_ITEM_DIR)
@@ -39,6 +39,13 @@ class CircuitPuzzle:
 		sys.exit(IMAGE_DOES_NOT_EXIST)
 	self.cursor.set_colorkey(COLOR_KEY)
 	self.cursor = self.cursor.convert()
+    
+    # load puzzle highlight
+	self.cursor_on = pygame.image.load(PUZZLE_SELECTED_ON_DIR)
+	if self.cursor_on == 0:
+		sys.exit(IMAGE_DOES_NOT_EXIST)
+	self.cursor_on.set_colorkey(COLOR_KEY)
+	self.cursor_on = self.cursor_on.convert()
 
 	# load puzzle items
 	item_w, item_h = self.puzzle_item.get_size()
@@ -131,7 +138,11 @@ class CircuitPuzzle:
             for y in xrange(len(self.item[x])):
                 screen.blit(self.item_table[self.item[x][y]], (x*TILE_WIDTH, y*TILE_HEIGHT))
         
-        screen.blit(self.cursor, (self.x*TILE_WIDTH, self.y*TILE_HEIGHT))
+        #display cursor
+        if self.selected:        
+            screen.blit(self.cursor_on, (self.x*TILE_WIDTH, self.y*TILE_HEIGHT))
+        else:
+            screen.blit(self.cursor, (self.x*TILE_WIDTH, self.y*TILE_HEIGHT))
 
         #print title and rules
         for x in xrange(len(self.rules)):
@@ -142,6 +153,9 @@ class CircuitPuzzle:
             else:
                 show = self.font_rules.render(self.rules[x], PUZZLE_FONT_ANTIALIAS, PUZZLE_FONT_COLOR)
             screen.blit(show, box)
+            
+        bridge_t = pygame.Rect(TILE_WIDTH*len(self.item)+10, 25* len(self.rules), 0, 0)
+        screen.blit(self.item_table[3], bridge_t)
 
         return NO_PROBLEM
 
