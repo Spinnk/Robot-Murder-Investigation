@@ -49,14 +49,14 @@ class NPC:
                                 # (response flag, response dialogue), ...]
 
         #temporary code to make a placeholder dialogue
-        alternate = 0
-        spoken = 0
-        self.dialogue[0] = [1, [alternate==0], [alternate=1], "Hmm, his ID must be around here somewhere"]
-        self.dialogue[1] = [1, [alternate==1], [alternate=0], "I need to find his ID if it's around"]
-        self.dialogue[2] = [1, [spoken==0], [spoken=1], "Well, I give up. Maybe it'll turn up later. Guess I'll head on up to the bridge."]
-        self.dialogue[3] = [1, [spoken==1], [], "I'll just look one more time..."]
-        self.dialogue[4] = [1, [], [], "Anythin' I can do for ya?", (response0=1, "Do you know anything about Johannsen?")]
-        self.dialogue[5] = [1, [response0==1], [], "Insert description here"]
+        #alternate = 0
+        #spoken = 0
+        #self.dialogue[0] = [1, ["alternate==0"], ["alternate=1"], "Hmm, his ID must be around here somewhere"]
+        #self.dialogue[1] = [1, ["alternate==1"], ["alternate=0"], "I need to find his ID if it's around"]
+        #self.dialogue[2] = [1, ["spoken==0"], ["spoken=1"], "Well, I give up. Maybe it'll turn up later. Guess I'll head on up to the bridge."]
+        #self.dialogue[3] = [1, ["spoken==1"], [], "I'll just look one more time..."]
+        #self.dialogue[4] = [1, [], [], "Anythin' I can do for ya?", (response0=1, "Do you know anything about Johannsen?")]
+        #self.dialogue[5] = [1, ["response0==1"], [], "Insert description here"]
         #temp code stops here
 
         
