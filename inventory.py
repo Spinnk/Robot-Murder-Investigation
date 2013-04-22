@@ -144,11 +144,13 @@ class Inventory:
         elif self.mode == 1:
             if event.key == KEYBINDINGS[KB_UP]:
                 self.option -= 1
+                return None
             elif event.key == KEYBINDINGS[KB_DOWN]:
                 self.option += 1
+                return None
             if not len(ITEMS[self.items[self.index][0]][2]):
                 self.mode = 0
-                return NO_PROBLEM
+                return None
             self.option %= len(ITEMS[self.items[self.index][0]][2])
             if event.key == KEYBINDINGS[KB_ENTER]:
                 # Cancel
@@ -162,13 +164,13 @@ class Inventory:
                 # Read
                 elif ITEMS[self.items[self.index][0]][2][self.option] == ITEM_OPTIONS[2]:
                     self.items[self.index][2] = 2
-                    return NO_PROBLEM
+                    return None
                 # Use
                 elif ITEMS[self.items[self.index][0]][2][self.option] == ITEM_OPTIONS[3]:
                     return self.removeitem()
                 else:
-                    return NOTHING_DONE
-        return NOTHING_DONE
+                    return None
+        return None
 
     # display inventory
     def display(self, screen):
