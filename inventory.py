@@ -139,7 +139,7 @@ class Inventory:
                     self.option = 0
                     self.mode = 1
             self.index %= INVENTORY_SPACES
-
+            return None
         # cursor in buttons area
         elif self.mode == 1:
             if event.key == KEYBINDINGS[KB_UP]:
@@ -168,7 +168,7 @@ class Inventory:
                     return self.removeitem()
                 else:
                     return NOTHING_DONE
-        return NO_PROBLEM
+        return NOTHING_DONE
 
     # display inventory
     def display(self, screen):
