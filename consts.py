@@ -162,19 +162,19 @@ TILE_INFO = [                               # index = tile type, clip; value is 
              0,                             # floor 2
              0,                             # floor 3
              0,                             # floor 4
-             0,                             # wall 1 bottom
-             0,                             # wall 1 top
+             1,                             # wall 1 bottom
+             1,                             # wall 1 top
              0,                             # blank square
-             0,                             # wall 2 bottom
-             0,                             # wall 2 top
+             1,                             # wall 2 bottom
+             1,                             # wall 2 top
              0,                             # bridge wall bottom
              0,                             # bridge wall mid
              0,                             # bridge wall top
-             0,                             # table left
-             0,                             # table right
-             0,                             # trash can
-             0,                             # bed top
-             0,                             # bed bottom
+             1,                             # table left
+             1,                             # table right
+             1,                             # trash can
+             1,                             # bed top
+             1,                             # bed bottom
              0,                             # storage box
              0,                             # puzzle tile
              0,                             # door bottom
