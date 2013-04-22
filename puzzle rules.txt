@@ -5,7 +5,8 @@ room, but the bridge is
 broken. You need to fix 
 the bridge so SAM may 
 cross. Move the pieces 
-to complete the path.
+to complete column and 
+cross the path.
 
 Controls:
 W,A,S,D to move
