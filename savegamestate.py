@@ -54,6 +54,9 @@ class SaveGameState (GameState):
             self.menu.add_buttons( [(f[:-5], save_state, None, True)])
             save_state += 1
             self.num_saves += 1
+            
+        if self.num_saves >= 8:
+            self.menu.set_selectable('New Save', False)
 
     ## ---[ update ]------------------------------------------------------------
     def update(self, event):
@@ -63,7 +66,7 @@ class SaveGameState (GameState):
 
         # If the new state is at least 100 then a save was requested
         if state >= 100:
-            if self.num_saves >= 9:
+            if self.num_saves >= 8:
                 self.menu.set_selectable('New Save', False)
             if state == 100:
                 save_name = "Save " + str(self.num_saves + 1)

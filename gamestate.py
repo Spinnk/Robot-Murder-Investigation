@@ -97,6 +97,8 @@ class GameState:
                     return IN_GAME_STATE
                 return MAP_STATE
             elif event.key == pygame.K_p:
+                if self.state_id == PUZZLE_STATE:
+                    return IN_GAME_STATE
                 return PUZZLE_STATE
             # If Escape is pressed
             elif event.key == pygame.K_ESCAPE:

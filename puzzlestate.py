@@ -40,8 +40,13 @@ class PuzzleState (GameState):
 
     ## ---[ update ]------------------------------------------------------------
     def update(self, event):
+        if self.checkstatechange(event) == IN_GAME_STATE:
+            return IN_GAME_STATE
+        
         try:
-            self.current_puzzle.update(event)
+            if self.current_puzzle.update(event) == PUZZLE_SUCCESS:
+                print "Puzzle Solved!"
+                return IN_GAME_STATE
         except AttributeError:
             print "Update Error: Puzzle not set."
             return IN_GAME_STATE
