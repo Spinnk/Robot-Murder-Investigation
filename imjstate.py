@@ -147,6 +147,8 @@ class MapState(GameState):
     def __init__(self, screen, keybindings, state_id):
         self.state_id = state_id
         self.in_game_map = InGameMap()
+        self.in_game_map.setscale(5, 5)
+        self.in_game_map.draw()
         self.screen = screen
         self.keybindings = keybindings
 
@@ -172,7 +174,6 @@ class MapState(GameState):
     ## ---[ display ]----------------------------------------------------------
     def display(self):
         try:
-            self.in_game_map.draw()
             self.in_game_map.display(self.screen)
         except AttributeError:
             print "Error: In-Game Map not set."
@@ -180,8 +181,8 @@ class MapState(GameState):
 
 
     def setmarkers(self, character_x, character_y):
+        self.in_game_map.draw()
         self.in_game_map.setmarkers(character_x, character_y, 10, 6)
-        self.in_game_map.setscale(5, 5)
 
 
 

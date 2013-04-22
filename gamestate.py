@@ -123,6 +123,7 @@ class MainMenuState (GameState):
         self.menu = cMenu(50, 50, 20, 5, 'vertical', 100, screen,
                             [('New Game', IN_GAME_STATE, None, True),
                              ('Load Game', LOAD_STATE, None, self.save_exists),
+                             ('Modify Settings', SETTINGS_STATE, None, True),
                              ('Quit', EXIT_STATE, None, True)])
         self.menu.set_center(True, True)
         self.menu.set_alignment('center', 'center')
@@ -168,6 +169,10 @@ class OptionsMenuState (GameState):
         state = OPTIONS_MENU_STATE
         if event.type == pygame.KEYDOWN or event.type == EVENT_CHANGE_STATE:
             rectList, state = self.menu.update(event, OPTIONS_MENU_STATE)
+
+        if self.checkstatechange(event) == IN_GAME_STATE:
+            return IN_GAME_STATE
+
         return state
 
     ## ---[ display ]----------------------------------------------------------
