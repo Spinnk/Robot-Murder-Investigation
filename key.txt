@@ -1,0 +1,26 @@
+key
+
+0=nothing
+1= floor 1
+2= floor 2
+3= floor 3
+4= floor 4
+5= wall 1 bottom
+6= wall 1 top
+7= blank square
+8= wall 2 bottom
+9= wall 2 top
+10= bridge wall bottom
+11= bridge wall mid
+12= bridge wall top
+13= table left
+14= table right
+15= trash can
+16= bed top
+17= bed bottom
+18= storage box
+19= puzzle tile (for jonathan)
+20= door bottom
+21= door top
+22= side door
+23= stairs
