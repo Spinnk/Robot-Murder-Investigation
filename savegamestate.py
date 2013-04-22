@@ -70,7 +70,6 @@ class SaveGameState (GameState):
                 self.menu.add_buttons([( save_name, 100 + self.num_saves + 1, None, True)])
                 self.num_saves += 1
                 self.save_location = os.path.join(SAVE_DIR, save_name + ".rmis")
-                print "Saved Game as " + save_name
             else:
                 self.save_location = os.path.join( SAVE_DIR, "Save " + str(state - 100) + ".rmis" )
         return state
@@ -99,9 +98,11 @@ class SaveGameState (GameState):
             f = open(self.save_location, 'wb')
             f.write(out)
             f.close()
-        except AttributeError:
-            print "Error: Could not save game"
+            print "Saved game in", self.save_location
+        except AttributeError as e:
+            print "Error Saving Game:", e
             return None
+
         return self.num_saves
 
 #-------------------------------------------------------------------------------
@@ -206,7 +207,7 @@ class LoadGameState (GameState):
         ns = []
         for x in xrange(npc_count):
             n_len = int(binascii.hexlify(data[:2]), 16); data = data[2:]
-            n = NPC(); n.load(data[:n_len]); ns += [n]; data = data[n_len:]
+            n = NPC(0, 0, 0); n.load(data[:n_len]); ns += [n]; data = data[n_len:]
         if len(data):
             return INCORRECT_DATA_LENGTH, None, None, None
 
