@@ -135,7 +135,7 @@ class ShipLayout:
         for x in xrange(TILE_SHOW_W):
             for y in xrange(TILE_SHOW_H):
                 show = pygame.Rect(x * TILE_WIDTH, y * TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT)
-                clip = pygame.Rect(self.data[camera.x + x][camera.y + y] * TILE_WIDTH, 0, TILE_WIDTH, TILE_HEIGHT)
+                clip = pygame.Rect(self.data[camera.y + y][camera.x + x] * TILE_WIDTH, 0, TILE_WIDTH, TILE_HEIGHT)
                 screen.blit(self.floor_tiles, show, clip)
         # display items
         for item in self.items:
