@@ -130,7 +130,11 @@ class InGameState (GameState):
     def removeitem(self):
         item = self.ship.removeitem([self.user.getx(), self.user.gety() + 1])
         if item != None:
-            self.inventory.additem(item)
+            if item == 1:
+                self.inventory.additem(1, 1)
+            else:
+                self.inventory.additem(item)
+
 
     # set all floor items
     def setitemsonfloor(self, itemsonfloor):
@@ -168,7 +172,6 @@ class InGameState (GameState):
             if abs(npc.getx() - x) == 1 and abs(npc.gety() - y) == 1:
                 print "You're trying to talk to NPC " + str(npc) + "! and failing!"
                 npc.setdialogue(self.inventory, 0)
-                                            
 
 
 
@@ -194,5 +197,6 @@ class InGameState (GameState):
 
 
 
-            
+
+
 
