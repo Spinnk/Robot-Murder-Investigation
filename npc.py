@@ -31,11 +31,9 @@ import pygame
 from consts import *
 
 class NPC:
-    def __init__(self):
-        self.type = 0
+    def __init__(self, npc_id, pos_x, pos_y):
+        self.id =  npc_id
         self.name = ""
-        self.x = 0
-        self.y = 0
         self.clip = 0           # which image to clip from sprite sheet; also which direction player is facing
 
         self.count = 0          # Count the number of times update was called
@@ -46,7 +44,19 @@ class NPC:
         self.font = pygame.font.Font(NPC_FONT_DIR, NPC_FONT_SIZE)
 
         self.dialogue = []      # dialogue is a list, where each element is an array of
-                                # [mission, preconditions (including response flags), postconditions, dialogue, (response flag, response dialogue), (response flag, response dialogue), ...]
+                                # [mission, preconditions (including response flags),
+                                # postconditions, dialogue, (response flag, response dialogue),
+                                # (response flag, response dialogue), ...]
+        # set the character position
+        self.x = pos_x
+        self.y = pos_y
+
+        # determine npc "type" based on its id
+        if npc_id == 0:
+            self.type = 0
+        self.sprite = pygame.image.load(NPC_SHEETS_DIR[0])
+        if self.sprite == None:
+            print "Error loading file: " + str(NPC_SHEETS_DIR[npc_type])
 
     # Accessors and Modifiers
 
@@ -92,7 +102,8 @@ class NPC:
 
     # read in dialogue
     def readdialogue(self):
-        f = open("dialogue%s.txt" %self.ID, 'r')    #open dialogue#.txt, where # is the ID of this NPC
+        dialogue_file = "dialogue" + self.id + ".txt"
+        f = open(dialogue_file, 'r')    #open dialogue#.txt, where # is the ID of this NPC
         line = f.readline()
         while line != '':
             splitline = string.split(line, ',')
@@ -149,8 +160,9 @@ class NPC:
         if screen == None:
             return SURFACE_DOES_NOT_EXIST
         # if the NPC is out of camera focus
-        if (self.x < camera.x) or (camera.x < self.x) or (self.y < camera.y) or (camera.y < self.y):
-            return NOTHING_DONE
+
+        #if (self.x < camera.x) or (camera.x < self.x) or (self.y < camera.y) or (camera.y < self.y):
+        #    return NOTHING_DONE
 
         show = pygame.Rect((self.x - camera.x) * TILE_WIDTH, (self.y - camera.y) * TILE_HEIGHT, 0, 0)
         clip = pygame.Rect(self.clip, 0, NPC_WIDTH, NPC_HEIGHT)

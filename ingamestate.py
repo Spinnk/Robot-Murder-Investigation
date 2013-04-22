@@ -57,9 +57,7 @@ class InGameState (GameState):
         self.ship.loadmap(MAP_DEFAULT_DIR)
 
         # temporary test NPC
-        self.npcs = [NPC()]
-        self.npcs[0].settype(0)
-        self.npcs[0].spawn(5,5)
+        self.npcs = [NPC(0, 3, 6)]
 
         # temporary test items
         self.ship.additem([1,1], 1)
@@ -169,8 +167,8 @@ class InGameState (GameState):
         for npc in self.npcs:
             if abs(npc.getx() - x) == 1 and abs(npc.gety() - y) == 1:
                 print "You're trying to talk to NPC " + str(npc) + "! and failing!"
-
-
+                npc.setdialogue(self.inventory, 0)
+                                            
 
 
 
