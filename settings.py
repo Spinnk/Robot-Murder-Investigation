@@ -39,10 +39,12 @@ class Key:
         screen.blit(self.font.render(KB_NAMES[self.value] + ": " + str(KEYBINDINGS[self.value]), KEY_FONT_ANTIALIAS, KEY_FONT_COLOR), self.loc)
 
 class Slider:
-    def __init__(self):
+    def __init__(self, name):
+        self.name = name
         self.pos = pygame.Rect(0, 0, 0, 0)      # position and size of entire slider
         self.box = pygame.Rect(0, 0, 0, 0)      # position and size of box
         self.sections = 100                     # number of divisions
+        self.font = pygame.font.Font(KEY_FONT_DIR, KEY_FONT_SIZE)
 
     # need to call before displaying
     def setpos(self, rect):
@@ -73,6 +75,9 @@ class Slider:
     def display(self, screen, color = (0xff, 0xff, 0xff)):
         if screen == None:
             return SURFACE_DOES_NOT_EXIST
+        self.pos.y -= self.font.size("")[1]
+        screen.blit(self.font.render(self.name, KEY_FONT_ANTIALIAS, KEY_FONT_COLOR), self.pos)
+        self.pos.y += self.font.size("")[1]
         pygame.draw.line(screen, color, (self.pos.x, self.pos.y + self.pos.h / 2), (self.pos.x + self.pos.w + self.pos.w / self.sections - 1, self.pos.y + self.pos.h / 2))
         pygame.draw.rect(screen, color, self.box)
         return NO_PROBLEM
@@ -82,11 +87,11 @@ class Settings:
         self.mode = 0               # 0 = going up and down; 1 = change
         self.line = 0
 
-        volume = Slider()
+        volume = Slider("Volume")
         volume.setpos(SETTINGS_BOXES[11])
         volume.setsections(25)
 
-        gamma = Slider()
+        gamma = Slider("Brightness")
         gamma.setpos(SETTINGS_BOXES[12])
         gamma.setsections(25)
 
