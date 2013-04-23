@@ -44,13 +44,25 @@ class NPC:
         self.font = pygame.font.Font(NPC_FONT_DIR, NPC_FONT_SIZE)
 
         self.dialogue = []      # dialogue is a list, where each element is an array of
-                                # [mission, preconditions (including response flags),
+                                # [mission, preconditions, response flags
                                 # postconditions, dialogue, (response flag, response dialogue),
                                 # (response flag, response dialogue), ...]
 
         #temporary code to make a placeholder dialogue
-        #alternate = 0
-        #spoken = 0
+        #preconditions and postconditions [self.alternate, self.spoken]
+        #responses are in order [response0, response1, ...]
+        #0=0, 1=1, 2=N/A
+        self.alternate = 0
+        self.spoken = 0
+        response0 = 0
+        
+        self.dialogue[0] = [1, [0, 2], [0], [1, 2], "Hmm, his ID must be around here somewhere"]
+        self.dialogue[1] = [1, [1, 2], [0], [0, 2], "I need to find his ID if it's around"]
+        self.dialogue[2] = [1, [2, 0], [0], [2, 1], "Well, I give up. Maybe it'll turn up later. Guess I'll head on up to the bridge."]
+        self.dialogue[3] = [1, [2, 1], [0], [2, 2], "I'll just look one more time..."]
+        self.dialogue[4] = [1, [2, 2], [0], [2, 2], "Anythin' I can do for ya?", ([1], "Do you know anything about Johannsen?")]
+        self.dialogue[5] = [1, [2, 2], [1], [2, 2], "Insert description here"]
+                            
         #self.dialogue[0] = [1, ["alternate==0"], ["alternate=1"], "Hmm, his ID must be around here somewhere"]
         #self.dialogue[1] = [1, ["alternate==1"], ["alternate=0"], "I need to find his ID if it's around"]
         #self.dialogue[2] = [1, ["spoken==0"], ["spoken=1"], "Well, I give up. Maybe it'll turn up later. Guess I'll head on up to the bridge."]
@@ -119,18 +131,34 @@ class NPC:
         f = open(dialogue_file, 'r')    #open dialogue#.txt, where # is the ID of this NPC
         line = f.readline()
         while line != '':
-            splitline = string.split(line, ',')
-            if len(splitline) > 4:
+            splitline = string.split(line, ';')
+            if len(splitline) > 5:
                 #there are response dialogues
-                i = 5
+                i = 6
                 for i in xrange(len(splitline)):
                     #group response dialogues together
                     response = (splitline[i], splitline[i+1])
                     del splitline[5:7]
                     splitline.insert(i, response)
 
-            self.dialogue.append(splitline)
+            temp = []
+            temp[0] = splitline[0]
+            temp[1] = string.split(splitline[1], ',')
+            temp[2] = string.split(splitline[2], ',')
+            temp[3] = string.split(splitline[3], ',')
+            i = 4
+            for i in xrange(len(splitline)):
+                temp[i] = splitline[i]
+            self.dialogue.append(temp)
+            
+            
             line = f.readline()
+
+    #NPC talk
+    def rundialogue(self):
+        pass
+        
+
 
     # load from save string
     def load(self, data):
