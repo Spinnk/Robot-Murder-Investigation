@@ -96,6 +96,7 @@ class GameState:
                 if self.state_id == MAP_STATE:
                     return IN_GAME_STATE
                 return MAP_STATE
+            # Temporarily way to enter puzzle state ("p" key)
             elif event.key == pygame.K_p:
                 if self.state_id == PUZZLE_STATE:
                     return IN_GAME_STATE
@@ -105,6 +106,12 @@ class GameState:
                 if self.state_id == OPTIONS_MENU_STATE:
                     return IN_GAME_STATE
                 return OPTIONS_MENU_STATE
+
+    def setflags(self, flags):
+        self.flags = flags
+
+    def getflags(self):
+        return self.flags
 
 
 #-------------------------------------------------------------------------------

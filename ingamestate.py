@@ -45,6 +45,9 @@ class InGameState (GameState):
         self.tile_sheet.set_colorkey(COLOR_KEY)
         self.tile_sheet = self.tile_sheet.convert()
 
+        # flags
+        self.flags = None
+
         # set system stuff
         self.screen = screen
         self.keybindings = keybindings
@@ -155,12 +158,6 @@ class InGameState (GameState):
 
     def getjournal(self):
         return self.journal
-
-    def getship(self):
-        return self.ship
-
-    def setship(self, ship):
-        self.ship = ship
 
     def getcharacterposition(self):
         return self.user.getx(), self.user.gety()

@@ -56,6 +56,9 @@ class Game:
             os.mkdir(SAVE_DIR)
         self.num_saves = len([name for name in os.listdir(SAVE_DIR)])
 
+        # Flags
+        self.flags = {'mission': 1, 'p1_solved': 0}
+
         # Create instances of each child of GameState:
         self.main_menu_state = MainMenuState( screen, self.num_saves, MAIN_MENU_STATE )
         self.options_menu_state = OptionsMenuState( screen, self.num_saves, OPTIONS_MENU_STATE )
@@ -67,9 +70,6 @@ class Game:
         self.load_game_state = LoadGameState(screen, LOAD_STATE)
         self.puzzle_state = PuzzleState(screen, keybindings, PUZZLE_STATE)
         self.settings_state = SettingsState(screen, SETTINGS_STATE)
-
-        # Flags
-        self.mission = 0
 
         # Set current_state to reference main_menu_state
         self.current_state = self.main_menu_state
@@ -83,6 +83,13 @@ class Game:
     ## ---[ setstate ]-------------------------------------------------------
     # Set the current_state to match the current_state_id
     def setstate(self, new_state_id):
+        
+        # If the current state has a "flags" attribute, get it
+        try:
+            self.flags = self.current_state.getflags()
+        except AttributeError:
+            pass
+            
         if new_state_id == MAIN_MENU_STATE:
             self.current_state = self.main_menu_state
 
@@ -121,7 +128,6 @@ class Game:
             self.current_state = self.map_state        
 
         elif new_state_id == PUZZLE_STATE:
-            print "Puzzle State!"
             self.current_state = self.puzzle_state
 
         elif new_state_id == OPTIONS_MENU_STATE:
@@ -157,6 +163,7 @@ class Game:
             return
 
         self.current_state_id = new_state_id
+        self.current_state.setflags(self.flags)
 
 
     ## ---[ update ]-------------------------------------------------------

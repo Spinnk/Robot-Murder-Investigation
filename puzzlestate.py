@@ -38,6 +38,8 @@ class PuzzleState (GameState):
         self.screen = screen
         self.setpuzzle(CIRCUIT_PUZZLE)
 
+        self.flags = None
+
     ## ---[ update ]------------------------------------------------------------
     def update(self, event):
         if self.checkstatechange(event) == IN_GAME_STATE:
@@ -46,6 +48,7 @@ class PuzzleState (GameState):
         try:
             if self.current_puzzle.update(event) == PUZZLE_SUCCESS:
                 print "Puzzle Solved!"
+                self.flags['p1_solved'] = 1
                 return IN_GAME_STATE
         except AttributeError:
             print "Update Error: Puzzle not set."
@@ -65,7 +68,8 @@ class PuzzleState (GameState):
         if puzzle_type == CIRCUIT_PUZZLE:
             self.current_puzzle = CircuitPuzzle()
 
-
+    def getflags(self):
+        return self.flags
 
 
 
