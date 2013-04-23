@@ -56,12 +56,12 @@ class NPC:
         self.spoken = 0
         response0 = 0
         
-        self.dialogue[0] = [1, [0, 2], [0], [1, 2], "Hmm, his ID must be around here somewhere"]
-        self.dialogue[1] = [1, [1, 2], [0], [0, 2], "I need to find his ID if it's around"]
-        self.dialogue[2] = [1, [2, 0], [0], [2, 1], "Well, I give up. Maybe it'll turn up later. Guess I'll head on up to the bridge."]
-        self.dialogue[3] = [1, [2, 1], [0], [2, 2], "I'll just look one more time..."]
-        self.dialogue[4] = [1, [2, 2], [0], [2, 2], "Anythin' I can do for ya?", ([1], "Do you know anything about Johannsen?")]
-        self.dialogue[5] = [1, [2, 2], [1], [2, 2], "Insert description here"]
+        self.dialogue[0] = [1, [0, 2], [0], [1, 2], ["Hmm, his ID must", "be around here somewhere"]]
+        self.dialogue[1] = [1, [1, 2], [0], [0, 2], ["I need to find his", "ID if it's around"]]
+        self.dialogue[2] = [1, [2, 0], [0], [2, 1], ["Well, I give up. Maybe it'll turn up", "later. Guess I'll head on up to the bridge."]]
+        self.dialogue[3] = [1, [2, 1], [0], [2, 2], ["I'll just look one more time..."]]
+        self.dialogue[4] = [1, [2, 2], [0], [2, 2], ["Anythin' I can do for ya?"], ([1], ["Do you know anything about Johannsen?"])]
+        self.dialogue[5] = [1, [2, 2], [1], [2, 2], ["Insert description here"]]
                             
         #self.dialogue[0] = [1, ["alternate==0"], ["alternate=1"], "Hmm, his ID must be around here somewhere"]
         #self.dialogue[1] = [1, ["alternate==1"], ["alternate=0"], "I need to find his ID if it's around"]
@@ -154,9 +154,18 @@ class NPC:
             
             line = f.readline()
 
-    #NPC talk
-    def rundialogue(self):
+    #NPC talk, call when player talks to NPC
+    def rundialogue(self, mission):
         pass
+        #if in the middle of a response, do response dialogue
+        #for i in xrange(len(self.dialogue[]):
+            #for j in xrange(len(self.dialogue[i][2]:
+                #if self.dialogue[i][2][j] == 1:
+                #now check if that response flag is met
+                    #if i == 0 and response0 == 1:
+                        #return self.dia
+                            
+        
         
 
 
