@@ -147,7 +147,7 @@ class MapState(GameState):
     def __init__(self, screen, keybindings, state_id):
         self.state_id = state_id
         self.in_game_map = InGameMap()
-        self.in_game_map.setscale(9, 6)
+        #self.in_game_map.setscale(9, 6)
         self.screen = screen
         self.keybindings = keybindings
 
@@ -180,7 +180,6 @@ class MapState(GameState):
 
 
     def setmarkers(self, character_x, character_y):
-        self.in_game_map.setmarkers(character_x, character_y + 1, 6, 16)
-        self.in_game_map.draw()
+        self.in_game_map.addmarker(character_x, character_y + 1, 0)
 
 
