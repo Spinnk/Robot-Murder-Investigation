@@ -24,6 +24,22 @@ import pygame
 
 from consts import *
 
+# string names
+class Button:
+    def __init__(self, name, loc):
+        self.name = name
+        self.loc = loc
+        self.font = pygame.font.Font(KEY_FONT_DIR, KEY_FONT_SIZE)
+
+    def update(self, name):
+        self.name = name
+
+    def display(self, screen):
+        if screen == None:
+            return SURFACE_DOES_NOT_EXIST
+        screen.blit(self.font.render(self.name, KEY_FONT_ANTIALIAS, KEY_FONT_COLOR), self.loc)
+
+# integer names
 class Key:
     def __init__(self, value, loc):
         self.value = value
@@ -39,21 +55,27 @@ class Key:
         screen.blit(self.font.render(KB_NAMES[self.value] + ": " + str(KEYBINDINGS[self.value]), KEY_FONT_ANTIALIAS, KEY_FONT_COLOR), self.loc)
 
 class Slider:
-    def __init__(self, name):
+    def __init__(self, name = '', pos = pygame.Rect(0, 0, 0, 0), sections = 100, box = 0.0):
         self.name = name
-        self.pos = pygame.Rect(0, 0, 0, 0)      # position and size of entire slider
-        self.box = pygame.Rect(0, 0, 0, 0)      # position and size of box
-        self.sections = 100                     # number of divisions
+        self.sections = sections
+        self.setpos(pos)
+        self.setsections(sections)
+        self.setbox(box)
         self.font = pygame.font.Font(KEY_FONT_DIR, KEY_FONT_SIZE)
 
-    # need to call before displaying
+    # position of slider box
     def setpos(self, rect):
-        self.pos = rect
-        self.box = pygame.Rect(self.pos.x, self.pos.y, self.pos.w / self.sections, self.pos.h)
+        self.pos = rect                                                                                 # position and size of entire slider
+        self.box = pygame.Rect(self.pos.x, self.pos.y, self.pos.w / self.sections, self.pos.h)          # position and size of box
 
     def getpos(self):
         return self.pos
 
+    # set where the box is at
+    def setbox(self, box):
+        self.box.x = self.pos.x + self.pos.w * box
+
+    # number of divisions
     def setsections(self, sec):
         self.sections = sec
         self.box.w = self.pos.w / self.sections
@@ -86,15 +108,6 @@ class Settings:
     def __init__(self):
         self.mode = 0               # 0 = going up and down; 1 = change
         self.line = 0
-
-        volume = Slider("Volume")
-        volume.setpos(SETTINGS_BOXES[11])
-        volume.setsections(25)
-
-        gamma = Slider("Brightness")
-        gamma.setpos(SETTINGS_BOXES[12])
-        gamma.setsections(25)
-
         self.lines = [  Key(KB_UP, SETTINGS_BOXES[0]),
                         Key(KB_LEFT, SETTINGS_BOXES[1]),
                         Key(KB_DOWN, SETTINGS_BOXES[2]),
@@ -106,8 +119,29 @@ class Settings:
                         Key(KB_ESCAPE, SETTINGS_BOXES[8]),
                         Key(KB_LIFT, SETTINGS_BOXES[9]),
                         Key(KB_MAP, SETTINGS_BOXES[10]),
-                        volume,
-                        gamma]
+                        Slider("Volume", SETTINGS_BOXES[11], 25),
+                        Slider("Brightness", SETTINGS_BOXES[12], 25),
+                        Button("Save", SETTINGS_BOXES[13]),
+                        Button("Default", SETTINGS_BOXES[14])]
+
+    def default(self):
+        global KEYBINDINGS, SOUND_VOLUME, SCREEN_BRIGHTNESS
+        KEYBINDINGS = { KB_UP: pygame.K_w,
+                        KB_LEFT: pygame.K_a,
+                        KB_DOWN: pygame.K_s,
+                        KB_RIGHT: pygame.K_d,
+                        KB_USE: pygame.K_e,
+                        KB_INVENTORY: pygame.K_i,
+                        KB_JOURNAL: pygame.K_j,
+                        KB_ENTER: pygame.K_RETURN,
+                        KB_ESCAPE: pygame.K_ESCAPE,
+                        KB_LIFT: pygame.K_l,
+                        KB_MAP: pygame.K_m}
+        SOUND_VOLUME = 1.0
+        SCREEN_BRIGHTNESS = 1.0
+
+        self.lines[11].setbox(0)
+        self.lines[12].setbox(0)
 
     def move(self, new_value):
         if self.line == 0:
@@ -133,14 +167,19 @@ class Settings:
         elif self.line == 10:
             KEYBINDINGS[KB_MAP] = new_value
         elif self.line == 11:
-            pygame.mixer.music.set_volume(new_value)
+            global SOUND_VOLUME
+            SOUND_VOLUME = new_value
+            pygame.mixer.music.set_volume(SOUND_VOLUME)
         elif self.line == 12:
-            pygame.display.set_gamma(1 - new_value)
+            global SCREEN_BRIGHTNESS
+            SCREEN_BRIGHTNESS = 1.0 - new_value
+            pygame.display.set_gamma(SCREEN_BRIGHTNESS)
 
     def load(self, file_name):
         f = open(file_name, 'r')
         settings = f.readlines()
         f.close()
+        global KEYBINDINGS, SOUND_VOLUME, SCREEN_BRIGHTNESS
         i = 0
         while i < len(settings):
             if settings[i][0] == '#':
@@ -185,6 +224,7 @@ class Settings:
                     line = line[:-1]        # remove newline char
                     if line[:6] == 'Volume':
                         SOUND_VOLUME = float(line[7:])
+                        self.lines[11].setbox(1 - SOUND_VOLUME)
                     i += 1
             elif settings[i] == '-----BEGIN SCREEN SETTINGS-----\n':
                 i += 1
@@ -195,10 +235,11 @@ class Settings:
                     line = line[:-1]        # remove newline char
                     if line[:10] == 'Brightness':
                         SCREEN_BRIGHTNESS = float(line[11:])
+                        self.lines[12].setbox(1 - SCREEN_BRIGHTNESS)
                     i += 1
             i += 1
 
-    def asve(self, file_name):
+    def save(self, file_name):
         f = open(file_name, 'w')
         f.write('# Sentience in Space\n' +
                 '\n-----BEGIN KEYBINDINGS-----' +
@@ -229,14 +270,19 @@ class Settings:
         if self.mode == 0:
             if event.key == KEYBINDINGS[KB_DOWN]:
                 self.line += 1
-                if self.line >= len(self.lines):
-                    self.line = len(self.lines) - 1
+                if self.line >= len(SETTINGS_BOXES):
+                    self.line = len(SETTINGS_BOXES) - 1
             elif event.key == KEYBINDINGS[KB_UP]:
                 self.line -= 1
                 if self.line < 0:
                     self.line = 0
             elif event.key == KEYBINDINGS[KB_RIGHT]:
-                self.mode = 1
+                if self.line == 13:
+                    self.save(SETTINGS_DIR)
+                elif self.line == 14:
+                    self.default()
+                else:
+                    self.mode = 1
         elif self.mode == 1:
             if self.line < 11:
                 if event.key == KEYBINDINGS[KB_LEFT]:
@@ -244,7 +290,7 @@ class Settings:
                 else:
                     self.move(event.key)
                     self.mode = 0
-            elif self.line >= 11:
+            elif (self.line == 11) or (self.line == 12):
                 if event.key == KEYBINDINGS[KB_RIGHT]:
                     self.move(self.lines[self.line].update(event))
                 elif event.key == KEYBINDINGS[KB_LEFT]:
@@ -274,6 +320,8 @@ if __name__=='__main__':
 
     test = Settings()
     test.load(SETTINGS_DIR)
+#    test.default()
+#    test.save(SETTINGS_DIR)
 
     quit = False
     while not(quit):
@@ -282,7 +330,7 @@ if __name__=='__main__':
                 quit = True
             if event.type == pygame.KEYDOWN:
                 test.update(event)
-        screen.fill(WHITE)
+        screen.fill(BLACK)
         test.display(screen)
         pygame.display.flip()
 

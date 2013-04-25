@@ -31,7 +31,7 @@ from consts import *
 
 class Character:
     # or instead of using file name, open all images in main, and clip with display()
-    def __init__(self):   # taking in string to save memory + faster since surfaces are passed by value, not reference
+    def __init__(self):
         # remember sprite will be standing on tile y+1
         self.spawn()
 
