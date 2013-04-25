@@ -293,8 +293,14 @@ JOURNAL_FONT_ANTIALIAS = True
 JOURNAL = parsejournal(JOURNAL_FILE_DIR)
 
 # In Game Map Info
-INGAMEMAP_CHARACTER_MARKER_DIR = os.path.join(ART_DIR, "robot marker.png")
-INGAMEMAP_MISSION_MARKER_DIR = os.path.join(ART_DIR, "mission marker.png")
+INGAMEMAP_MARKER_DIRS = [os.path.join(ART_DIR, "robot marker.png"),                # character marker
+                          os.path.join(ART_DIR, "mission marker.png")               # goal marker
+                          ]
+INGAMEMAP_TILE_SHEET_DIR = os.path.join(ART_DIR, "small tiles.png")
+INGAMEMAP_TILE_WIDTH = 20
+INGAMEMAP_TILE_HEIGHT = 20
+INGAMEMAP_TILE_SHOW_W = SCREEN_WIDTH / INGAMEMAP_TILE_WIDTH
+INGAMEMAP_TILE_SHOW_H = SCREEN_HEIGHT / INGAMEMAP_TILE_HEIGHT
 
 # Dialogue Info
 DIALOGUE = parsedialogue('')

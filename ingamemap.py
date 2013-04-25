@@ -23,35 +23,32 @@ from consts import *
 
 import pygame
 
+
 class InGameMap:
     def __init__(self):
-        self.image = pygame.Surface((0, 0))
-        self.camera = pygame.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
-        self.setmarkers()
-        self.setscale()
+        self.camera = pygame.Rect(0, 0, INGAMEMAP_TILE_SHOW_W, INGAMEMAP_TILE_SHOW_H)
+        self.markers = []       # (x, y, type)
 
         # open files that will not change
         self.background = pygame.image.load(BACKGROUND_IMAGE_DIR)
         if self.background == None:
             sys.exit(IMAGE_DOES_NOT_EXIST)
 
-        self.tiles = pygame.image.load(TILE_SHEET_DIR)
+        self.tiles = pygame.image.load(INGAMEMAP_TILE_SHEET_DIR)
         if self.tiles == None:
             sys.exit(IMAGE_DOES_NOT_EXIST)
         self.tiles.set_colorkey(COLOR_KEY)
         self.tiles = self.tiles.convert()
 
-        self.character_marker = pygame.image.load(INGAMEMAP_CHARACTER_MARKER_DIR)
-        if self.character_marker == None:
-            sys.exit(IMAGE_DOES_NOT_EXIST)
-        self.character_marker.set_colorkey(COLOR_KEY)
-        self.character_marker = self.character_marker.convert()
+        self.marker_images = []
 
-        self.mission_marker = pygame.image.load(INGAMEMAP_MISSION_MARKER_DIR)
-        if self.mission_marker == None:
-            sys.exit(IMAGE_DOES_NOT_EXIST)
-        self.mission_marker.set_colorkey(COLOR_KEY)
-        self.mission_marker = self.mission_marker.convert()
+        for DIR in INGAMEMAP_MARKER_DIRS:
+            marker = pygame.image.load(DIR)
+            if marker == None:
+                sys.exit(IMAGE_DOES_NOT_EXIST)
+            marker.set_colorkey(COLOR_KEY)
+            marker = marker.convert()
+            self.marker_images += [marker]
 
         # read in map from file
         f = open(MAP_DEFAULT_DIR, 'rb')
@@ -62,92 +59,66 @@ class InGameMap:
             self.ship += [[ord(y) for y in data[:MAP_WIDTH]]]
             data = data[MAP_WIDTH:]
 
-    # call before displaying, or screen will not contain markers
-    def setmarkers(self, character_x = None, character_y = None, mission_x = None, mission_y = None):
-        self.character_x = character_x
-        self.character_y = character_y
-        self.mission_x = mission_x
-        self.mission_y = mission_y
-        # center the camera
-        if self.character_x and self.character_y:
-            self.camera.x = self.character_x - TILE_SHOW_W / 2
-            if self.camera.x < 0:
-                self.camera.x = 0
-            if (self.camera.x + TILE_SHOW_W) > MAP_WIDTH:
-                self.camera.x = MAP_WIDTH - TILE_SHOW_W
-            self.camera.y = self.character_y - TILE_SHOW_H / 2 + 1
-            if self.camera.y < 0:
-                self.camera.y = 0
-            if (self.camera.y + TILE_SHOW_H + 1) > MAP_HEIGHT:
-                self.camera.y = MAP_HEIGHT - TILE_SHOW_H - 1
-        return NO_PROBLEM
+    def addmarker(self, x = None, y = None, type = None):
+        if type:
+            self.markers += [(x, y, type)]
+            return NO_PROBLEM
+        return NOTHING_DONE
 
-    # default scale is 1. might want to change before calling draw
-    # zoom   1,1 = show full map
-    #      10, 5 = normal size
-    #     18, 18 = max zoom
-    def setscale(self, x_scale = 1, y_scale = 1):
-        self.xscale = x_scale
-        self.yscale = y_scale
-        return NO_PROBLEM
-
-    # draw map; call as few times as possible
-    def draw(self):
-        self.image = pygame.Surface((TILE_WIDTH * MAP_WIDTH, TILE_HEIGHT * MAP_HEIGHT))
-        if self.image == None:
-            return SURFACE_DOES_NOT_EXIST
-
-        # draw entire map
-        show = pygame.Rect(0, 0, TILE_WIDTH, TILE_HEIGHT)
-        clip = pygame.Rect(0, 0, TILE_WIDTH, TILE_HEIGHT)
-        for y in xrange(MAP_HEIGHT):
-            for x in xrange(MAP_WIDTH):
-                clip.x = TILE_WIDTH * self.ship[y][x]
-                self.image.blit(self.tiles, show, clip)
-                show.x += TILE_WIDTH
-            show.x = 0
-            show.y += TILE_HEIGHT
-
-        # draw markers
-        if (self.character_x is not None) and (self.character_y is not None):
-            self.image.blit(self.character_marker, (self.character_x * TILE_WIDTH, self.character_y * TILE_HEIGHT))
-        if (self.mission_x is not None) and (self.mission_y is not None):
-            self.image.blit(self.mission_marker, (self.mission_x * TILE_WIDTH, self.mission_y * TILE_HEIGHT))
-
-        # shrink image
-        self.image = pygame.transform.scale(self.image, (self.xscale * SCREEN_WIDTH, self.yscale * SCREEN_HEIGHT))
-
-        return NO_PROBLEM
+    def removemarker(self, x = None, y = None, type = None):
+        if type:
+            if (x, y, type) in self.markers:
+                self.markers.remove((x, y, type))
+                return NO_PROBLEM
+        return NOTHING_DONE
 
     def update(self, event = None):
         keystates = pygame.key.get_pressed()
-#        if event.key == KEYBINDINGS[KB_DOWN]:
         if keystates[KEYBINDINGS[KB_DOWN]]:
-            self.camera.y += TILE_HEIGHT / self.yscale
-#        elif event.key == KEYBINDINGS[KB_RIGHT]:
+        #if event.key == KEYBINDINGS[KB_DOWN]:
+            self.camera.y += 1
         elif keystates[KEYBINDINGS[KB_RIGHT]]:
-            self.camera.x += TILE_WIDTH / self.xscale
-#        elif event.key == KEYBINDINGS[KB_UP]:
+        #elif event.key == KEYBINDINGS[KB_RIGHT]:
+            self.camera.x += 1
         elif keystates[KEYBINDINGS[KB_UP]]:
-            self.camera.y -= TILE_HEIGHT / self.yscale
-#        elif event.key == KEYBINDINGS[KB_LEFT]:
+        #elif event.key == KEYBINDINGS[KB_UP]:
+            self.camera.y -= 1
         elif keystates[KEYBINDINGS[KB_LEFT]]:
-            self.camera.x -= TILE_WIDTH / self.xscale
+        #elif event.key == KEYBINDINGS[KB_LEFT]:
+            self.camera.x -= 1
         if self.camera.x < 0:
             self.camera.x = 0
-        if (self.camera.x + SCREEN_WIDTH) >= self.image.get_size()[0]:
-            self.camera.x = self.image.get_size()[0] - SCREEN_WIDTH - 1
+        if (self.camera.x + self.camera.w) >= MAP_WIDTH:
+            self.camera.x = MAP_WIDTH - self.camera.w
         if self.camera.y < 0:
             self.camera.y = 0
-        if (self.camera.y + SCREEN_HEIGHT) >= self.image.get_size()[1]:
-            self.camera.y = self.image.get_size()[1] - SCREEN_HEIGHT - 1
+        if (self.camera.y + self.camera.h) >= MAP_HEIGHT:
+            self.camera.y = MAP_HEIGHT - self.camera.h
         return NO_PROBLEM
 
     def display(self, screen):
         if screen == None:
             return SURFACE_DOES_NOT_EXIST
         screen.blit(self.background, (0, 0))
-        screen.blit(self.image, (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT), self.camera)
+
+        show = pygame.Rect(0, 0, INGAMEMAP_TILE_WIDTH, INGAMEMAP_TILE_HEIGHT)
+        clip = pygame.Rect(0, 0, INGAMEMAP_TILE_WIDTH, INGAMEMAP_TILE_HEIGHT)
+        for y in xrange(self.camera.y, self.camera.y + self.camera.h):
+            for x in xrange(self.camera.x, self.camera.x + self.camera.w):
+                clip.x = INGAMEMAP_TILE_WIDTH * self.ship[y][x]
+                screen.blit(self.tiles, show, clip)
+                show.x += INGAMEMAP_TILE_WIDTH
+            show.x = 0
+            show.y += INGAMEMAP_TILE_HEIGHT
+
+        for m in self.markers:
+            # if the marker in the camera
+            if (((self.camera.x <= m[0]) and (m[0] < (self.camera.x + self.camera.w))) and
+               ((self.camera.y <= m[1]) and (m[1] < (self.camera.y + self.camera.h)))):
+                show.x = self.camera.w * m[0] - self.camera.x
+                show.y = self.camera.h * m[1] - self.camera.y
+                screen.blit(self.marker_images[m[2]], show)
+
         return NO_PROBLEM
 
 if __name__=='__main__':
@@ -160,9 +131,8 @@ if __name__=='__main__':
     pygame.key.set_repeat(100, 100)
 
     test = InGameMap()
-    test.setmarkers(0, 1, 10, 6)
-    test.setscale(10, 5)
-    test.draw()
+    test.addmarker(0, 0, 0)
+    test.addmarker(2, 2, 1)
 
     quit = False
     while not(quit):
@@ -170,8 +140,8 @@ if __name__=='__main__':
         for event in pygame.event.get():
             if event.type == pygame.QUIT: # exit when close window "X" is pressed
                 quit = True
-            #if event.type == pygame.KEYDOWN:
-        test.update()
+            if event.type == pygame.KEYDOWN:
+                test.update(event)
         test.display(screen)
         pygame.display.flip()
 
