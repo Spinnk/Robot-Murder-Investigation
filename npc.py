@@ -158,12 +158,31 @@ class NPC:
     def rundialogue(self, mission):
         pass
         #if in the middle of a response, do response dialogue
-        #for i in xrange(len(self.dialogue[]):
-            #for j in xrange(len(self.dialogue[i][2]:
-                #if self.dialogue[i][2][j] == 1:
-                #now check if that response flag is met
-                    #if i == 0 and response0 == 1:
-                        #return self.dia
+        #for i in xrange(len(self.dialogue[])):
+            #if self.dialogue[i][0] == mission:
+                #for j in xrange(len(self.dialogue[i][2]:
+                    #if self.dialogue[i][2][j] == 1:
+                    #now check if that response flag is met
+                        #if i == 0 and response0 == 1:
+                            #call functions to set postconditions
+                            #return the text
+                            #return self.dialogue[i][5]
+        #if found no responses, find the appropriate dialogue
+        #for i in xrange(len(self.dialogue[])):
+            #if self.dialogue[i][0] == mission:
+                #bool_precon = True
+                #for j in xrange(len(self.dialogue[i][1][j])):
+                    #if j == 0:
+                        #checking alternate
+                        #if self.alternate != self.dialogue[i][1][j]:
+                            #bool_precon = False
+                    #if j == 1:
+                        #checking spoken
+                        #if self.spoken != self.dialogue[i][1][j]:
+                            #bool_precon = False
+                #if all conditions were true, call functions to set postconditions and return text
+                #if bool_precon == True:
+                    #return self.dialogue[i][5]
                             
         
         
