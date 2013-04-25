@@ -83,9 +83,9 @@ class InGameMap:
         return NO_PROBLEM
 
     # default scale is 1. might want to change before calling draw
-    # zoom   1 = show full map
-    #      ~10 = normal size
-    #       18 = max zoom
+    # zoom   1,1 = show full map
+    #      10, 5 = normal size
+    #     18, 18 = max zoom
     def setscale(self, x_scale = 1, y_scale = 1):
         self.xscale = x_scale
         self.yscale = y_scale
@@ -109,8 +109,9 @@ class InGameMap:
             show.y += TILE_HEIGHT
 
         # draw markers
-        if (self.character_x is not None) and (self.character_y is not None) and (self.mission_x is not None) and (self.mission_y is not None):
+        if (self.character_x is not None) and (self.character_y is not None):
             self.image.blit(self.character_marker, (self.character_x * TILE_WIDTH, self.character_y * TILE_HEIGHT))
+        if (self.mission_x is not None) and (self.mission_y is not None):
             self.image.blit(self.mission_marker, (self.mission_x * TILE_WIDTH, self.mission_y * TILE_HEIGHT))
 
         # shrink image
@@ -118,14 +119,19 @@ class InGameMap:
 
         return NO_PROBLEM
 
-    def update(self, event):
-        if event.key == KEYBINDINGS[KB_DOWN]:
+    def update(self, event = None):
+        keystates = pygame.key.get_pressed()
+#        if event.key == KEYBINDINGS[KB_DOWN]:
+        if keystates[KEYBINDINGS[KB_DOWN]]:
             self.camera.y += TILE_HEIGHT / self.yscale
-        elif event.key == KEYBINDINGS[KB_RIGHT]:
+#        elif event.key == KEYBINDINGS[KB_RIGHT]:
+        elif keystates[KEYBINDINGS[KB_RIGHT]]:
             self.camera.x += TILE_WIDTH / self.xscale
-        elif event.key == KEYBINDINGS[KB_UP]:
+#        elif event.key == KEYBINDINGS[KB_UP]:
+        elif keystates[KEYBINDINGS[KB_UP]]:
             self.camera.y -= TILE_HEIGHT / self.yscale
-        elif event.key == KEYBINDINGS[KB_LEFT]:
+#        elif event.key == KEYBINDINGS[KB_LEFT]:
+        elif keystates[KEYBINDINGS[KB_LEFT]]:
             self.camera.x -= TILE_WIDTH / self.xscale
         if self.camera.x < 0:
             self.camera.x = 0
@@ -155,7 +161,7 @@ if __name__=='__main__':
 
     test = InGameMap()
     test.setmarkers(0, 1, 10, 6)
-    test.setscale(10,10)
+    test.setscale(10, 5)
     test.draw()
 
     quit = False
@@ -164,8 +170,8 @@ if __name__=='__main__':
         for event in pygame.event.get():
             if event.type == pygame.QUIT: # exit when close window "X" is pressed
                 quit = True
-            if event.type == pygame.KEYDOWN:
-                test.update(event)
+            #if event.type == pygame.KEYDOWN:
+        test.update()
         test.display(screen)
         pygame.display.flip()
 
