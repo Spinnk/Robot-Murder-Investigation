@@ -40,15 +40,11 @@ class InGameMap:
         self.tiles.set_colorkey(COLOR_KEY)
         self.tiles = self.tiles.convert()
 
-        self.marker_images = []
-
-        for DIR in INGAMEMAP_MARKER_DIRS:
-            marker = pygame.image.load(DIR)
-            if marker == None:
-                sys.exit(IMAGE_DOES_NOT_EXIST)
-            marker.set_colorkey(COLOR_KEY)
-            marker = marker.convert()
-            self.marker_images += [marker]
+        self.markerimages = pygame.image.load(INGAMEMAP_MARKERS_DIR)
+        if self.markerimages == None:
+            sys.exit(IMAGE_DOES_NOT_EXIST)
+        self.markerimages.set_colorkey(COLOR_KEY)
+        self.markerimages = self.markerimages.convert()
 
         # read in map from file
         f = open(MAP_DEFAULT_DIR, 'rb')
@@ -70,13 +66,13 @@ class InGameMap:
             show.y += INGAMEMAP_TILE_HEIGHT
 
     def addmarker(self, x = None, y = None, type = None):
-        if type:
+        if type is not None:
             self.markers += [(x, y, type)]
             return NO_PROBLEM
         return NOTHING_DONE
 
     def removemarker(self, x = None, y = None, type = None):
-        if type:
+        if type is not None:
             if (x, y, type) in self.markers:
                 self.markers.remove((x, y, type))
                 return NO_PROBLEM
@@ -111,18 +107,17 @@ class InGameMap:
             return SURFACE_DOES_NOT_EXIST
         screen.blit(self.background, (0, 0))
 
-        show = pygame.Rect(self.camera.x * INGAMEMAP_TILE_WIDTH, self.camera.y * INGAMEMAP_TILE_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT)
         # draw map
-        screen.blit(self.image, (0, 0), show)
+        screen.blit(self.image, (0, 0), pygame.Rect(self.camera.x * INGAMEMAP_TILE_WIDTH, self.camera.y * INGAMEMAP_TILE_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT))
 
         # draw markers
         for m in self.markers:
             # if the marker in the camera
             if (((self.camera.x <= m[0]) and (m[0] < (self.camera.x + self.camera.w))) and
                ((self.camera.y <= m[1]) and (m[1] < (self.camera.y + self.camera.h)))):
-                show.x = self.camera.w * m[0] - self.camera.x
-                show.y = self.camera.h * m[1] - self.camera.y
-                screen.blit(self.marker_images[m[2]], show)
+                show = pygame.Rect(INGAMEMAP_TILE_WIDTH * (m[0] - self.camera.x), INGAMEMAP_TILE_HEIGHT * (m[1] - self.camera.y), INGAMEMAP_TILE_WIDTH, INGAMEMAP_TILE_HEIGHT)
+                clip = pygame.Rect(INGAMEMAP_TILE_WIDTH * m[2], 0, INGAMEMAP_TILE_WIDTH, INGAMEMAP_TILE_HEIGHT)
+                screen.blit(self.markerimages, show, clip)
 
         return NO_PROBLEM
 
@@ -136,8 +131,8 @@ if __name__=='__main__':
     pygame.key.set_repeat(100, 100)
 
     test = InGameMap()
-    test.addmarker(0, 0, 0)
-    test.addmarker(2, 2, 1)
+    test.addmarker(1, 1, 0)
+    test.addmarker(5, 10, 1)
 
     quit = False
     while not(quit):
