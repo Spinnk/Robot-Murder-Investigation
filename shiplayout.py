@@ -158,6 +158,7 @@ if __name__ == '__main__':
     pygame.display.set_caption("Character Demo")
 
     test = ShipLayout()
+    test.loadmap(MAP_DEFAULT_DIR)
     # generate a random map and save it
     #test.generaterandommap()
     #test.savemap(os.path.join(CWD, "map.txt"))
