@@ -152,7 +152,7 @@ MAP_HEIGHT = 41                               # tiles
 # Tile Info
 TILE_MAX_VALUE = 23
 
-TILE_SHEET_DIR = os.path.join(ART_DIR, "tiles.png")
+TILE_SHEET_DIR = os.path.join(ART_DIR, "floortiles.png")
 TILE_WIDTH = 80                             # pixels
 TILE_HEIGHT = 80                            # pixels
 TILE_SHOW_W = SCREEN_WIDTH / TILE_WIDTH     # number of tiles across that are shown at any one time
@@ -293,8 +293,8 @@ JOURNAL_FONT_ANTIALIAS = True
 JOURNAL = parsejournal(JOURNAL_FILE_DIR)
 
 # In Game Map Info
-INGAMEMAP_MARKERS_DIR = os.path.join(ART_DIR, "small markers.png")
-INGAMEMAP_TILE_SHEET_DIR = os.path.join(ART_DIR, "tilessmall.png")
+INGAMEMAP_MARKERS_DIR = os.path.join(ART_DIR, "mapmarkers.png")
+INGAMEMAP_TILE_SHEET_DIR = os.path.join(ART_DIR, "maptiles.png")
 INGAMEMAP_TILE_WIDTH = 30
 INGAMEMAP_TILE_HEIGHT = 30
 INGAMEMAP_TILE_SHOW_W = SCREEN_WIDTH / INGAMEMAP_TILE_WIDTH
