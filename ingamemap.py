@@ -25,6 +25,7 @@ import pygame
 
 class InGameMap:
     def __init__(self):
+        self.image = pygame.Surface((INGAMEMAP_TILE_WIDTH * MAP_WIDTH, INGAMEMAP_TILE_HEIGHT * MAP_HEIGHT))
         self.camera = pygame.Rect(0, 0, INGAMEMAP_TILE_SHOW_W, INGAMEMAP_TILE_SHOW_H)
         self.markers = []       # (x, y, type)
 
@@ -53,10 +54,20 @@ class InGameMap:
         f = open(MAP_DEFAULT_DIR, 'rb')
         data = f.read()
         f.close()
-        self.ship = []
+        ship = []
         for x in xrange(MAP_HEIGHT):
-            self.ship += [[ord(y) for y in data[:MAP_WIDTH]]]
+            ship += [[ord(y) for y in data[:MAP_WIDTH]]]
             data = data[MAP_WIDTH:]
+
+        show = pygame.Rect(0, 0, INGAMEMAP_TILE_WIDTH, INGAMEMAP_TILE_HEIGHT)
+        clip = pygame.Rect(0, 0, INGAMEMAP_TILE_WIDTH, INGAMEMAP_TILE_HEIGHT)
+        for y in xrange(MAP_HEIGHT):
+            for x in xrange(MAP_WIDTH):
+                clip.x = INGAMEMAP_TILE_WIDTH * ship[y][x]
+                self.image.blit(self.tiles, show, clip)
+                show.x += INGAMEMAP_TILE_WIDTH
+            show.x = 0
+            show.y += INGAMEMAP_TILE_HEIGHT
 
     def addmarker(self, x = None, y = None, type = None):
         if type:
@@ -71,20 +82,15 @@ class InGameMap:
                 return NO_PROBLEM
         return NOTHING_DONE
 
-    # eventually should be able to change update back to single event, rather than continuous keypresses
-    def update(self, event = None):
+    def update(self, event):
         keystates = pygame.key.get_pressed()
-        if keystates[KEYBINDINGS[KB_DOWN]]:
-        #if event.key == KEYBINDINGS[KB_DOWN]:
+        if event.key == KEYBINDINGS[KB_DOWN]:
             self.camera.y += 1
-        elif keystates[KEYBINDINGS[KB_RIGHT]]:
-        #elif event.key == KEYBINDINGS[KB_RIGHT]:
+        elif event.key == KEYBINDINGS[KB_RIGHT]:
             self.camera.x += 1
-        elif keystates[KEYBINDINGS[KB_UP]]:
-        #elif event.key == KEYBINDINGS[KB_UP]:
+        elif event.key == KEYBINDINGS[KB_UP]:
             self.camera.y -= 1
-        elif keystates[KEYBINDINGS[KB_LEFT]]:
-        #elif event.key == KEYBINDINGS[KB_LEFT]:
+        elif event.key == KEYBINDINGS[KB_LEFT]:
             self.camera.x -= 1
         if self.camera.x < 0:
             self.camera.x = 0
@@ -101,16 +107,9 @@ class InGameMap:
             return SURFACE_DOES_NOT_EXIST
         screen.blit(self.background, (0, 0))
 
+        show = pygame.Rect(self.camera.x * INGAMEMAP_TILE_WIDTH, self.camera.y * INGAMEMAP_TILE_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT)
         # draw map
-        show = pygame.Rect(0, 0, INGAMEMAP_TILE_WIDTH, INGAMEMAP_TILE_HEIGHT)
-        clip = pygame.Rect(0, 0, INGAMEMAP_TILE_WIDTH, INGAMEMAP_TILE_HEIGHT)
-        for y in xrange(self.camera.y, self.camera.y + self.camera.h):
-            for x in xrange(self.camera.x, self.camera.x + self.camera.w):
-                clip.x = INGAMEMAP_TILE_WIDTH * self.ship[y][x]
-                screen.blit(self.tiles, show, clip)
-                show.x += INGAMEMAP_TILE_WIDTH
-            show.x = 0
-            show.y += INGAMEMAP_TILE_HEIGHT
+        screen.blit(self.image, (0, 0), show)
 
         # draw markers
         for m in self.markers:
