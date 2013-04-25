@@ -23,7 +23,6 @@ from consts import *
 
 import pygame
 
-
 class InGameMap:
     def __init__(self):
         self.camera = pygame.Rect(0, 0, INGAMEMAP_TILE_SHOW_W, INGAMEMAP_TILE_SHOW_H)
@@ -72,6 +71,7 @@ class InGameMap:
                 return NO_PROBLEM
         return NOTHING_DONE
 
+    # eventually should be able to change update back to single event, rather than continuous keypresses
     def update(self, event = None):
         keystates = pygame.key.get_pressed()
         if keystates[KEYBINDINGS[KB_DOWN]]:
@@ -101,6 +101,7 @@ class InGameMap:
             return SURFACE_DOES_NOT_EXIST
         screen.blit(self.background, (0, 0))
 
+        # draw map
         show = pygame.Rect(0, 0, INGAMEMAP_TILE_WIDTH, INGAMEMAP_TILE_HEIGHT)
         clip = pygame.Rect(0, 0, INGAMEMAP_TILE_WIDTH, INGAMEMAP_TILE_HEIGHT)
         for y in xrange(self.camera.y, self.camera.y + self.camera.h):
@@ -111,6 +112,7 @@ class InGameMap:
             show.x = 0
             show.y += INGAMEMAP_TILE_HEIGHT
 
+        # draw markers
         for m in self.markers:
             # if the marker in the camera
             if (((self.camera.x <= m[0]) and (m[0] < (self.camera.x + self.camera.w))) and
