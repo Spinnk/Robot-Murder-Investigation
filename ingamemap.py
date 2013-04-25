@@ -82,6 +82,10 @@ class InGameMap:
                 return NO_PROBLEM
         return NOTHING_DONE
 
+    def clearmarkers(self):
+        self.markers = []
+        return NOTHING_DONE
+
     def update(self, event):
         keystates = pygame.key.get_pressed()
         if event.key == KEYBINDINGS[KB_DOWN]:
