@@ -218,7 +218,7 @@ class NPC:
             return SURFACE_DOES_NOT_EXIST
 
         # if the NPC is out of camera focus
-        if (self.x < camera.x) or (camera.x < self.x) or (self.y < camera.y) or (camera.y < self.y):
+        if (self.x < camera.x) or ((camera.x + camera.w) < self.x) or (self.y < camera.y) or ((camera.y + camera.h) < self.y):
             return NOTHING_DONE
 
         show = pygame.Rect((self.x - camera.x) * TILE_WIDTH, (self.y - camera.y) * TILE_HEIGHT, 0, 0)
