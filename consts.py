@@ -169,7 +169,7 @@ TILE_INFO = [                               # index = tile type, clip; value is 
              0,                             # floor 4
              1,                             # wall 1 bottom
              1,                             # wall 1 top
-             0,                             # blank square
+             1,                             # blank square
              1,                             # wall 2 bottom
              1,                             # wall 2 top
              0,                             # bridge wall bottom
