@@ -169,7 +169,7 @@ TILE_INFO = [                               # index = tile type, clip; value is 
              0,                             # floor 4
              1,                             # wall 1 bottom
              1,                             # wall 1 top
-             0,                             # blank square
+             1,                             # blank square
              1,                             # wall 2 bottom
              1,                             # wall 2 top
              0,                             # bridge wall bottom
@@ -207,7 +207,7 @@ NPC_FONT_DIR = os.path.join(CWD, "comic.ttf")
 NPC_FONT_SIZE = 24
 NPC_FONT_COLOR = BLACK
 NPC_FONT_ANTIALIAS = True
-NPC_TEXT_BOX = pygame.Rect(0, 500, 880, 40)
+NPC_TEXT_BOX = pygame.Rect(20, 500, 880, 40)
 
 # Puzzle Info
 PUZZLE_BACKGROUND_DIR = os.path.join(ART_DIR, "puzzle.png")

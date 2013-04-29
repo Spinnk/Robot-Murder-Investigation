@@ -39,8 +39,7 @@ class NPC:
         self.count = 0          # Count the number of times update was called
                                 # to limit updates per second
         self.mode = 0           # 0 = not interacting, 1 =
-        self.say = 0            # dialogue index;
-        self.sayindex = -1
+        self.say = 0            # dialogue index
         self.font = pygame.font.Font(NPC_FONT_DIR, NPC_FONT_SIZE)
 
         self.dialogue = []      # dialogue is a list, where each element is an array of
@@ -55,23 +54,18 @@ class NPC:
         self.alternate = 0
         self.spoken = 0
         response0 = 0
-        
+
         self.dialogue.append([1, [0, 2], [0], [1, 2], ["Hmm, his ID must", "be around here somewhere"]])
         self.dialogue.append([1, [1, 2], [0], [0, 2], ["I need to find his", "ID if it's around"]])
         self.dialogue.append([1, [2, 0], [0], [2, 1], ["Well, I give up. Maybe it'll turn up", "later. Guess I'll head on up to the bridge."]])
         self.dialogue.append([1, [2, 1], [0], [2, 2], ["I'll just look one more time..."]])
         self.dialogue.append([1, [2, 2], [0], [2, 2], ["Anythin' I can do for ya?"], ([1], ["Do you know anything about Johannsen?"])])
         self.dialogue.append([1, [2, 2], [1], [2, 2], ["Insert description here"]])
-                            
-        #self.dialogue[0] = [1, ["alternate==0"], ["alternate=1"], "Hmm, his ID must be around here somewhere"]
-        #self.dialogue[1] = [1, ["alternate==1"], ["alternate=0"], "I need to find his ID if it's around"]
-        #self.dialogue[2] = [1, ["spoken==0"], ["spoken=1"], "Well, I give up. Maybe it'll turn up later. Guess I'll head on up to the bridge."]
-        #self.dialogue[3] = [1, ["spoken==1"], [], "I'll just look one more time..."]
-        #self.dialogue[4] = [1, [], [], "Anythin' I can do for ya?", ("response0=1", "Do you know anything about Johannsen?")]
-        #self.dialogue[5] = [1, ["response0==1"], [], "Insert description here"]
+        print self.dialogue
+
         #temp code stops here
 
-        
+
         # set the character position
         self.x = pos_x
         self.y = pos_y
@@ -123,7 +117,6 @@ class NPC:
     # start dialogue
     def setdialogue(self, inventory, d):
         self.say = d
-        self.sayindex = 0
 
     # read in dialogue
     def readdialogue(self):
@@ -150,43 +143,44 @@ class NPC:
             for i in xrange(len(splitline)):
                 temp[i] = splitline[i]
             self.dialogue.append(temp)
-            
-            
+
             line = f.readline()
 
     #NPC talk, call when player talks to NPC
     def rundialogue(self, mission):
-        pass
+        self.say = mission
+
         #if in the middle of a response, do response dialogue
-        #for i in xrange(len(self.dialogue[])):
-            #if self.dialogue[i][0] == mission:
-                #for j in xrange(len(self.dialogue[i][2]:
-                    #if self.dialogue[i][2][j] == 1:
+        for i in xrange(len(self.dialogue)):
+            if self.dialogue[i][0] == mission:
+                for j in xrange(len(self.dialogue[i][2])):
+                    if self.dialogue[i][2][j] == 1:
                     #now check if that response flag is met
-                        #if i == 0 and response0 == 1:
+                        if i == 0 and response0 == 1:
                             #call functions to set postconditions
                             #return the text
-                            #return self.dialogue[i][5]
+                            return self.dialogue[i][5]
         #if found no responses, find the appropriate dialogue
-        #for i in xrange(len(self.dialogue[])):
-            #if self.dialogue[i][0] == mission:
-                #bool_precon = True
-                #for j in xrange(len(self.dialogue[i][1][j])):
-                    #if j == 0:
+        for i in xrange(len(self.dialogue)):
+            if self.dialogue[i][0] == mission:
+                bool_precon = True
+                for j in xrange(len(self.dialogue[i][1])):
+                    if j == 0:
                         #checking alternate
-                        #if self.alternate != self.dialogue[i][1][j]:
-                            #bool_precon = False
-                    #if j == 1:
+                        if self.alternate != self.dialogue[i][1][j]:
+                            bool_precon = False
+                        if self.dialogue[i][1][j] == 2:
+                            bool_precon = True
+                    if j == 1:
                         #checking spoken
-                        #if self.spoken != self.dialogue[i][1][j]:
-                            #bool_precon = False
+                        if self.spoken != self.dialogue[i][1][j]:
+                            bool_precon = False
+                        if self.dialogue[i][1][j] == 2:
+                            bool_precon = True
                 #if all conditions were true, call functions to set postconditions and return text
-                #if bool_precon == True:
-                    #return self.dialogue[i][5]
-                            
-        
-        
-
+                if bool_precon == True:
+                    return self.dialogue[i][4]
+        #return "Yo_mamma's_face"
 
     # load from save string
     def load(self, data):
@@ -215,21 +209,17 @@ class NPC:
         '''
         return chr(self.type) + binascii.unhexlify(makehex(len(self.name), 4)) + self.name + chr(self.x) + chr(self.y) + chr(self.clip)
 
-    # move NPC and use grid to check for collisions
-    # it will need to be changed if some NPCs can only
-    # be in certain areas
     def update(self, grid):
         pass
-
 
     # display NPC
     def display(self, screen, camera):
         if screen == None:
             return SURFACE_DOES_NOT_EXIST
-        # if the NPC is out of camera focus
 
-        #if (self.x < camera.x) or (camera.x < self.x) or (self.y < camera.y) or (camera.y < self.y):
-        #    return NOTHING_DONE
+        # if the NPC is out of camera focus
+        if (self.x < camera.x) or (camera.x < self.x) or (self.y < camera.y) or (camera.y < self.y):
+            return NOTHING_DONE
 
         show = pygame.Rect((self.x - camera.x) * TILE_WIDTH, (self.y - camera.y) * TILE_HEIGHT, 0, 0)
         clip = pygame.Rect(self.clip, 0, NPC_WIDTH, NPC_HEIGHT)
@@ -241,7 +231,7 @@ class NPC:
             show.y += 10
             dy = self.font.size("")[1]
             screen.fill(WHITE, show)
-            for line in DIALOGUE[self.say]:
+            for line in self.rundialogue(self.say):
                 text = self.font.render(line, NPC_FONT_ANTIALIAS, NPC_FONT_COLOR)
                 screen.blit(text, show)
                 show.y += dy
@@ -257,13 +247,15 @@ if __name__=='__main__':
     camera = pygame.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
 
     # create NPCS
-    test = [NPC() for x in xrange(1)]
+    test = [NPC(x, x, x) for x in xrange(1)]
     test[0].settype(0); #test[1].settype(1)
     #test[2].settype(2); test[3].settype(3)
 
     # set dialogue for all of them
     #for x in xrange(len(test)):
     #    test[x].setdialogue(1)
+    test_dialogue = test[0].rundialogue(1)
+    print test_dialogue
 
     quit = False
     while not(quit):

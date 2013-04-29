@@ -68,6 +68,10 @@ class InGameMap:
     def addmarker(self, x = None, y = None, type = None):
         if type is not None:
             self.markers += [(x, y, type)]
+            if type == 0:
+                self.camera.x = x - INGAMEMAP_TILE_SHOW_W / 2
+                self.camera.y = y - INGAMEMAP_TILE_SHOW_H / 2
+                self.update(None)
             return NO_PROBLEM
         return NOTHING_DONE
 
@@ -83,15 +87,16 @@ class InGameMap:
         return NOTHING_DONE
 
     def update(self, event):
-        keystates = pygame.key.get_pressed()
-        if event.key == KEYBINDINGS[KB_DOWN]:
-            self.camera.y += 1
-        elif event.key == KEYBINDINGS[KB_RIGHT]:
-            self.camera.x += 1
-        elif event.key == KEYBINDINGS[KB_UP]:
-            self.camera.y -= 1
-        elif event.key == KEYBINDINGS[KB_LEFT]:
-            self.camera.x -= 1
+        if event:
+            keystates = pygame.key.get_pressed()
+            if event.key == KEYBINDINGS[KB_DOWN]:
+                self.camera.y += 1
+            elif event.key == KEYBINDINGS[KB_RIGHT]:
+                self.camera.x += 1
+            elif event.key == KEYBINDINGS[KB_UP]:
+                self.camera.y -= 1
+            elif event.key == KEYBINDINGS[KB_LEFT]:
+                self.camera.x -= 1
         if self.camera.x < 0:
             self.camera.x = 0
         if (self.camera.x + self.camera.w) >= MAP_WIDTH:
