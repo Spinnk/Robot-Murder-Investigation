@@ -149,6 +149,8 @@ class NPC:
     #NPC talk, call when player talks to NPC
     def rundialogue(self, mission):
         self.say = mission
+        if mission == 0:
+            return ""
 
         #if in the middle of a response, do response dialogue
         for i in xrange(len(self.dialogue)):
