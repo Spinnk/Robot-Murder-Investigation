@@ -230,9 +230,9 @@ class NPC:
             show = copy.deepcopy(NPC_TEXT_BOX)
             show.y += 10
             dy = self.font.size("")[1]
-            screen.fill(WHITE, show)
             for line in self.rundialogue(self.say):
                 text = self.font.render(line, NPC_FONT_ANTIALIAS, NPC_FONT_COLOR)
+                screen.fill(WHITE, show)
                 screen.blit(text, show)
                 show.y += dy
         return NO_PROBLEM
@@ -281,7 +281,7 @@ if __name__=='__main__':
         if (camera.y + TILE_SHOW_H + 1) > MAP_HEIGHT:
             camera.y = MAP_HEIGHT - TILE_SHOW_H - 1
 
-        screen.fill(WHITE)
+        screen.fill(BLACK)
         for npc in test:
             npc.update(None)
             npc.display(screen, camera)
