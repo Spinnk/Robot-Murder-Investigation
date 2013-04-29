@@ -54,6 +54,8 @@ class InGameState (GameState):
 
         # create default objects
         self.user = Character()
+        self.user.setx(2)
+        self.user.sety(2)
         self.inventory = Inventory()
         self.journal = Journal()
         self.journal.addentry(3)
@@ -88,7 +90,7 @@ class InGameState (GameState):
             elif event.key == self.keybindings[KB_ENTER]:
                 self.attempt_dialogue()
             else:
-                grid = self.ship.getsurrounding(self.user.getx(), self.user.gety())
+                grid = self.ship.getsurrounding(self.user.getx(), self.user.gety() + 1)
     
                 self.user.update(event, grid)
         return IN_GAME_STATE
