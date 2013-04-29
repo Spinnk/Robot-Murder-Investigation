@@ -197,7 +197,7 @@ CHARACTER_WALK_TIME = 400                   # milliseconds to cross 1 tile
 CHARACTER_TPF = CHARACTER_WALK_TIME / CHARACTER_FRAMES
 
 # NPC Info
-NPCS = ["puppy", "panda", "koala", "spock"]
+NPCS = ["puppy"]
 NPC_SHEETS_DIR = [os.path.join(ART_DIR, fname + ".png") for fname in NPCS]
 NPC_WIDTH = 80                              # pixels
 NPC_HEIGHT = 80                             # pixels
