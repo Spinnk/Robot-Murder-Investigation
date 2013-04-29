@@ -62,13 +62,8 @@ class NPC:
         self.dialogue.append([1, [2, 1], [0], [2, 2], ["I'll just look one more time..."]])
         self.dialogue.append([1, [2, 2], [0], [2, 2], ["Anythin' I can do for ya?"], ([1], ["Do you know anything about Johannsen?"])])
         self.dialogue.append([1, [2, 2], [1], [2, 2], ["Insert description here"]])
-                            
-        #self.dialogue[0] = [1, ["alternate==0"], ["alternate=1"], "Hmm, his ID must be around here somewhere"]
-        #self.dialogue[1] = [1, ["alternate==1"], ["alternate=0"], "I need to find his ID if it's around"]
-        #self.dialogue[2] = [1, ["spoken==0"], ["spoken=1"], "Well, I give up. Maybe it'll turn up later. Guess I'll head on up to the bridge."]
-        #self.dialogue[3] = [1, ["spoken==1"], [], "I'll just look one more time..."]
-        #self.dialogue[4] = [1, [], [], "Anythin' I can do for ya?", ("response0=1", "Do you know anything about Johannsen?")]
-        #self.dialogue[5] = [1, ["response0==1"], [], "Insert description here"]
+        print self.dialogue                    
+        
         #temp code stops here
 
         
@@ -156,33 +151,37 @@ class NPC:
 
     #NPC talk, call when player talks to NPC
     def rundialogue(self, mission):
-        pass
         #if in the middle of a response, do response dialogue
-        #for i in xrange(len(self.dialogue[])):
-            #if self.dialogue[i][0] == mission:
-                #for j in xrange(len(self.dialogue[i][2]:
-                    #if self.dialogue[i][2][j] == 1:
+        for i in xrange(len(self.dialogue)):
+            if self.dialogue[i][0] == mission:
+                for j in xrange(len(self.dialogue[i][2])):
+                    if self.dialogue[i][2][j] == 1:
                     #now check if that response flag is met
-                        #if i == 0 and response0 == 1:
+                        if i == 0 and response0 == 1:
                             #call functions to set postconditions
                             #return the text
-                            #return self.dialogue[i][5]
+                            return self.dialogue[i][5]
         #if found no responses, find the appropriate dialogue
-        #for i in xrange(len(self.dialogue[])):
-            #if self.dialogue[i][0] == mission:
-                #bool_precon = True
-                #for j in xrange(len(self.dialogue[i][1][j])):
-                    #if j == 0:
+        for i in xrange(len(self.dialogue)):
+            if self.dialogue[i][0] == mission:
+                bool_precon = True
+                for j in xrange(len(self.dialogue[i][1])):
+                    if j == 0:
                         #checking alternate
-                        #if self.alternate != self.dialogue[i][1][j]:
-                            #bool_precon = False
-                    #if j == 1:
+                        if self.alternate != self.dialogue[i][1][j]:
+                            bool_precon = False
+                        if self.dialogue[i][1][j] == 2:
+                            bool_precon = True
+                    if j == 1:
                         #checking spoken
-                        #if self.spoken != self.dialogue[i][1][j]:
-                            #bool_precon = False
+                        if self.spoken != self.dialogue[i][1][j]:
+                            bool_precon = False
+                        if self.dialogue[i][1][j] == 2:
+                            bool_precon = True
                 #if all conditions were true, call functions to set postconditions and return text
-                #if bool_precon == True:
-                    #return self.dialogue[i][5]
+                if bool_precon == True:
+                    return self.dialogue[i][4]
+        #return "Yo_mamma's_face"
                             
         
         
@@ -257,13 +256,15 @@ if __name__=='__main__':
     camera = pygame.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
 
     # create NPCS
-    test = [NPC() for x in xrange(1)]
+    test = [NPC(x, x, x) for x in xrange(1)]
     test[0].settype(0); #test[1].settype(1)
     #test[2].settype(2); test[3].settype(3)
 
     # set dialogue for all of them
     #for x in xrange(len(test)):
     #    test[x].setdialogue(1)
+    test_dialogue = test[0].rundialogue(1)
+    print test_dialogue
 
     quit = False
     while not(quit):
