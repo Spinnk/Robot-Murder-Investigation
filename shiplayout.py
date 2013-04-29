@@ -48,7 +48,7 @@ class ShipLayout:
         self.data[location[0]][location[1]] = newtile
 
     # get 4 tiles surrounding given coordinates
-    def getsurrounding(x, y):
+    def getsurrounding(self, x, y):
         up = 0
         left = 0
         down = 0

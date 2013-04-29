@@ -78,7 +78,7 @@ class InGameState (GameState):
                               PUZZLE_STATE]
 
     ## ---[ update ]------------------------------------------------------------
-    def update(self, event):
+    def update(self, event):        
         if self.checkstatechange(event) in self.state_changes:
             return self.checkstatechange(event)
         if event.type == pygame.KEYDOWN:
@@ -88,7 +88,9 @@ class InGameState (GameState):
             elif event.key == self.keybindings[KB_ENTER]:
                 self.attempt_dialogue()
             else:
-                self.user.update(event)
+                grid = self.ship.getsurrounding(self.user.getx(), self.user.gety())
+    
+                self.user.update(event, grid)
         return IN_GAME_STATE
 
     ## ---[ display ]----------------------------------------------------------
