@@ -87,33 +87,47 @@ class Character:
         return chr(self.x) + chr(self.y) + chr(self.clip)
 
     # check for movement
-    def update(self, event): # add argument for collision detection?
+    # grid is array of [up, left, down, right] tile values for collision detection
+    def update(self, event, grid = None):
         # if not already moving
         if not self.moving:
             if event.key == KEYBINDINGS[KB_DOWN]:
                 self.clip = 0
+                if grid:
+                    if TILE_INFO[grid[2]] & TILE_SOLID:
+                        return NOTHING_DONE
                 self.moving = True
                 if ((self.y + 3) >= MAP_HEIGHT):
                     self.y = MAP_HEIGHT - 3
                     self.moving = False
             elif event.key == KEYBINDINGS[KB_RIGHT]:
                 self.clip = 1
+                if grid:
+                    if TILE_INFO[grid[3]] & TILE_SOLID:
+                        return NOTHING_DONE
                 self.moving = True
                 if ((self.x + 1) >= MAP_WIDTH):
                     self.x = MAP_WIDTH - 1
                     self.moving = False
             elif event.key == KEYBINDINGS[KB_UP]:
                 self.clip = 2
+                if grid:
+                    if TILE_INFO[grid[0]] & TILE_SOLID:
+                        return NOTHING_DONE
                 self.moving = True
                 if ((self.y - 1) < 0):
                     self.y = 0
                     self.moving = False
             elif event.key == KEYBINDINGS[KB_LEFT]:
                 self.clip = 3
+                if grid:
+                    if TILE_INFO[grid[1]] & TILE_SOLID:
+                        return NOTHING_DONE
                 self.moving = True
                 if ((self.x - 1) < 0):
                     self.x = 0
                     self.moving = False
+        return NO_PROBLEM
 
     # display character
     def display(self, screen, camera):

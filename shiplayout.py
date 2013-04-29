@@ -47,6 +47,22 @@ class ShipLayout:
     def changetile(self, newtile, location):
         self.data[location[0]][location[1]] = newtile
 
+    # get 4 tiles surrounding given coordinates
+    def getsurrounding(x, y):
+        up = 0
+        left = 0
+        down = 0
+        right = 0
+        if (y - 1) >= 0:
+            up = self.data[y - 1][x]
+        if (x - 1) >= 0:
+            left = self.data[y][x - 1]
+        if (y + 1) < MAP_HEIGHT:
+            down = self.data[y + 1][x]
+        if (x + 1) < MAP_WIDTH:
+            right = self.data[y][x + 1]
+        return [up, left, down, right]
+
     # set items
     def setitems(self, items):
         self.items = items
