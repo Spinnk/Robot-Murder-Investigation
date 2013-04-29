@@ -159,6 +159,7 @@ TILE_SHOW_W = SCREEN_WIDTH / TILE_WIDTH     # number of tiles across that are sh
 TILE_SHOW_H = SCREEN_HEIGHT / TILE_HEIGHT   # number of tiles down that are shown at any one time
 
 TILE_SOLID = 0x01                           # mask for whether or not the tile can be walked through
+TILK_DOOR =  0x02                           # mask for whether or not the tile is a door
 
 TILE_INFO = [                               # index = tile type, clip; value is properties mask
              0,                             # nothing
@@ -179,11 +180,11 @@ TILE_INFO = [                               # index = tile type, clip; value is 
              1,                             # trash can
              1,                             # bed top
              1,                             # bed bottom
-             0,                             # storage box
+             1,                             # storage box
              0,                             # puzzle tile
-             0,                             # door bottom
-             0,                             # door top
-             0,                             # side door
+             2,                             # door bottom
+             2,                             # door top
+             2,                             # side door
              0                              # stairs
              ]
 
