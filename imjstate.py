@@ -180,6 +180,7 @@ class MapState(GameState):
 
 
     def setmarkers(self, character_x, character_y):
+        self.in_game_map.clearmarkers()
         self.in_game_map.addmarker(character_x, character_y + 1, 0)
 
 

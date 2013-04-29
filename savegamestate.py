@@ -136,7 +136,7 @@ class LoadGameState (GameState):
             load_state += 1
             self.num_saves += 1
             
-    ## ---[ update ]-----------------------------------------------------------
+    ## ---[ calledfrom ]-----------------------------------------------------------
     # Inputs the state where "Load Game" was called and sets "Back" to go to
     # that state
     def calledfrom(self, state):

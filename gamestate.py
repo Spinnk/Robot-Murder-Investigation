@@ -196,15 +196,14 @@ class SettingsState (GameState):
     def __init__(self, screen, state_id):
         self.screen = screen
         self.state_id = state_id
+        self.cf = MAIN_MENU_STATE
         self.settings = Settings()
-        self.state_changes = [OPTIONS_MENU_STATE]
-        
-
+    
     ## ---[ update ]------------------------------------------------------------
     def update(self, event):
         changed_state = self.checkstatechange(event)
-        if changed_state in self.state_changes:
-            return changed_state
+        if event.key == pygame.K_ESCAPE:
+            return self.cf
         
         if event.type == pygame.KEYDOWN:
             self.settings.update(event)
@@ -215,7 +214,9 @@ class SettingsState (GameState):
     def display(self):
         self.settings.display(self.screen)
 
-
+    ## ---[ calledfrom ]-----------------------------------------------------------
+    def calledfrom(self, state):
+        self.cf = state
 
 
 
