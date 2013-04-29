@@ -113,6 +113,7 @@ class Game:
 
         elif new_state_id == SETTINGS_STATE:
             self.current_state = self.settings_state
+            self.settings_state.calledfrom( self.current_state_id )
 
         elif new_state_id == INVENTORY_STATE:
             self.inventory_state.setinventory( self.in_game_state.getinventory() )

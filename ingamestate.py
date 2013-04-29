@@ -32,6 +32,7 @@ class InGameState (GameState):
     # initialize with only map
     def __init__(self, screen, keybindings, state_id):
         self.state_id = state_id
+        self.in_dialogue = None   # npc the user is currently talking to
 
         # load images, check if they exist, and apply colorkey
         self.character_sprite_sheet = pygame.image.load(CHARACTER_SPRITE_SHEET_DIR)
@@ -83,15 +84,20 @@ class InGameState (GameState):
     def update(self, event):        
         if self.checkstatechange(event) in self.state_changes:
             return self.checkstatechange(event)
+        if self.in_dialogue:
+            if event.type == pygame.KEYDOWN and event.key == self.keybindings[KB_ENTER]:
+                self.in_dialogue.rundialogue(0)
+                self.in_dialogue = None
+            return self.state_id
+        
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 self.removeitem()
             # Attempt to talk to a nearby NPC if "enter" key is pressed
             elif event.key == self.keybindings[KB_ENTER]:
-                self.attempt_dialogue()
+                self.in_dialogue = self.attempt_dialogue()
             else:
                 grid = self.ship.getsurrounding(self.user.getx(), self.user.gety() + 1)
-    
                 self.user.update(event, grid)
         return IN_GAME_STATE
 
@@ -169,11 +175,12 @@ class InGameState (GameState):
     # Find if there is a nearby NPC,
     # if there is, attempt to talk to it
     def attempt_dialogue(self):
-        x, y = self.user.getx(), self.user.gety()
+        x, y = self.user.getx(), self.user.gety() + 1
         for npc in self.npcs:
-            if abs(npc.getx() - x) == 1 and abs(npc.gety() - y) == 1:
+            if (abs(npc.getx() - x) == 1 and npc.gety() == y) or (abs(npc.gety() - y) == 1 and npc.getx() == x ):
                 print "You're trying to talk to NPC " + str(npc) + "! and failing!"
-                npc.setdialogue(self.inventory, 0)
+                npc.rundialogue(1)
+                return npc
 
 
 
