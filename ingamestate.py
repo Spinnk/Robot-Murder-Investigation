@@ -67,8 +67,8 @@ class InGameState (GameState):
         self.npcs = [NPC(0, 3, 6)]
 
         # temporary test items
-        self.ship.additem([1,1], 1)
-        self.ship.additem([1,4], 2)
+        self.ship.additem([6,7], 1)
+        self.ship.additem([1,5], 2)
         self.ship.additem([3,3], 3)
 
         self.camera = pygame.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT) # tile index, not pixel
@@ -178,7 +178,6 @@ class InGameState (GameState):
         x, y = self.user.getx(), self.user.gety() + 1
         for npc in self.npcs:
             if (abs(npc.getx() - x) == 1 and npc.gety() == y) or (abs(npc.gety() - y) == 1 and npc.getx() == x ):
-                print "You're trying to talk to NPC " + str(npc) + "! and failing!"
                 npc.rundialogue(1)
                 return npc
 
