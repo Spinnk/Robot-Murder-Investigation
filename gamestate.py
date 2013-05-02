@@ -125,6 +125,9 @@ class MainMenuState (GameState):
     def __init__(self, screen, save_exists, state_id):
         self.state_id = state_id
         self.save_exists = save_exists
+        self.ship = pygame.image.load(BACKGROUND_SHIP_DIR)
+        self.screen = screen
+        self.font = pygame.font.Font(GAME_NAME_FONT_DIR, GAME_NAME_FONT_SIZE)
 
         # Menu to display "New Game, "Load Game," and "Quit" options
         self.menu = cMenu(50, 50, 20, 5, 'vertical', 100, screen,
@@ -144,6 +147,8 @@ class MainMenuState (GameState):
 
     ## ---[ display ]----------------------------------------------------------
     def display(self):
+        self.screen.blit(self.font.render(GAME_NAME, GAME_NAME_FONT_ANTIALIAS, GAME_NAME_FONT_COLOR), GAME_NAME_FONT_BOX)
+        self.screen.blit(self.ship, BACKGROUND_SHIP_BOX)
         self.menu.draw_buttons()
 
 
@@ -185,7 +190,7 @@ class OptionsMenuState (GameState):
     ## ---[ display ]----------------------------------------------------------
     def display(self):
         self.menu.draw_buttons()
-        
+
 #-------------------------------------------------------------------------------
 #---[ SettingsState Class ]-----------------------------------------------------
 #-------------------------------------------------------------------------------
@@ -198,16 +203,16 @@ class SettingsState (GameState):
         self.state_id = state_id
         self.cf = MAIN_MENU_STATE
         self.settings = Settings()
-    
+
     ## ---[ update ]------------------------------------------------------------
     def update(self, event):
         changed_state = self.checkstatechange(event)
         if event.key == pygame.K_ESCAPE:
             return self.cf
-        
+
         if event.type == pygame.KEYDOWN:
             self.settings.update(event)
-            
+
         return self.state_id
 
     ## ---[ display ]----------------------------------------------------------

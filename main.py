@@ -75,7 +75,6 @@ def main():
     # Turn off mouse events to reduce overhead
     pygame.event.set_blocked(pygame.MOUSEMOTION)
 
-
     while not(quit):
         # single key presses
         for event in pygame.event.get():

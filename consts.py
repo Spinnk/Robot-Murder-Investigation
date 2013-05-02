@@ -26,8 +26,16 @@ import pygame
 
 from specialfunctions import *
 
-# Name of Game
-GAME_NAME = "Sentience In Space"
+# Useful RGB Values
+WHITE =   pygame.Color(0xff, 0xff, 0xff, 0xff)
+BLACK =   pygame.Color(0x00, 0x00, 0x00, 0xff)
+HOTPINK = pygame.Color(0xff, 0x69, 0xb4, 0xff)
+RED =     pygame.Color(0xff, 0x00, 0x00, 0xff)
+YELLOW =  pygame.Color(0xff, 0xff, 0x00, 0xff)
+GREEN =   pygame.Color(0x00, 0xff, 0x00, 0xff)
+CYAN =    pygame.Color(0x00, 0xff, 0xff, 0xff)
+BLUE =    pygame.Color(0x00, 0x00, 0xff, 0xff)
+MEDIUM_SLATE_BLUE = pygame.Color(0x7f, 0x00, 0xff, 0xff)
 
 # Non-Image Directories
 CWD = os.path.split(os.path.abspath(__file__))[0]
@@ -38,21 +46,22 @@ SOUND_DIR = os.path.join(CWD, "sound")
 # Framerate
 FPS = 60
 
+COLOR_KEY = HOTPINK
+
 # Screen Stuff
-BACKGROUND_IMAGE_DIR = os.path.join( ART_DIR, "background 1.png" )
 SCREEN_WIDTH = 880                          # pixels
 SCREEN_HEIGHT = 640                         # pixels
+BACKGROUND_IMAGE_DIR = os.path.join( ART_DIR, "background 1.png")
+BACKGROUND_SHIP_DIR = os.path.join(ART_DIR, "SHIP COLORED.png")
+BACKGROUND_SHIP_BOX = pygame.Rect(40, 400, SCREEN_WIDTH, SCREEN_HEIGHT)
 
-# Useful RGB Values
-WHITE =   pygame.Color(0xff, 0xff, 0xff, 0xff)
-BLACK =   pygame.Color(0x00, 0x00, 0x00, 0xff)
-HOTPINK = pygame.Color(0xff, 0x69, 0xb4, 0xff)
-YELLOW =  pygame.Color(0xff, 0xff, 0x00, 0xff)
-CYAN =    pygame.Color(0x00, 0xff, 0xff, 0xff)
-BLUE =    pygame.Color(0x00, 0x00, 0xff, 0xff)
-MEDIUM_SLATE_BLUE =   pygame.Color(0x7f, 0x00, 0xff, 0xff)
-
-COLOR_KEY = HOTPINK
+# Name of Game
+GAME_NAME = "Sentience In Space"
+GAME_NAME_FONT_DIR = os.path.join(CWD, "comic.ttf")
+GAME_NAME_FONT_COLOR = GREEN
+GAME_NAME_FONT_SIZE = 64
+GAME_NAME_FONT_ANTIALIAS = True
+GAME_NAME_FONT_BOX = pygame.Rect(165, 100, SCREEN_WIDTH, SCREEN_HEIGHT)
 
 # Keybindings Enum
 # special case positioning of global variables
