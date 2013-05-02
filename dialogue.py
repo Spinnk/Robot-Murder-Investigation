@@ -123,7 +123,7 @@ if __name__=='__main__':
     if screen == 0:
         sys.exit(SCREEN_DOES_NOT_EXIST)
 
-    pygame.display.set_caption("Journal Demo")
+    pygame.display.set_caption("Dialogue Demo")
     pygame.key.set_repeat(100, 100)
 
     test = Dialogue()
