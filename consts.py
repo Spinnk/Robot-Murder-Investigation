@@ -147,8 +147,8 @@ DIALOGUE_ENDED = 12
 
 # Map Info
 MAP_DEFAULT_DIR = os.path.join(CWD, "map.txt")
-MAP_WIDTH = 119                               # tiles
-MAP_HEIGHT = 41                               # tiles
+MAP_WIDTH = 72                                # tiles
+MAP_HEIGHT = 23                               # tiles
 
 # Tile Info
 TILE_MAX_VALUE = 23
