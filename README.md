@@ -27,6 +27,16 @@ Requirements:
 Usage:
     Run main.py
 
+    Default keys:
+        WASD for movement
+        ESC to quit
+        SPACE to pick up
+        ENTER for select
+        I for inventory
+        M for map
+        J for journal
+        P for Puzzle
+
 Additional Information (Change Logs, Bugs, etc):
     https://github.com/Spinnk/Robot-Murder-Investigation.git
     http://bestvideogame.wikidot.com/
