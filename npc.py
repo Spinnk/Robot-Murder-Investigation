@@ -158,8 +158,9 @@ class NPC:
                 for j in xrange(len(self.dialogue[i][2])):
                     if self.dialogue[i][2][j] == 1:
                     #now check if that response flag is met
-                        if i == 0 and response0 == 1:
+                        if j == 0 and response0 == 1:
                             #call functions to set postconditions
+                            #construct tuple of NPC dialogue, Robot dialogue
                             #return the text
                             return self.dialogue[i][5]
         #if found no responses, find the appropriate dialogue
@@ -181,6 +182,8 @@ class NPC:
                             bool_precon = True
                 #if all conditions were true, call functions to set postconditions and return text
                 if bool_precon == True:
+                    #set postconditions
+                    #
                     return self.dialogue[i][4]
         #return "Yo_mamma's_face"
 
