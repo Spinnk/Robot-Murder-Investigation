@@ -42,19 +42,19 @@ class Inventory:
         self.background = self.background.convert()
 
         self.small = pygame.image.load(ITEM_SHEET_SMALL_DIR)
-        if self.small == 0:
+        if self.small == None:
             sys.exit(IMAGE_DOES_NOT_EXIST)
         self.small.set_colorkey(COLOR_KEY)
         self.small = self.small.convert()
 
         self.large = pygame.image.load(ITEM_SHEET_LARGE_DIR)
-        if self.large == 0:
+        if self.large == None:
             sys.exit(IMAGE_DOES_NOT_EXIST)
         self.large.set_colorkey(COLOR_KEY)
         self.large = self.large.convert()
 
         self.box = pygame.image.load(ITEM_BOX_DIR)
-        if self.box == 0:
+        if self.box == None:
             sys.exit(IMAGE_DOES_NOT_EXIST)
         self.box.set_colorkey(COLOR_KEY)
         self.box = self.box.convert()
@@ -242,12 +242,14 @@ if __name__=='__main__':
     test.additem(1, 1)      # book
     test.additem(2)
     test.additem(3); test.additem(3); test.additem(3)
+    test.additem(4)
+    test.additem(5)
 
-    # move cursor to (1, 0)
-    test.index = 1
+#    # move cursor to (1, 0)
+#    test.index = 1
 
-    # remove item 2
-    test.removeitem()
+#    # remove item 2
+#    test.removeitem()
 
     # test save and load
     test.load(test.save())

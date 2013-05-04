@@ -207,7 +207,7 @@ CHARACTER_WALK_TIME = 400                   # milliseconds to cross 1 tile
 CHARACTER_TPF = CHARACTER_WALK_TIME / CHARACTER_FRAMES
 
 # NPC Info
-NPCS = ["puppy"]
+NPCS = ["doctor"]
 NPC_SHEETS_DIR = [os.path.join(ART_DIR, fname + ".png") for fname in NPCS]
 NPC_WIDTH = 80                              # pixels
 NPC_HEIGHT = 80                             # pixels
@@ -265,12 +265,14 @@ ITEM_OPTIONS = ["Cancel", "Drop", "Read", "Use"]
 # Index is Item Type and Number
 #   Subarray Indexes:
 #       0 - Item Name
-#       1 - Description (store in multiple strings)
-#       2 - Inventory Buttons ("Cancel" must always be availible)
-ITEMS = [   ["", [""], []], # Item 0 is Null Item
-            ["Book", ["Read a book", "Read a book", "Read an important book"], ["Cancel", "Drop", "Read"]],
-            ["Not Book", ["Not a book"], ["Cancel", "Drop", "Use"]],
-        	["Not a book either", ["Not a book", "Still not a book"], ["Cancel", "Drop", "Use"]]
+#       1 - Description (array of strings)
+#       2 - Inventory Buttons (array of strings). "Cancel" must always be availible
+ITEMS = [   ["", [], []], # Item 0 is Null Item
+            ["Book", [""], ["Cancel", "Drop", "Read"]],
+            ["Communicator", [], ["Cancel", "Drop", "Use"]],
+        	["Flash Drive", [], ["Cancel", "Drop", "Use"]],
+        	["ID Card", ['"Psychic Paper"'], ["Cancel", "Drop", "Use"]],
+        	["Wrench", [], ["Cancel", "Drop", "Use"]]
         ]
 
 ITEM_IMAGE_BOX = pygame.Rect(666, 37, 100, 100)        # location of items when displayed on screen; change as necessary

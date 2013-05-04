@@ -61,21 +61,22 @@ class NPC:
         self.dialogue.append([1, [2, 1], [0], [2, 2], ["I'll just look one more time..."]])
         self.dialogue.append([1, [2, 2], [0], [2, 2], ["Anythin' I can do for ya?"], ([1], ["Do you know anything about Johannsen?"])])
         self.dialogue.append([1, [2, 2], [1], [2, 2], ["Insert description here"]])
-        print self.dialogue
+#        print self.dialogue
 
         #temp code stops here
-
 
         # set the character position
         self.x = pos_x
         self.y = pos_y
 
         # determine npc "type" based on its id
-        if npc_id == 0:
-            self.type = 0
-        self.sprite = pygame.image.load(NPC_SHEETS_DIR[0])
+        self.type = 0
+
+        self.sprite = pygame.image.load(NPC_SHEETS_DIR[self.type])
         if self.sprite == None:
-            print "Error loading file: " + str(NPC_SHEETS_DIR[npc_type])
+            print "Error loading file: " + NPC_SHEETS_DIR[self.type]
+        self.sprite.set_colorkey(COLOR_KEY)
+        self.sprite = self.sprite.convert()
 
     # Accessors and Modifiers
 
@@ -230,6 +231,7 @@ class NPC:
         clip = pygame.Rect(self.clip, 0, NPC_WIDTH, NPC_HEIGHT)
         screen.blit(self.sprite, show, clip)
 
+        '''
         # if the NPC is talking
         if self.say:
             show = copy.deepcopy(NPC_TEXT_BOX)
@@ -240,6 +242,7 @@ class NPC:
                 screen.fill(WHITE, show)
                 screen.blit(text, show)
                 show.y += dy
+        '''
         return NO_PROBLEM
 
 if __name__=='__main__':
@@ -252,15 +255,13 @@ if __name__=='__main__':
     camera = pygame.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
 
     # create NPCS
-    test = [NPC(x, x, x) for x in xrange(1)]
-    test[0].settype(0); #test[1].settype(1)
-    #test[2].settype(2); test[3].settype(3)
+    test = NPC(0, 0, 0)
 
     # set dialogue for all of them
     #for x in xrange(len(test)):
     #    test[x].setdialogue(1)
-    test_dialogue = test[0].rundialogue(1)
-    print test_dialogue
+#    test_dialogue = test[0].rundialogue(1)
+#    print test_dialogue
 
     quit = False
     while not(quit):
@@ -287,9 +288,8 @@ if __name__=='__main__':
             camera.y = MAP_HEIGHT - TILE_SHOW_H - 1
 
         screen.fill(BLACK)
-        for npc in test:
-            npc.update(None)
-            npc.display(screen, camera)
+        test.update(None)
+        test.display(screen, camera)
 
         pygame.display.flip()
         pygame.time.Clock().tick(10)
