@@ -54,8 +54,9 @@ class NPC:
         self.alternate = 0
         self.spoken = 0
         self.response0 = 0
+        self.dialogue_index = 0
 
-        self.dialogue.append([1, [0, 2], [0], [1, 2], ["Hmm, his ID must", "be around here somewhere"]])
+        self.dialogue.append([1, [0, 2], [0], [1, 2], ["Hmm, his ID must be around here somewhere"]])
         self.dialogue.append([1, [1, 2], [0], [0, 2], ["I need to find his", "ID if it's around"]])
         self.dialogue.append([1, [2, 0], [0], [2, 1], ["Well, I give up. Maybe it'll turn up", "later. Guess I'll head on up to the bridge."]])
         self.dialogue.append([1, [2, 1], [0], [2, 2], ["I'll just look one more time..."]])
@@ -185,8 +186,15 @@ class NPC:
                 if bool_precon == True:
                     #set postconditions
                     #
+                    i= 4
+                    self.dialogue_index = i
                     return self.dialogue[i][4]
         #return "Yo_mamma's_face"
+
+    def responseoptions(self):
+        if len(self.dialogue[self.dialogue_index]) < 6:
+            return [""]
+        return self.dialogue[self.dialogue_index][5][1]
 
     # load from save string
     def load(self, data):
@@ -231,7 +239,7 @@ class NPC:
         clip = pygame.Rect(self.clip, 0, NPC_WIDTH, NPC_HEIGHT)
         screen.blit(self.sprite, show, clip)
 
-        '''
+        
         # if the NPC is talking
         if self.say:
             show = copy.deepcopy(NPC_TEXT_BOX)
@@ -242,7 +250,12 @@ class NPC:
                 screen.fill(WHITE, show)
                 screen.blit(text, show)
                 show.y += dy
-        '''
+            for line in self.responseoptions():
+                text= self.font.render(line, NPC_FONT_ANTIALIAS, MEDIUM_SLATE_BLUE)
+                screen.fill(WHITE, show)
+                screen.blit(text, show)
+                show.y += dy
+        
         return NO_PROBLEM
 
 if __name__=='__main__':
