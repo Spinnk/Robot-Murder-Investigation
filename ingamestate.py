@@ -67,7 +67,7 @@ class InGameState (GameState):
         self.npcs = [NPC(0, 3, 6)]
 
         # temporary test items
-        self.ship.additem([6,7], 1)
+        self.ship.additem([6,10], 1)
         self.ship.additem([1,5], 2)
         self.ship.additem([3,3], 3)
 

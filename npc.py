@@ -53,7 +53,7 @@ class NPC:
         #0=0, 1=1, 2=N/A
         self.alternate = 0
         self.spoken = 0
-        response0 = 0
+        self.response0 = 0
 
         self.dialogue.append([1, [0, 2], [0], [1, 2], ["Hmm, his ID must", "be around here somewhere"]])
         self.dialogue.append([1, [1, 2], [0], [0, 2], ["I need to find his", "ID if it's around"]])
@@ -159,7 +159,7 @@ class NPC:
                 for j in xrange(len(self.dialogue[i][2])):
                     if self.dialogue[i][2][j] == 1:
                     #now check if that response flag is met
-                        if j == 0 and response0 == 1:
+                        if j == 0 and self.response0 == 1:
                             #call functions to set postconditions
                             #construct tuple of NPC dialogue, Robot dialogue
                             #return the text
