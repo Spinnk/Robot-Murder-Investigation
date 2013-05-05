@@ -53,15 +53,18 @@ class NPC:
         #0=0, 1=1, 2=N/A
         self.alternate = 0
         self.spoken = 0
-        self.response0 = 0
+        self.response = [0]
         self.dialogue_index = 0
 
-        self.dialogue.append([1, [0, 2], [0], [1, 2], ["Hmm, his ID must be around here somewhere"]])
-        self.dialogue.append([1, [1, 2], [0], [0, 2], ["I need to find his", "ID if it's around"]])
-        self.dialogue.append([1, [2, 0], [0], [2, 1], ["Well, I give up. Maybe it'll turn up", "later. Guess I'll head on up to the bridge."]])
-        self.dialogue.append([1, [2, 1], [0], [2, 2], ["I'll just look one more time..."]])
+        self.current_dialogue = []
+        self.current_response = []
+
+        #self.dialogue.append([1, [0, 2], [0], [1, 2], ["Hmm, his ID must be around here somewhere"]])
+        #self.dialogue.append([1, [1, 2], [0], [0, 2], ["I need to find his", "ID if it's around"]])
+        #self.dialogue.append([1, [2, 0], [0], [2, 1], ["Well, I give up. Maybe it'll turn up", "later. Guess I'll head on up to the bridge."]])
+        #self.dialogue.append([1, [2, 1], [0], [2, 2], ["I'll just look one more time..."]])
         self.dialogue.append([1, [2, 2], [0], [2, 2], ["Anythin' I can do for ya?"], ([1], ["Do you know anything about Johannsen?"])])
-        self.dialogue.append([1, [2, 2], [1], [2, 2], ["Insert description here"]])
+        self.dialogue.append([1, [2, 2], [1], [2, 2], ["He was feeding the cat last time I checked."]])
 #        print self.dialogue
 
         #temp code stops here
@@ -153,18 +156,19 @@ class NPC:
         self.say = mission
         if mission == 0:
             return ""
-
+        '''
         #if in the middle of a response, do response dialogue
         for i in xrange(len(self.dialogue)):
             if self.dialogue[i][0] == mission:
                 for j in xrange(len(self.dialogue[i][2])):
                     if self.dialogue[i][2][j] == 1:
                     #now check if that response flag is met
-                        if j == 0 and self.response0 == 1:
+                        if j == 0 and self.response[0] == 1:
                             #call functions to set postconditions
                             #construct tuple of NPC dialogue, Robot dialogue
                             #return the text
                             return self.dialogue[i][5]
+        '''
         #if found no responses, find the appropriate dialogue
         for i in xrange(len(self.dialogue)):
             if self.dialogue[i][0] == mission:
@@ -182,18 +186,26 @@ class NPC:
                             bool_precon = False
                         if self.dialogue[i][1][j] == 2:
                             bool_precon = True
+                for j in xrange(len(self.dialogue[i][2])):
+                    if self.response[j] != self.dialogue[i][2][j]:
+                        bool_precon = False
                 #if all conditions were true, call functions to set postconditions and return text
                 if bool_precon == True:
                     #set postconditions
                     #
-                    i= 4
                     self.dialogue_index = i
-                    return self.dialogue[i][4]
+                    self.current_dialogue = self.dialogue[i][4]
+                    if len(self.dialogue[self.dialogue_index]) >= 6:
+                        return 1
+        return 0
+                    #return self.dialogue[i][4]
         #return "Yo_mamma's_face"
 
     def responseoptions(self):
         if len(self.dialogue[self.dialogue_index]) < 6:
             return [""]
+
+        self.response = self.dialogue[self.dialogue_index][5][0]
         return self.dialogue[self.dialogue_index][5][1]
 
     # load from save string
@@ -245,7 +257,7 @@ class NPC:
             show = copy.deepcopy(NPC_TEXT_BOX)
             show.y += 10
             dy = self.font.size("")[1]
-            for line in self.rundialogue(self.say):
+            for line in self.current_dialogue: #self.rundialogue(self.say):
                 text = self.font.render(line, NPC_FONT_ANTIALIAS, NPC_FONT_COLOR)
                 screen.fill(WHITE, show)
                 screen.blit(text, show)

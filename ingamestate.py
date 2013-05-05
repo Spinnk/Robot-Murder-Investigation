@@ -48,6 +48,7 @@ class InGameState (GameState):
 
         # flags
         self.flags = None
+        self.more_dialogue = 0
 
         # set system stuff
         self.screen = screen
@@ -85,16 +86,19 @@ class InGameState (GameState):
         if self.checkstatechange(event) in self.state_changes:
             return self.checkstatechange(event)
         if self.in_dialogue:
-            if event.type == pygame.KEYDOWN and event.key == self.keybindings[KB_ENTER]:
-                self.in_dialogue.rundialogue(0)
-                self.in_dialogue = None
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_e:
+                if self.more_dialogue:
+                    self.more_dialogue = self.in_dialogue.rundialogue(1)
+                else:
+                    self.in_dialogue.rundialogue(0)
+                    self.in_dialogue = None
             return self.state_id
         
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 self.removeitem()
             # Attempt to talk to a nearby NPC if "enter" key is pressed
-            elif event.key == self.keybindings[KB_ENTER]:
+            elif event.key == pygame.K_e:
                 self.in_dialogue = self.attempt_dialogue()
             else:
                 grid = self.ship.getsurrounding(self.user.getx(), self.user.gety() + 1)
@@ -117,6 +121,7 @@ class InGameState (GameState):
         if (self.camera.y + TILE_SHOW_H + 1) > MAP_HEIGHT:
             self.camera.y = MAP_HEIGHT - TILE_SHOW_H - 1
         self.ship.display(self.screen, self.camera)
+
         for npc in self.npcs:
             npc.display(self.screen, self.camera)
         self.user.display(self.screen, self.camera)
@@ -178,7 +183,7 @@ class InGameState (GameState):
         x, y = self.user.getx(), self.user.gety() + 1
         for npc in self.npcs:
             if (abs(npc.getx() - x) == 1 and npc.gety() == y) or (abs(npc.gety() - y) == 1 and npc.getx() == x ):
-                npc.rundialogue(1)
+                self.more_dialogue = npc.rundialogue(1)
                 return npc
 
 
