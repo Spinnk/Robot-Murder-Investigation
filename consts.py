@@ -286,8 +286,8 @@ ITEM_FONT_COLOR = BLACK
 ITEM_FONT_ANTIALIAS = True
 
 # Music Info
-SOUND_DIRS = [os.path.join(SOUND_DIR, "tetris1.mid")]                                # list of music file names
-
+SOUND_DIRS = [os.path.join(SOUND_DIR, "sentience.wav"),                                # list of music file names
+              os.path.join(SOUND_DIR, "sentience.wav")]
 
 # Journal Info
 JOURNAL_BACKGROUND_DIR = os.path.join(ART_DIR, "journal.png")
